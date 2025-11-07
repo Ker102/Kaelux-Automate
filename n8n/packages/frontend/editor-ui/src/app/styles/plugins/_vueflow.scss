@@ -86,6 +86,30 @@
 	&:has(.canvas-handle-plus-wrapper):hover {
 		z-index: 2 !important;
 	}
+
+	&.ai-insert-glow {
+		animation: ai-inserted-node-glow 1.6s ease-out;
+		box-shadow: 0 0 0 0
+			color-mix(in srgb, var(--color--primary, #5b6aff) 40%, transparent);
+	}
+}
+
+.vue-flow__nodes:has(.ai-insert-glow) {
+	z-index: 2;
+}
+
+@keyframes ai-inserted-node-glow {
+	0% {
+		box-shadow: 0 0 0 0 color-mix(in srgb, var(--color--primary, #5b6aff) 40%, transparent);
+	}
+
+	60% {
+		box-shadow: 0 0 0 16px color-mix(in srgb, var(--color--primary, #5b6aff) 10%, transparent);
+	}
+
+	100% {
+		box-shadow: 0 0 0 0 transparent;
+	}
 }
 
 .vue-flow__nodes:has(.bring-to-front) {

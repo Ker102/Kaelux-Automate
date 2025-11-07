@@ -1002,6 +1002,41 @@ async function importWorkflowExact({ workflow: workflowData }: { workflow: Workf
 	fitView();
 }
 
+const AI_INSERTED_GLOW_CLASS = 'ai-insert-glow';
+const aiGlowTimeouts = new Map<string, number>();
+
+function addTemporaryNodeGlow(nodeIds: string[]) {
+	if (!nodeIds.length) {
+		return;
+	}
+
+	void nextTick(() => {
+		nodeIds.forEach((id) => {
+			const escapedId = typeof CSS !== 'undefined' && CSS.escape ? CSS.escape(id) : id;
+			const nodeElement = document.querySelector<HTMLElement>(
+				`.vue-flow__node[data-id="${escapedId}"]`,
+			);
+
+			if (!nodeElement) {
+				return;
+			}
+
+			nodeElement.classList.add(AI_INSERTED_GLOW_CLASS);
+			const previousTimeout = aiGlowTimeouts.get(id);
+			if (previousTimeout) {
+				window.clearTimeout(previousTimeout);
+			}
+
+			const timeout = window.setTimeout(() => {
+				nodeElement.classList.remove(AI_INSERTED_GLOW_CLASS);
+				aiGlowTimeouts.delete(id);
+			}, 1800);
+
+			aiGlowTimeouts.set(id, timeout);
+		});
+	});
+}
+
 async function onImportWorkflowDataEvent(data: IDataObject) {
 	const workflowData = data.data as WorkflowDataUpdate;
 	const trackEvents = typeof data.trackEvents === 'boolean' ? data.trackEvents : undefined;
@@ -1016,6 +1051,7 @@ async function onImportWorkflowDataEvent(data: IDataObject) {
 	fitView();
 
 	selectNodes(workflowData.nodes?.map((node) => node.id) ?? []);
+	addTemporaryNodeGlow(workflowData.nodes?.map((node) => node.id).filter(Boolean) ?? []);
 	if (data.toast) {
 		const toastData = data.toast as { title?: string; message?: string; type?: 'success' | 'error' };
 		toast.showMessage({
