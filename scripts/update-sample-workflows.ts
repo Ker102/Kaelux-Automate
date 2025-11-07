@@ -201,6 +201,46 @@ const samples: SampleMeta[] = [
     tags: ["reports", "html", "automation"],
     file: "data/workflows/episodes/marvo_report_generator.json",
   },
+  {
+    id: "notion-todoist-two-way-sync",
+    title: "Realtime Notion ↔ Todoist Sync",
+    description:
+      "Complex two-way sync handling webhook events, batching, Redis dedupe, and SSE notifications between Notion and Todoist.",
+    problem:
+      "Teams maintaining parallel task systems need reliable bidirectional sync with conflict handling.",
+    tags: ["notion", "todoist", "sync", "webhook", "redis"],
+    file: "data/workflows/episodes/dan_1897_notion_todoist_sync.json",
+  },
+  {
+    id: "youtube-playlist-summarizer",
+    title: "AI YouTube Playlist Summaries",
+    description:
+      "Fetches playlists, downloads transcripts, caches data in Redis/Qdrant, and produces long-form summaries with Gemini.",
+    problem:
+      "Knowledge workers want digestible summaries of hours-long playlists without manual watching.",
+    tags: ["youtube", "summaries", "redis", "qdrant", "gemini"],
+    file: "data/workflows/episodes/dan_0971_youtube_summary.json",
+  },
+  {
+    id: "notion-clockify-sync",
+    title: "Notion → Clockify Sync",
+    description:
+      "Compares datasets, syncs tasks, and keeps Notion databases aligned with Clockify time tracking via webhooks.",
+    problem:
+      "Ops teams struggle to reconcile project plans with actual time entries across tools.",
+    tags: ["notion", "clockify", "time-tracking", "webhook"],
+    file: "data/workflows/episodes/dan_1498_notion_clockify.json",
+  },
+  {
+    id: "bamboohr-webhook-sandbox",
+    title: "Webhook Sandbox & BambooHR Alerts",
+    description:
+      "Uses PostBin + Cal.com forms to capture HR events, enriches data with OpenAI, and pushes alerts to Slack.",
+    problem:
+      "Testing webhook-driven HR flows is painful; this template lets you inspect payloads and automate BambooHR handling.",
+    tags: ["bamboohr", "webhook", "slack", "cal.com"],
+    file: "data/workflows/episodes/dan_1977_webhook_test.json",
+  },
 ];
 
 async function main() {
