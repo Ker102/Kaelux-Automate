@@ -291,6 +291,56 @@ const samples: SampleMeta[] = [
     tags: ["security", "postgres", "slack", "monitoring"],
     file: "data/workflows/episodes/dan_2014_suspicious_login.json",
   },
+  {
+    id: "woocommerce-shipping-dhl",
+    title: "WooCommerce + DHL Fulfillment Console",
+    description:
+      "Captures WooCommerce orders via forms, calls DHL APIs, and drives execution workflows to fulfill shipments.",
+    problem:
+      "Store owners want automatic shipping label orchestration between WooCommerce and DHL without manual exports.",
+    tags: ["woocommerce", "dhl", "shipping", "forms"],
+    file: "data/workflows/episodes/dan_0457_woocommerce_shipping.json",
+  },
+  {
+    id: "woocommerce-ai-chatbot",
+    title: "WooCommerce Post-Sales AI Chatbot",
+    description:
+      "Combines Telegram bots, Cal.com, RAG over docs, and WooCommerce tools to answer order questions and create tickets.",
+    problem:
+      "Support teams need an AI assistant that understands WooCommerce orders and can provide follow-up steps automatically.",
+    tags: ["woocommerce", "telegram", "support", "rag"],
+    file: "data/workflows/episodes/dan_1575_woocommerce_ai_chatbot.json",
+  },
+  {
+    id: "stripe-zoom-payments",
+    title: "Stripe-Paid Zoom Booking",
+    description:
+      "Collects payments via Stripe Checkout, records attendees in Sheets, emails confirmations, and provisions Zoom sessions.",
+    problem:
+      "Consultants want to gate Zoom meetings behind payment without juggling multiple tools manually.",
+    tags: ["stripe", "zoom", "payments", "forms"],
+    file: "data/workflows/episodes/dan_0739_stripe_zoom.json",
+  },
+  {
+    id: "stripe-quickbooks-sync",
+    title: "Stripe → QuickBooks Invoice Sync",
+    description:
+      "Listens to Stripe events, looks up QuickBooks customers, and posts invoices/charges to accounting automatically.",
+    problem:
+      "Finance teams need Stripe transactions reflected in QuickBooks without exporting CSVs.",
+    tags: ["stripe", "quickbooks", "accounting"],
+    file: "data/workflows/episodes/dan_0707_stripe_quickbooks.json",
+  },
+  {
+    id: "pipedrive-billing-handoff",
+    title: "Pipedrive + Stripe Deal Billing",
+    description:
+      "Scheduled workflow that inspects Pipedrive deals, builds Stripe charges, and syncs results via Function & ItemList nodes.",
+    problem:
+      "Sales ops need closed deals to trigger billing automatically so finance isn’t chasing spreadsheets.",
+    tags: ["pipedrive", "stripe", "sales-ops"],
+    file: "data/workflows/episodes/dan_0246_pipedrive_billing.json",
+  },
 ];
 
 async function main() {

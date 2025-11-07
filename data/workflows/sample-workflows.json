@@ -50769,5 +50769,3898 @@
         }
       }
     }
+  },
+  {
+    "id": "woocommerce-shipping-dhl",
+    "title": "WooCommerce + DHL Fulfillment Console",
+    "description": "Captures WooCommerce orders via forms, calls DHL APIs, and drives execution workflows to fulfill shipments.",
+    "problem": "Store owners want automatic shipping label orchestration between WooCommerce and DHL without manual exports.",
+    "tags": [
+      "woocommerce",
+      "dhl",
+      "shipping",
+      "forms"
+    ],
+    "workflow": {
+      "meta": {
+        "instanceId": "cb484ba7b742928a2048bf8829668bed5b5ad9787579adea888f05980292a4a7"
+      },
+      "nodes": [
+        {
+          "id": "be49d136-6392-481d-8544-d4f4d4fd0357",
+          "name": "Sticky Note",
+          "type": "n8n-nodes-base.stickyNote",
+          "position": [
+            90,
+            260
+          ],
+          "parameters": {
+            "color": 7,
+            "width": 1000.427054367056,
+            "height": 572.2734520891689,
+            "content": "## Find WooCommerce User-ID\nUser-ID is required to query past orders"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "5932f77b-63e2-4991-aa16-2b8587b2b560",
+          "name": "No email provided",
+          "type": "n8n-nodes-base.set",
+          "position": [
+            400,
+            640
+          ],
+          "parameters": {
+            "options": {},
+            "assignments": {
+              "assignments": [
+                {
+                  "id": "9a06428b-4115-4eee-97f4-8e828c5a7e5a",
+                  "name": "response",
+                  "type": "string",
+                  "value": "No email address got provided."
+                }
+              ]
+            }
+          },
+          "typeVersion": 3.3
+        },
+        {
+          "id": "909a9a47-8683-4a1f-a359-8f6a878f8cd7",
+          "name": "If email provided",
+          "type": "n8n-nodes-base.if",
+          "position": [
+            140,
+            460
+          ],
+          "parameters": {
+            "options": {},
+            "conditions": {
+              "options": {
+                "leftValue": "",
+                "caseSensitive": true,
+                "typeValidation": "strict"
+              },
+              "combinator": "and",
+              "conditions": [
+                {
+                  "id": "13f7bd32-5760-4ac3-8292-c8beb131a4a5",
+                  "operator": {
+                    "type": "string",
+                    "operation": "notEmpty",
+                    "singleValue": true
+                  },
+                  "leftValue": "={{ $json.email }}",
+                  "rightValue": ""
+                }
+              ]
+            }
+          },
+          "typeVersion": 2
+        },
+        {
+          "id": "f5bd2098-090b-4537-8e61-90afb4c85ad8",
+          "name": "If user found",
+          "type": "n8n-nodes-base.if",
+          "position": [
+            620,
+            440
+          ],
+          "parameters": {
+            "options": {},
+            "conditions": {
+              "options": {
+                "leftValue": "",
+                "caseSensitive": true,
+                "typeValidation": "strict"
+              },
+              "combinator": "and",
+              "conditions": [
+                {
+                  "id": "0e434771-6a63-420b-89fe-cf4d5b1d8127",
+                  "operator": {
+                    "type": "number",
+                    "operation": "gt"
+                  },
+                  "leftValue": "={{ Object.keys($json).length }}",
+                  "rightValue": 0
+                }
+              ]
+            }
+          },
+          "typeVersion": 2
+        },
+        {
+          "id": "cd2e8f95-363d-47fc-a18b-42eb93f89d0d",
+          "name": "Sticky Note1",
+          "type": "n8n-nodes-base.stickyNote",
+          "position": [
+            -480,
+            -346
+          ],
+          "parameters": {
+            "color": 6,
+            "width": 1060.5591882039919,
+            "height": 506.94921487705585,
+            "content": "# Agent"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "411d5656-ace2-43a1-8672-0ffc9929f99b",
+          "name": "Sticky Note2",
+          "type": "n8n-nodes-base.stickyNote",
+          "position": [
+            2040,
+            265
+          ],
+          "parameters": {
+            "width": 2404.755367647059,
+            "height": 559.608748371423,
+            "content": "## Add DHL tracking information\nQueries the status of shipped orders from DHL.\n\nCan be skipped if order tracking should not be available or replaced with other services like UPS."
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "2787a47f-d685-49b2-b4f9-15ed59525d63",
+          "name": "No customer found",
+          "type": "n8n-nodes-base.set",
+          "position": [
+            880,
+            640
+          ],
+          "parameters": {
+            "options": {},
+            "assignments": {
+              "assignments": [
+                {
+                  "id": "9a06428b-4115-4eee-97f4-8e828c5a7e5a",
+                  "name": "response",
+                  "type": "string",
+                  "value": "No customer with that email address could be found."
+                }
+              ]
+            }
+          },
+          "typeVersion": 3.3
+        },
+        {
+          "id": "9ff271fb-5013-41a3-bc3c-84af3f36d079",
+          "name": "If contains DHL data",
+          "type": "n8n-nodes-base.if",
+          "position": [
+            2400,
+            400
+          ],
+          "parameters": {
+            "options": {},
+            "conditions": {
+              "options": {
+                "leftValue": "",
+                "caseSensitive": true,
+                "typeValidation": "strict"
+              },
+              "combinator": "and",
+              "conditions": [
+                {
+                  "id": "674eff87-834b-4436-8666-66ccd11016d6",
+                  "operator": {
+                    "type": "array",
+                    "operation": "notEmpty",
+                    "singleValue": true
+                  },
+                  "leftValue": "={{ $json.tracking }}",
+                  "rightValue": ""
+                }
+              ]
+            }
+          },
+          "typeVersion": 2
+        },
+        {
+          "id": "736adbe9-1141-47b1-9d17-b2a86e0285a3",
+          "name": "Extract Tracking Data",
+          "type": "n8n-nodes-base.set",
+          "position": [
+            2140,
+            400
+          ],
+          "parameters": {
+            "options": {},
+            "assignments": {
+              "assignments": [
+                {
+                  "id": "c378e8d4-3fdf-49f5-a766-6cfc1d7e898f",
+                  "name": "tracking",
+                  "type": "array",
+                  "value": "={{ $json.meta_data.filter(data => data.key === '_wc_shipment_tracking_items').flatMap(data => data.value) }}"
+                }
+              ]
+            }
+          },
+          "typeVersion": 3.3
+        },
+        {
+          "id": "603584d5-85c7-4995-a7a4-1ecb07c9ce2b",
+          "name": "Merge Orders",
+          "type": "n8n-nodes-base.merge",
+          "position": [
+            3980,
+            500
+          ],
+          "parameters": {},
+          "typeVersion": 2.1
+        },
+        {
+          "id": "a5f61962-99bd-4e6d-9c4f-4e0fa3685780",
+          "name": "Merge Order and Tracking Data",
+          "type": "n8n-nodes-base.merge",
+          "position": [
+            4300,
+            640
+          ],
+          "parameters": {
+            "mode": "combine",
+            "options": {},
+            "combinationMode": "mergeByPosition"
+          },
+          "typeVersion": 2.1
+        },
+        {
+          "id": "9aff6c2b-90f5-4cf6-8637-634c1d7f439d",
+          "name": "Sticky Note3",
+          "type": "n8n-nodes-base.stickyNote",
+          "position": [
+            -480,
+            -1280
+          ],
+          "parameters": {
+            "color": 3,
+            "width": 478.2162464985994,
+            "height": 558.6043670960834,
+            "content": "# Setup\n## Generally\n- The environment variable `NODE_FUNCTION_ALLOW_BUILTIN` has to equal or include the value `crypto` (FYI: is default on n8n cloud) as it is required to run this workflow\n\n\n## To test the workflow\n1. Set a valid email address of a user that exists in WooCommerce in the Mock Node \"Mock Data\"\n2. Enable the node \"Mock Data\"\n3. Disable the node \"Decrypt email address\"\n4. Use the built-in chat by pressing the \"Chat\" button\n\n\n## For production use:\n1. Update the \"System Message\" in the node \"AI Agent\" for specific use case. At least the name of the shop should be changed\n2. Integrate the chat into the website. An example can be found in the box \"Example Website Implementation\"\n3. Disable or delete the node \"Mock Data\"\n4. Enable the node \"Decrypt email address\"\n5. Enable Workflow"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "901be36e-f68a-4052-ad40-2a3a6a596b56",
+          "name": "Sticky Note4",
+          "type": "n8n-nodes-base.stickyNote",
+          "position": [
+            1140,
+            260
+          ],
+          "parameters": {
+            "width": 277.6742597550393,
+            "height": 568.9672169306307,
+            "content": "## Get Orders"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "7501d8f8-d91e-4cb3-835d-bf3cd0cac69c",
+          "name": "Sticky Note5",
+          "type": "n8n-nodes-base.stickyNote",
+          "position": [
+            -492,
+            260
+          ],
+          "parameters": {
+            "color": 2,
+            "width": 527.8197815634092,
+            "height": 572.2734520891689,
+            "content": "# WooCommerce Order Tool"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "0f2dc782-63c1-43bc-9347-33ebfe00af69",
+          "name": "Split Out",
+          "type": "n8n-nodes-base.splitOut",
+          "position": [
+            2680,
+            380
+          ],
+          "parameters": {
+            "options": {},
+            "fieldToSplitOut": "tracking"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "d9b180bc-b4d2-4b94-ac65-b73344a47ad8",
+          "name": "Aggregate",
+          "type": "n8n-nodes-base.aggregate",
+          "position": [
+            3600,
+            380
+          ],
+          "parameters": {
+            "options": {},
+            "aggregate": "aggregateAllItemData",
+            "destinationFieldName": "tracking"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "6d2a044e-4164-4f0f-a6ef-a1a7a347a0c3",
+          "name": "Merge Tracking Data",
+          "type": "n8n-nodes-base.merge",
+          "position": [
+            3360,
+            380
+          ],
+          "parameters": {},
+          "typeVersion": 2.1
+        },
+        {
+          "id": "bca16467-9c24-4f36-b41f-d471d27ae465",
+          "name": "Window Buffer Memory",
+          "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+          "position": [
+            260,
+            0
+          ],
+          "parameters": {
+            "sessionKey": "={{ $('Mock Data').item.json.sessionId }}",
+            "sessionIdType": "customKey",
+            "contextWindowLength": 10
+          },
+          "typeVersion": 1.2
+        },
+        {
+          "id": "ff432439-2421-4769-bfc8-b58e56742275",
+          "name": "Execute Workflow Trigger",
+          "type": "n8n-nodes-base.executeWorkflowTrigger",
+          "position": [
+            -340,
+            460
+          ],
+          "parameters": {},
+          "typeVersion": 1
+        },
+        {
+          "id": "b8a156a0-bec2-43a5-b2c1-3474701c353b",
+          "name": "Sticky Note6",
+          "type": "n8n-nodes-base.stickyNote",
+          "position": [
+            1480,
+            260
+          ],
+          "parameters": {
+            "color": 7,
+            "width": 492.0420811160542,
+            "height": 564.8840203332783,
+            "content": "## Check orders found"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "22f86e67-710f-49ae-a967-6e5f9345eab6",
+          "name": "WooCommerce - Get User",
+          "type": "n8n-nodes-base.wooCommerce",
+          "position": [
+            400,
+            440
+          ],
+          "parameters": {
+            "limit": 1,
+            "filters": {
+              "email": "={{ $json.email }}"
+            },
+            "resource": "customer",
+            "operation": "getAll"
+          },
+          "credentials": {
+            "wooCommerceApi": {
+              "id": "Rm7eydPl5IQwnlhw",
+              "name": "WooCommerce account"
+            }
+          },
+          "typeVersion": 1,
+          "alwaysOutputData": true
+        },
+        {
+          "id": "0c23aaa1-b1a4-4890-8df8-4440d32c2308",
+          "name": "If order found",
+          "type": "n8n-nodes-base.if",
+          "position": [
+            1520,
+            420
+          ],
+          "parameters": {
+            "options": {},
+            "conditions": {
+              "options": {
+                "leftValue": "",
+                "caseSensitive": true,
+                "typeValidation": "strict"
+              },
+              "combinator": "and",
+              "conditions": [
+                {
+                  "id": "0e434771-6a63-420b-89fe-cf4d5b1d8127",
+                  "operator": {
+                    "type": "number",
+                    "operation": "gt"
+                  },
+                  "leftValue": "={{ Object.keys($json).length }}",
+                  "rightValue": 0
+                }
+              ]
+            }
+          },
+          "typeVersion": 2
+        },
+        {
+          "id": "63b155ef-6336-4938-890a-28050ffe5deb",
+          "name": "WooCommerce Get Orders",
+          "type": "n8n-nodes-base.httpRequest",
+          "position": [
+            1220,
+            420
+          ],
+          "parameters": {
+            "url": "https://woo-pleasantly-swag-werewolf3.wpcomstaging.com/wp-json/wc/v3/orders",
+            "options": {},
+            "sendBody": true,
+            "authentication": "predefinedCredentialType",
+            "bodyParameters": {
+              "parameters": [
+                {
+                  "name": "customer",
+                  "value": "={{ $json.id }}"
+                },
+                {
+                  "name": "include",
+                  "value": "={{ $('If email provided').item.json.query.split(',').filter(data => !data.includes('@')).join(',') }}"
+                }
+              ]
+            },
+            "nodeCredentialType": "wooCommerceApi"
+          },
+          "credentials": {
+            "wooCommerceApi": {
+              "id": "Rm7eydPl5IQwnlhw",
+              "name": "WooCommerce account"
+            }
+          },
+          "typeVersion": 4.1,
+          "alwaysOutputData": true
+        },
+        {
+          "id": "6cd01eed-7b28-4fe1-b3a2-33293a978843",
+          "name": "No order found",
+          "type": "n8n-nodes-base.set",
+          "position": [
+            1800,
+            620
+          ],
+          "parameters": {
+            "options": {},
+            "assignments": {
+              "assignments": [
+                {
+                  "id": "9a06428b-4115-4eee-97f4-8e828c5a7e5a",
+                  "name": "response",
+                  "type": "string",
+                  "value": "No order could be found."
+                }
+              ]
+            }
+          },
+          "typeVersion": 3.3
+        },
+        {
+          "id": "bd45f21a-f30e-4dc2-be8b-527323016fae",
+          "name": "Add Error Information",
+          "type": "n8n-nodes-base.set",
+          "position": [
+            3120,
+            480
+          ],
+          "parameters": {
+            "options": {},
+            "assignments": {
+              "assignments": [
+                {
+                  "id": "5fdb3524-6263-4e0b-a052-742cec8ceac1",
+                  "name": "Error",
+                  "type": "string",
+                  "value": "=No data about the parcel with the tracking ID \"{{ $('Split Out').item.json.tracking_id }}\" could be found."
+                }
+              ]
+            }
+          },
+          "typeVersion": 3.3
+        },
+        {
+          "id": "73596711-8b8b-47d9-88b6-84fe1c35fd42",
+          "name": "DHL",
+          "type": "n8n-nodes-base.dhl",
+          "onError": "continueErrorOutput",
+          "position": [
+            2880,
+            380
+          ],
+          "parameters": {
+            "options": {},
+            "trackingNumber": "={{ $json.tracking_number }}"
+          },
+          "credentials": {
+            "dhlApi": {
+              "id": "AYAwLZA02lSGlGTd",
+              "name": "DHL account Jan"
+            }
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "ea1a7ab3-d7b7-4651-9232-4724a1adc14f",
+          "name": "Send Response",
+          "type": "n8n-nodes-base.set",
+          "position": [
+            4600,
+            640
+          ],
+          "parameters": {
+            "options": {},
+            "assignments": {
+              "assignments": [
+                {
+                  "id": "a2bb4a8a-40b0-4233-99a8-3b494fb84230",
+                  "name": "response",
+                  "type": "array",
+                  "value": "={{ $input.all().map(item => item.json) }}"
+                }
+              ]
+            }
+          },
+          "typeVersion": 3.3
+        },
+        {
+          "id": "606f4731-00cc-4af0-a708-1d0d3d348dfa",
+          "name": "Sticky Note8",
+          "type": "n8n-nodes-base.stickyNote",
+          "position": [
+            640,
+            -1280
+          ],
+          "parameters": {
+            "color": 4,
+            "width": 676.2425958534976,
+            "height": 886.4179654829891,
+            "content": "## How to supply user email\nAs we want to ensure that customers can only query information about their own orders, the email address gets encrypted in the backend, and then decrypt again in this workflow. If the email was allowed to be set unencrypted, anyone could query information from other customers.\n\n### The email address get supplied in the chat script at the following location:\n```\ncreateChat({\n\twebhookUrl: '...',\n\tmetadata: {\n          email: 'ENCRYPTED_EMAIL_ADDRESS'\n    },\n});\n```\n\n\n## Example Scripts:\n\n### Encrypt email on the backend\nRun the following code in the backend of your website, send the data to the frontend, and then set it dynamically at the above defined location as email.\n\n\n\n\n\n\n\n\n\n\n\n\n\n### Decrypt email in workflow\nThis script is already used in this workflow and is only provided here again as an example.\n"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "adbd1b20-0b4e-44ee-9ecc-3fc746691a03",
+          "name": "OpenAI Chat Model",
+          "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+          "position": [
+            60,
+            0
+          ],
+          "parameters": {
+            "model": "gpt-4",
+            "options": {}
+          },
+          "credentials": {
+            "openAiApi": {
+              "id": "h7YcjvQLK5VrUYLz",
+              "name": "OpenAi Jan"
+            }
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "b9076a7c-39b6-4205-9b05-90ed1f07115e",
+          "name": "WooCommerce_Tool",
+          "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+          "position": [
+            440,
+            0
+          ],
+          "parameters": {
+            "name": "WooCommerce_Tool",
+            "fields": {
+              "values": [
+                {
+                  "name": "email",
+                  "stringValue": "={{ $json.metadata.email }}"
+                }
+              ]
+            },
+            "workflowId": "={{ $workflow.id }}",
+            "description": "Call this tool to retrieve the orders in JSON format (compatible with the WooCommerce API). The input should be a list of comma-separated order IDs or nothing at all for all orders. Supply nothing else than the order IDs!"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "c1f06bc7-04d3-4ad5-b46a-6baa509ee23d",
+          "name": "Chat Trigger",
+          "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+          "position": [
+            -440,
+            -220
+          ],
+          "webhookId": "3b63a62a-bfb7-4fb4-a6ec-4c40dcb4d9f6",
+          "parameters": {
+            "public": true,
+            "options": {}
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "1dcb818f-48d1-4314-8737-509c2484c8af",
+          "name": "Sticky Note7",
+          "type": "n8n-nodes-base.stickyNote",
+          "position": [
+            60,
+            -1280
+          ],
+          "parameters": {
+            "color": 4,
+            "width": 517.004057164405,
+            "height": 555.1564335638465,
+            "content": "## Example Website Implementation\nExample Code for a website can be found in node \"Respond to Webhook\".\n\nMore information about the embeddable chat can be found [here](https://github.com/n8n-io/n8n/tree/master/packages/%40n8n/chat#installation).\n\nRequired changes:\n- Change \"webhookUrl\" to the displayed in \"Chat Trigger\" node\n- Set the encrypted email address dynamically. The value has to be calculated in the backend to make it truly secure\n- Use a unique password for email en-/decryption and use it in the backend and this workflow (can be set in node \"Decrypt email address\")\n\n\nThe example page can be opened by calling the production Webhook-URL of the node \"Webhook Example Page\". It only works if the \"For production use\" steps on the left have been followed."
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "e3a405a1-077d-4b72-bafa-26fd470f0f1c",
+          "name": "Respond to Webhook",
+          "type": "n8n-nodes-base.respondToWebhook",
+          "position": [
+            360,
+            -920
+          ],
+          "parameters": {
+            "options": {
+              "responseHeaders": {
+                "entries": [
+                  {
+                    "name": "content-type",
+                    "value": "text/html; charset=utf-8"
+                  }
+                ]
+              }
+            },
+            "respondWith": "text",
+            "responseBody": "<doctype html>\n\t<html lang=\"en\">\n\t\t<head>\n\t\t\t<meta charset=\"utf-8\" />\n\t\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n\t\t\t<title>Chat</title>\n\t\t\t<link\n\t\t\t\thref=\"https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css\"\n\t\t\t\trel=\"stylesheet\"\n\t\t\t/>\n\t\t\t<link href=\"https://cdn.jsdelivr.net/npm/@n8n/chat/style.css\" rel=\"stylesheet\" />\n\t\t</head>\n\t\t<body>\n\t\t\t<script type=\"module\">\n\t\t\t\timport { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat@latest/chat.bundle.es.js';\n\n\t\t\t\t(async function () {\n\t\t\t\t\tcreateChat({\n\t\t\t\t\t\tmode: 'window',\n\t\t\t\t\t\twebhookUrl: 'https://xxx.n8n.cloud/webhook/ea429912-869c-490b-9e04-4401ac9943b6/chat',\n\t\t\t\t\t\tloadPreviousSession: false,\n\t\t\t\t\t\tmetadata: {\n\t\t\t\t\t\t\temail: '352b16c74f73265441c55c37c9c22b04:4a8e614143c9cd31cc7e2389380943f3', // james@brown.com encrypted\n\t\t\t\t\t\t},\n\t\t\t\t\t\twebhookConfig: {\n\t\t\t\t\t\t\theaders: {\n\t\t\t\t\t\t\t\t'Content-Type': 'application/json',\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t},\n\t\t\t\t\t});\n\t\t\t\t})();\n\t\t\t</script>\n\n\t\t\t<h1>WooCommerce Agent Example page</h1>\n\t\t\tClick on the bubble in the lower right corner to open the chat.\n\n\t\t</body>\n\t</html>\n</doctype>"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "3ee13508-9400-415f-b435-514131ab8c53",
+          "name": "Webhook Example Page",
+          "type": "n8n-nodes-base.webhook",
+          "position": [
+            140,
+            -920
+          ],
+          "webhookId": "18474f2d-9472-4a8d-8e63-8128fd2cbefc",
+          "parameters": {
+            "path": "website-chat-example",
+            "options": {},
+            "responseMode": "responseNode"
+          },
+          "typeVersion": 1.1
+        },
+        {
+          "id": "76bfe2b1-2c4a-45b9-a066-1287e735fafd",
+          "name": "Decrypt email",
+          "type": "n8n-nodes-base.code",
+          "position": [
+            860,
+            -580
+          ],
+          "parameters": {
+            "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\nconst crypto = require('crypto');\n\nconst password = 'a random password';\n\nconst encryptedData = $input.first().json.email;\n\n\nfunction decrypt(encrypted, password) {\n  // Extract the IV and the encrypted text\n  const parts = encrypted.split(':');\n  const iv = Buffer.from(parts.shift(), 'hex');\n\n  // Create a key from the password\n  const key = crypto.scryptSync(password, 'salt', 32);\n\n  // Create a decipher\n  const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);\n\n  // Decrypt the text\n  let decrypted = decipher.update(parts.join(':'), 'hex', 'utf8');\n  decrypted += decipher.final('utf8');\n\n  // Return the decrypted text\n  return decrypted;\n}\n\nreturn [\n  {\n    json: {\n      email: decrypt(encryptedData, password),\n    }\n  }\n];"
+          },
+          "typeVersion": 2
+        },
+        {
+          "id": "561cb422-955b-445b-9690-aa439dcd2455",
+          "name": "Encrypt email",
+          "type": "n8n-nodes-base.code",
+          "position": [
+            680,
+            -840
+          ],
+          "parameters": {
+            "jsCode": "const crypto = require('crypto');\n\nconst password = 'a random password';\nconst email = 'james@brown.com';\n\n\nfunction encrypt(text, password) {\n  // Generate a secure random initialization vector\n  const iv = crypto.randomBytes(16);\n\n  // Create a key from the password\n  const key = crypto.scryptSync(password, 'salt', 32);\n\n  // Create a cipher\n  const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);\n\n  // Encrypt the text\n  let encrypted = cipher.update(text, 'utf8', 'hex');\n  encrypted += cipher.final('hex');\n\n  // Return the IV and the encrypted text\n  return `${iv.toString('hex')}:${encrypted}`;\n}\n\nreturn [\n  {\n    json: {\n      email: encrypt(email, password),\n    }\n  }\n];"
+          },
+          "typeVersion": 2
+        },
+        {
+          "id": "eba004cb-4a40-432b-8fe2-d8526913c585",
+          "name": "Example encrypted email",
+          "type": "n8n-nodes-base.set",
+          "position": [
+            680,
+            -580
+          ],
+          "parameters": {
+            "options": {},
+            "assignments": {
+              "assignments": [
+                {
+                  "id": "fa8d71d3-8e60-44b0-8ef0-e0bfc6feaf0e",
+                  "name": "email",
+                  "type": "string",
+                  "value": "352b16c74f73265441c55c37c9c22b04:4a8e614143c9cd31cc7e2389380943f3"
+                }
+              ]
+            }
+          },
+          "typeVersion": 3.3
+        },
+        {
+          "id": "d2fe7948-2ce5-4faa-91da-ea76f02aaf84",
+          "name": "Decrypt email address",
+          "type": "n8n-nodes-base.code",
+          "disabled": true,
+          "position": [
+            -240,
+            -220
+          ],
+          "parameters": {
+            "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\nconst crypto = require('crypto');\n\nconst password = 'a random password';\nconst incomingData = $input.first().json;\n\n\nfunction decrypt(encrypted, password) {\n  // Extract the IV and the encrypted text\n  const parts = encrypted.split(':');\n  const iv = Buffer.from(parts.shift(), 'hex');\n\n  // Create a key from the password\n  const key = crypto.scryptSync(password, 'salt', 32);\n\n  // Create a decipher\n  const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);\n\n  // Decrypt the text\n  let decrypted = decipher.update(parts.join(':'), 'hex', 'utf8');\n  decrypted += decipher.final('utf8');\n\n  // Return the decrypted text\n  return decrypted;\n}\n\nreturn [\n  {\n    json: {\n      ...incomingData,\n      metadata: {\n        email: decrypt(incomingData.metadata.email, password),        \n      },\n    }\n  }\n];"
+          },
+          "typeVersion": 2
+        },
+        {
+          "id": "26cb468c-5edf-4674-bec2-39270262fc00",
+          "name": "AI Agent",
+          "type": "@n8n/n8n-nodes-langchain.agent",
+          "position": [
+            140,
+            -220
+          ],
+          "parameters": {
+            "options": {
+              "systemMessage": "=The Assistant is tailored to support customers of Best Shirts Ltd. with inquiries related to their orders. It adheres to the following principles for optimal customer service:\n\n1. **Customer-Focused Communication**: The Assistant maintains a friendly and helpful tone throughout the interaction. It remains focused on the topic at hand, ensuring all responses are relevant to the customer's inquiries about their orders.\n\n2. **Objective and Factual**: In cases where specific information is unavailable, the Assistant clearly communicates the lack of information and refrains from speculating or providing unverified details.\n\n3. **Efficient Interaction**: Recognizing the importance of the customer's time, the Assistant is designed to remember previous interactions within the same session. This minimizes the need for customers to repeat information, streamlining the support process.\n\n4. **Strict Privacy Adherence**: The Assistant automatically has access to the customer's email address as \"{{ $json.email }}\", using it to assist with order-related inquiries. Customers are informed that it is not possible to use or inquire about a different email address. If a customer attempts to provide an alternate email, they are gently reminded of this limitation.\n\n5. **Transparency in Order Status**: The Assistant provides accurate information about order processing and delivery timelines. Orders are typically dispatched 1-2 days post-purchase, with an expected delivery period of 1-2 days following dispatch. If an order hasn't been sent out within 2 days, the Assistant acknowledges an unplanned delay and offers assistance accordingly.\n\n6. **Non-assumptive Approach to Delivery Confirmation**: The Assistant never presumes an order has been delivered based solely on its dispatch. It relies on explicit delivery confirmations or tracking information to inform customers about their order status.\n\n7. **Responsive to Specific Inquiries**: If a customer requests the email address used for their inquiry, the Assistant provides it directly, ensuring privacy and accuracy in communications.\n\nThis approach ensures that customers receive comprehensive, respectful, and efficient support for their order-related queries."
+            }
+          },
+          "typeVersion": 1.4
+        },
+        {
+          "id": "1088d613-4321-40ec-baba-deb0f3aa1078",
+          "name": "Mock Data",
+          "type": "n8n-nodes-base.set",
+          "position": [
+            -40,
+            -220
+          ],
+          "parameters": {
+            "options": {},
+            "assignments": {
+              "assignments": [
+                {
+                  "id": "c591fa49-31b3-46e7-8108-2d3ad1fc895b",
+                  "name": "metadata.email",
+                  "type": "string",
+                  "value": "james@brown.com"
+                }
+              ]
+            },
+            "includeOtherFields": true
+          },
+          "typeVersion": 3.3
+        }
+      ],
+      "pinData": {},
+      "connections": {
+        "DHL": {
+          "main": [
+            [
+              {
+                "node": "Merge Tracking Data",
+                "type": "main",
+                "index": 0
+              }
+            ],
+            [
+              {
+                "node": "Add Error Information",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Aggregate": {
+          "main": [
+            [
+              {
+                "node": "Merge Orders",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Mock Data": {
+          "main": [
+            [
+              {
+                "node": "AI Agent",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Split Out": {
+          "main": [
+            [
+              {
+                "node": "DHL",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Chat Trigger": {
+          "main": [
+            [
+              {
+                "node": "Decrypt email address",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Merge Orders": {
+          "main": [
+            [
+              {
+                "node": "Merge Order and Tracking Data",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "If user found": {
+          "main": [
+            [
+              {
+                "node": "WooCommerce Get Orders",
+                "type": "main",
+                "index": 0
+              }
+            ],
+            [
+              {
+                "node": "No customer found",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "If order found": {
+          "main": [
+            [
+              {
+                "node": "Extract Tracking Data",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "Merge Order and Tracking Data",
+                "type": "main",
+                "index": 1
+              }
+            ],
+            [
+              {
+                "node": "No order found",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "WooCommerce_Tool": {
+          "ai_tool": [
+            [
+              {
+                "node": "AI Agent",
+                "type": "ai_tool",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "If email provided": {
+          "main": [
+            [
+              {
+                "node": "WooCommerce - Get User",
+                "type": "main",
+                "index": 0
+              }
+            ],
+            [
+              {
+                "node": "No email provided",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "OpenAI Chat Model": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "AI Agent",
+                "type": "ai_languageModel",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Merge Tracking Data": {
+          "main": [
+            [
+              {
+                "node": "Aggregate",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "If contains DHL data": {
+          "main": [
+            [
+              {
+                "node": "Split Out",
+                "type": "main",
+                "index": 0
+              }
+            ],
+            [
+              {
+                "node": "Merge Orders",
+                "type": "main",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "Webhook Example Page": {
+          "main": [
+            [
+              {
+                "node": "Respond to Webhook",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Window Buffer Memory": {
+          "ai_memory": [
+            [
+              {
+                "node": "AI Agent",
+                "type": "ai_memory",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Add Error Information": {
+          "main": [
+            [
+              {
+                "node": "Merge Tracking Data",
+                "type": "main",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "Decrypt email address": {
+          "main": [
+            [
+              {
+                "node": "Mock Data",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Extract Tracking Data": {
+          "main": [
+            [
+              {
+                "node": "If contains DHL data",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "WooCommerce - Get User": {
+          "main": [
+            [
+              {
+                "node": "If user found",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "WooCommerce Get Orders": {
+          "main": [
+            [
+              {
+                "node": "If order found",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Example encrypted email": {
+          "main": [
+            [
+              {
+                "node": "Decrypt email",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Execute Workflow Trigger": {
+          "main": [
+            [
+              {
+                "node": "If email provided",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Merge Order and Tracking Data": {
+          "main": [
+            [
+              {
+                "node": "Send Response",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "woocommerce-ai-chatbot",
+    "title": "WooCommerce Post-Sales AI Chatbot",
+    "description": "Combines Telegram bots, Cal.com, RAG over docs, and WooCommerce tools to answer order questions and create tickets.",
+    "problem": "Support teams need an AI assistant that understands WooCommerce orders and can provide follow-up steps automatically.",
+    "tags": [
+      "woocommerce",
+      "telegram",
+      "support",
+      "rag"
+    ],
+    "workflow": {
+      "id": "ODZpSQqCxkISEqv8",
+      "meta": {
+        "instanceId": "a4bfc93e975ca233ac45ed7c9227d84cf5a2329310525917adaf3312e10d5462",
+        "templateCredsSetupCompleted": true
+      },
+      "name": "WooCommerce AI Chatbot Workflow for Post-Sales Support",
+      "tags": [
+        {
+          "id": "NFwUyKypVupFwAM4",
+          "name": "WooCommerce",
+          "createdAt": "2024-12-13T15:34:20.174Z",
+          "updatedAt": "2024-12-13T15:34:20.174Z"
+        },
+        {
+          "id": "paTcf5QZDJsC2vKY",
+          "name": "OpenAI",
+          "createdAt": "2024-12-04T16:52:10.768Z",
+          "updatedAt": "2024-12-04T16:52:10.768Z"
+        }
+      ],
+      "nodes": [
+        {
+          "id": "25024dde-431b-4dad-b5ed-9be77cdf3db2",
+          "name": "When chat message received",
+          "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+          "position": [
+            -860,
+            420
+          ],
+          "webhookId": "bb9b597a-25ed-43de-9ebb-14f166af789b",
+          "parameters": {
+            "mode": "webhook",
+            "public": true,
+            "options": {
+              "responseMode": "responseNode"
+            }
+          },
+          "typeVersion": 1.1
+        },
+        {
+          "id": "96139b63-75aa-4d16-91b1-2fe0ca624137",
+          "name": "Simple Memory",
+          "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+          "position": [
+            -520,
+            720
+          ],
+          "parameters": {},
+          "typeVersion": 1.3
+        },
+        {
+          "id": "f7901f97-50c5-4f56-bae3-21c575aa22cc",
+          "name": "get_order",
+          "type": "n8n-nodes-base.wooCommerceTool",
+          "position": [
+            80,
+            600
+          ],
+          "parameters": {
+            "orderId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Order_ID', `Order Details Retrieval Process:\n1. Request Order Number\n   - Explicitly ask customer for the complete order number\n\n2. Identity Verification\n   - Ask for the email address associated with the order\n   - Strictly verify that the provided email matches the order record\n   - If email does NOT match the order:\n     * Immediately halt the process\n     * Inform customer that the email is incorrect\n     * Do NOT provide the correct email\n     * Prevent access to order details\n\n3. Verification Criteria\n   - Exact match of email to order record is mandatory\n   - No exceptions or workarounds\n   - Customer must provide the precise, correct email`, 'string') }}",
+            "resource": "order",
+            "operation": "get"
+          },
+          "credentials": {
+            "wooCommerceApi": {
+              "id": "nCgFKMfBO95v38Mp",
+              "name": "WooCommerce (magnanigioielli.com)"
+            }
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "b448fb28-1bba-4743-923f-4198bdea0165",
+          "name": "get_orders",
+          "type": "n8n-nodes-base.wooCommerceTool",
+          "position": [
+            180,
+            600
+          ],
+          "parameters": {
+            "options": {
+              "search": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Search', ``, 'string') }}"
+            },
+            "resource": "order",
+            "operation": "getAll",
+            "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}"
+          },
+          "credentials": {
+            "wooCommerceApi": {
+              "id": "nCgFKMfBO95v38Mp",
+              "name": "WooCommerce (magnanigioielli.com)"
+            }
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "4b386cd5-1f42-45b9-bfa6-e8caf50d49b3",
+          "name": "get_user",
+          "type": "n8n-nodes-base.wooCommerceTool",
+          "position": [
+            280,
+            600
+          ],
+          "parameters": {
+            "filters": {
+              "email": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Email', ``, 'string') }}"
+            },
+            "resource": "customer",
+            "operation": "getAll",
+            "returnAll": true
+          },
+          "credentials": {
+            "wooCommerceApi": {
+              "id": "nCgFKMfBO95v38Mp",
+              "name": "WooCommerce (magnanigioielli.com)"
+            }
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "2235e0c5-ad5e-42d3-a6da-19513dcba181",
+          "name": "Calculator",
+          "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+          "position": [
+            -400,
+            720
+          ],
+          "parameters": {},
+          "typeVersion": 1
+        },
+        {
+          "id": "e3b8fd50-2f47-4866-acc7-88e819b9d2ce",
+          "name": "When clicking ‘Test workflow’",
+          "type": "n8n-nodes-base.manualTrigger",
+          "position": [
+            -980,
+            -500
+          ],
+          "parameters": {},
+          "typeVersion": 1
+        },
+        {
+          "id": "7ac0573f-fcc0-426e-b412-1f4a1e38b9ee",
+          "name": "Create collection",
+          "type": "n8n-nodes-base.httpRequest",
+          "position": [
+            -680,
+            -640
+          ],
+          "parameters": {
+            "url": "https://QDRANTURL/collections/COLLECTION",
+            "method": "POST",
+            "options": {},
+            "jsonBody": "{\n  \"filter\": {}\n}",
+            "sendBody": true,
+            "sendHeaders": true,
+            "specifyBody": "json",
+            "authentication": "genericCredentialType",
+            "genericAuthType": "httpHeaderAuth",
+            "headerParameters": {
+              "parameters": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ]
+            }
+          },
+          "credentials": {
+            "httpHeaderAuth": {
+              "id": "qhny6r5ql9wwotpn",
+              "name": "Qdrant API (Hetzner)"
+            }
+          },
+          "typeVersion": 4.2
+        },
+        {
+          "id": "15de11a6-27eb-4431-9105-a7f07f103d44",
+          "name": "Refresh collection",
+          "type": "n8n-nodes-base.httpRequest",
+          "position": [
+            -680,
+            -380
+          ],
+          "parameters": {
+            "url": "https://QDRANTURL/collections/COLLECTION/points/delete",
+            "method": "POST",
+            "options": {},
+            "jsonBody": "{\n  \"filter\": {}\n}",
+            "sendBody": true,
+            "sendHeaders": true,
+            "specifyBody": "json",
+            "authentication": "genericCredentialType",
+            "genericAuthType": "httpHeaderAuth",
+            "headerParameters": {
+              "parameters": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ]
+            }
+          },
+          "credentials": {
+            "httpHeaderAuth": {
+              "id": "qhny6r5ql9wwotpn",
+              "name": "Qdrant API (Hetzner)"
+            }
+          },
+          "typeVersion": 4.2
+        },
+        {
+          "id": "aab947f3-3e7f-4068-8183-a6003754dc16",
+          "name": "Get folder",
+          "type": "n8n-nodes-base.googleDrive",
+          "position": [
+            -460,
+            -380
+          ],
+          "parameters": {
+            "filter": {
+              "driveId": {
+                "__rl": true,
+                "mode": "list",
+                "value": "My Drive",
+                "cachedResultUrl": "https://drive.google.com/drive/my-drive",
+                "cachedResultName": "My Drive"
+              },
+              "folderId": {
+                "__rl": true,
+                "mode": "id",
+                "value": "=test-whatsapp"
+              }
+            },
+            "options": {},
+            "resource": "fileFolder"
+          },
+          "credentials": {
+            "googleDriveOAuth2Api": {
+              "id": "HEy5EuZkgPZVEa9w",
+              "name": "Google Drive account (n3w.it)"
+            }
+          },
+          "typeVersion": 3
+        },
+        {
+          "id": "091b9080-eae0-433a-80e6-d1c553b4912b",
+          "name": "Download Files",
+          "type": "n8n-nodes-base.googleDrive",
+          "position": [
+            -240,
+            -380
+          ],
+          "parameters": {
+            "fileId": {
+              "__rl": true,
+              "mode": "id",
+              "value": "={{ $json.id }}"
+            },
+            "options": {
+              "googleFileConversion": {
+                "conversion": {
+                  "docsToFormat": "text/plain"
+                }
+              }
+            },
+            "operation": "download"
+          },
+          "credentials": {
+            "googleDriveOAuth2Api": {
+              "id": "HEy5EuZkgPZVEa9w",
+              "name": "Google Drive account (n3w.it)"
+            }
+          },
+          "typeVersion": 3
+        },
+        {
+          "id": "400fcdde-ef42-49bf-807d-e2ed029aae1f",
+          "name": "Default Data Loader",
+          "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+          "position": [
+            160,
+            -180
+          ],
+          "parameters": {
+            "options": {},
+            "dataType": "binary"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "b3f39ac8-ebbc-42c5-8368-2fedd8d133f3",
+          "name": "Token Splitter",
+          "type": "@n8n/n8n-nodes-langchain.textSplitterTokenSplitter",
+          "position": [
+            140,
+            0
+          ],
+          "parameters": {
+            "chunkSize": 300,
+            "chunkOverlap": 30
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "a17ed192-cd39-456d-b35a-ee7d8532fb7c",
+          "name": "Sticky Note3",
+          "type": "n8n-nodes-base.stickyNote",
+          "position": [
+            -480,
+            -700
+          ],
+          "parameters": {
+            "color": 6,
+            "width": 880,
+            "height": 220,
+            "content": "# STEP 1\n\n## Create Qdrant Collection\nChange:\n- QDRANTURL\n- COLLECTION"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "ce12df1d-357a-4f8f-91cf-f92c0aa6bcd7",
+          "name": "Qdrant Vector Store1",
+          "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+          "position": [
+            0,
+            -380
+          ],
+          "parameters": {
+            "mode": "insert",
+            "options": {},
+            "qdrantCollection": {
+              "__rl": true,
+              "mode": "id",
+              "value": "=COLLECTION"
+            }
+          },
+          "credentials": {
+            "qdrantApi": {
+              "id": "iyQ6MQiVaF3VMBmt",
+              "name": "QdrantApi account"
+            }
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "e440121d-6aa8-4cc7-920c-d28d93717d99",
+          "name": "Embeddings OpenAI1",
+          "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+          "position": [
+            0,
+            -160
+          ],
+          "parameters": {
+            "options": {}
+          },
+          "credentials": {
+            "openAiApi": {
+              "id": "CDX6QM4gLYanh0P4",
+              "name": "OpenAi account"
+            }
+          },
+          "typeVersion": 1.1
+        },
+        {
+          "id": "c6f89301-3ae0-4068-8279-de149859f6a5",
+          "name": "Sticky Note5",
+          "type": "n8n-nodes-base.stickyNote",
+          "position": [
+            -700,
+            -440
+          ],
+          "parameters": {
+            "color": 4,
+            "width": 620,
+            "height": 400,
+            "content": "# STEP 2\n\n\n\n\n\n\n\n\n\n\n\n\n## Documents vectorization with Qdrant and Google Drive\nChange:\n- QDRANTURL\n- COLLECTION"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "7ae502f5-bf12-49bd-afd0-d8ad050c1d8b",
+          "name": "Qdrant Vector Store",
+          "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+          "position": [
+            -140,
+            960
+          ],
+          "parameters": {
+            "options": {},
+            "qdrantCollection": {
+              "__rl": true,
+              "mode": "id",
+              "value": "=COLLECTION"
+            }
+          },
+          "credentials": {
+            "qdrantApi": {
+              "id": "iyQ6MQiVaF3VMBmt",
+              "name": "QdrantApi account"
+            }
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "b3bc247f-7fcb-4c17-8995-ec4ba26b65ee",
+          "name": "Embeddings OpenAI",
+          "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+          "position": [
+            -160,
+            1140
+          ],
+          "parameters": {
+            "options": {}
+          },
+          "credentials": {
+            "openAiApi": {
+              "id": "CDX6QM4gLYanh0P4",
+              "name": "OpenAi account"
+            }
+          },
+          "typeVersion": 1.1
+        },
+        {
+          "id": "7c110a8b-5e66-4824-ac9f-a42fabbe3929",
+          "name": "OpenAI Chat Model",
+          "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+          "position": [
+            160,
+            960
+          ],
+          "parameters": {
+            "options": {}
+          },
+          "credentials": {
+            "openAiApi": {
+              "id": "CDX6QM4gLYanh0P4",
+              "name": "OpenAi account"
+            }
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "b9a62833-a124-439b-b6ca-eb6061afa74d",
+          "name": "ToS",
+          "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+          "position": [
+            -40,
+            780
+          ],
+          "parameters": {
+            "name": "company",
+            "description": "Rispondi alle domande relative ai termini e condizioni e spedizioni"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "667e8756-78a6-4cd1-bf24-00af8188fe50",
+          "name": "get_tracking",
+          "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+          "position": [
+            -240,
+            600
+          ],
+          "parameters": {
+            "name": "get_tracking",
+            "workflowId": {
+              "__rl": true,
+              "mode": "list",
+              "value": "AcPE4PXeFOiOW48H",
+              "cachedResultName": "WooCommerce Get Tracking Number"
+            },
+            "description": "Get tracking number for a specific order by providing the order number. The tool retrieves the unique tracking code that allows customers to monitor their shipment's current status and location.",
+            "workflowInputs": {
+              "value": {
+                "order_number": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('order_number', ``, 'string') }}"
+              },
+              "schema": [
+                {
+                  "id": "order_number",
+                  "type": "string",
+                  "display": true,
+                  "removed": false,
+                  "required": false,
+                  "displayName": "order_number",
+                  "defaultMatch": false,
+                  "canBeUsedToMatch": true
+                }
+              ],
+              "mappingMode": "defineBelow",
+              "matchingColumns": [
+                "order_number"
+              ],
+              "attemptToConvertTypes": false,
+              "convertFieldsToString": false
+            }
+          },
+          "typeVersion": 2.1
+        },
+        {
+          "id": "305ea876-80b9-45c4-b548-6d1df093bd94",
+          "name": "When Executed by Another Workflow",
+          "type": "n8n-nodes-base.executeWorkflowTrigger",
+          "position": [
+            560,
+            480
+          ],
+          "parameters": {
+            "inputSource": "jsonExample",
+            "jsonExample": "{\n  \"order_number\": \"order number\"\n}"
+          },
+          "typeVersion": 1.1
+        },
+        {
+          "id": "4f7547c1-1d21-45f6-a409-09e55c4b9477",
+          "name": "Post-Sales Agent",
+          "type": "@n8n/n8n-nodes-langchain.agent",
+          "position": [
+            -540,
+            420
+          ],
+          "parameters": {
+            "options": {
+              "systemMessage": "=## Role and Primary Objective\nYou are a customer support AI agent for an online clothing store, specializing in post-sales assistance. Your primary goals are to:\n- Help customers track their orders\n- Provide information about past and current orders\n- Offer clear and concise support\n\n## Communication Guidelines\n1. Always be professional, helpful, and precise\n2. Use available tools to retrieve accurate information\n3. Verify customer identity before sharing order details\n4. Protect customer privacy and data confidentiality\n\n## Tool Usage Instructions\n\n### Order Information Retrieval\n- Use `get_order` to fetch details for a single order\n  - REQUIRED: Complete user information including request, email, and order number\n- Use `get_orders` to retrieve multiple orders for a single customer\n- Use `get_user` to obtain customer profile information\n\n### Tracking and Support\n- Use `get_tracking` to obtain tracking information for an order using the order number\n- If a customer cannot find what they need, use `human*assistance`\n  - Synthesize the request clearly\n  - Include associated user email\n  - Provide concise, relevant details\n\n### General Information\n- Use `ToS` tool to answer questions about:\n  - Terms and Conditions\n  - Shipping information\n  - General store policies\n\n## Critical Verification Rules\n- ALWAYS verify that the email provided matches the order number\n- If the email does not match the order:\n  - DO NOT provide the correct email\n  - Inform the customer that the email address is incorrect\n  - Request the correct email associated with the order\n\n## Prohibited Actions\n- Never disclose sensitive customer information\n- Do not share full order details without proper verification\n- Avoid providing speculative or unconfirmed information\n\n## Communication Style\n- Be direct and helpful\n- Use clear, professional language\n- Focus on solving the customer's specific query\n- Provide step-by-step guidance when necessary\n\n## Escalation Protocol\n- If unable to resolve the customer's issue using available tools\n- Use `human_assistance` to escalate complex or unresolvable queries\n- Ensure clear, concise problem description\n\nToday is {{$now}}"
+            }
+          },
+          "typeVersion": 1.8
+        },
+        {
+          "id": "a5b49dbf-f041-43ec-b621-a89f65675705",
+          "name": "human_assistence",
+          "type": "n8n-nodes-base.telegramTool",
+          "position": [
+            -80,
+            600
+          ],
+          "webhookId": "1f9cad22-45e3-4c6b-bec8-f421060d14d9",
+          "parameters": {
+            "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text', ``, 'string') }}",
+            "chatId": "CHAT_ID",
+            "additionalFields": {}
+          },
+          "credentials": {
+            "telegramApi": {
+              "id": "rQ5q95W7uKesMDx4",
+              "name": "Telegram account Fastewb"
+            }
+          },
+          "typeVersion": 1.2
+        },
+        {
+          "id": "46110bcd-dae7-4c33-8936-cc4867c9abde",
+          "name": "Sticky Note",
+          "type": "n8n-nodes-base.stickyNote",
+          "position": [
+            -880,
+            240
+          ],
+          "parameters": {
+            "width": 1220,
+            "height": 140,
+            "content": "# STEP 3\n\n- Add your Telegram CHAT_ID in the \"human_assistance\" tool"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "9c45d20d-f4d3-4bde-9e3e-749c64a123bb",
+          "name": "Sticky Note1",
+          "type": "n8n-nodes-base.stickyNote",
+          "position": [
+            540,
+            240
+          ],
+          "parameters": {
+            "color": 5,
+            "width": 580,
+            "height": 200,
+            "content": "# STEP 4\n\nThe tracking code request is made through the most popular WooCommerce tracking plugin: \"YITH WooCommerce Order & Shipment Tracking\". The free version can be [downloaded here](https://wordpress.org/plugins/yith-woocommerce-order-tracking/)\n- Create a new workflow and change URL in the node \"Http Request\" with your WooCommerce shop url"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "f16ee312-8434-4958-b111-d80384ae869c",
+          "name": "Get tracking",
+          "type": "n8n-nodes-base.httpRequest",
+          "position": [
+            780,
+            480
+          ],
+          "parameters": {
+            "url": "=https://URL/wp-json/wc/v3/orders/{{ $json.order_number }}",
+            "options": {},
+            "authentication": "genericCredentialType",
+            "genericAuthType": "httpBasicAuth"
+          },
+          "credentials": {
+            "httpBasicAuth": {
+              "id": "nIitKwSJa9EpgG8K",
+              "name": "WP (magnanigioielli.com)"
+            }
+          },
+          "typeVersion": 4.2
+        },
+        {
+          "id": "e5de4ad6-3469-4720-828e-618db5c4f3ae",
+          "name": "Set tracking code",
+          "type": "n8n-nodes-base.set",
+          "position": [
+            1020,
+            480
+          ],
+          "parameters": {
+            "options": {},
+            "assignments": {
+              "assignments": [
+                {
+                  "id": "19b33abc-5191-4449-b682-4466f1975ff2",
+                  "name": "tracking_code",
+                  "type": "string",
+                  "value": "={{ $json[\"meta_data\"].find(item => item.key === \"ywot_tracking_code\").value }}"
+                },
+                {
+                  "id": "2e18b337-e3e8-4669-a902-ecc2ba027a1a",
+                  "name": "carrier_url",
+                  "type": "string",
+                  "value": "={{ $json[\"meta_data\"].find(item => item.key === \"ywot_carrier_url\").value }}"
+                },
+                {
+                  "id": "ae834f65-67b2-4e95-9a49-5172e36fc5b9",
+                  "name": "pick_up",
+                  "type": "string",
+                  "value": "={{ $json[\"meta_data\"].find(item => item.key === \"ywot_pick_up_date\").value }}"
+                }
+              ]
+            }
+          },
+          "typeVersion": 3.4
+        },
+        {
+          "id": "b889e33b-5243-4b5b-80ef-023df779e673",
+          "name": "GPT 4o-mini",
+          "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+          "position": [
+            -700,
+            720
+          ],
+          "parameters": {
+            "model": {
+              "__rl": true,
+              "mode": "list",
+              "value": "gpt-4o-mini"
+            },
+            "options": {}
+          },
+          "credentials": {
+            "openAiApi": {
+              "id": "CDX6QM4gLYanh0P4",
+              "name": "OpenAi account"
+            }
+          },
+          "typeVersion": 1.2
+        },
+        {
+          "id": "c9863b08-f6aa-4502-85a4-7782a090d532",
+          "name": "Sticky Note2",
+          "type": "n8n-nodes-base.stickyNote",
+          "position": [
+            -1000,
+            -1040
+          ],
+          "parameters": {
+            "color": 3,
+            "width": 1400,
+            "height": 240,
+            "content": "# WooCommerce AI Chatbot Workflow for Post-Sales Support\n\nThis WooCommerce-integrated chatbot is designed to transform post-sales customer support by combining automation and artificial intelligence to deliver fast, secure, and personalized assistance. By connecting directly to the WooCommerce database, the chatbot retrieves real-time order information—including shipping details and tracking numbers—after verifying the customer's identity through a strict email-based authentication system. This ensures maximum data security, preventing leaks of sensitive information.  \n\nBeyond order management, the chatbot answers frequently asked questions about return policies, delivery times, and terms of service using a vector database that provides accurate, context-aware responses. If a request is too complex, the system seamlessly escalates it to a human operator via Telegram, guaranteeing no customer query goes unresolved. \n"
+          },
+          "typeVersion": 1
+        }
+      ],
+      "active": false,
+      "pinData": {},
+      "settings": {
+        "executionOrder": "v1"
+      },
+      "versionId": "bace4bf0-d6b4-46f8-81d1-26dbc1120d85",
+      "connections": {
+        "ToS": {
+          "ai_tool": [
+            [
+              {
+                "node": "Post-Sales Agent",
+                "type": "ai_tool",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "get_user": {
+          "ai_tool": [
+            [
+              {
+                "node": "Post-Sales Agent",
+                "type": "ai_tool",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "get_order": {
+          "ai_tool": [
+            [
+              {
+                "node": "Post-Sales Agent",
+                "type": "ai_tool",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Calculator": {
+          "ai_tool": [
+            [
+              {
+                "node": "Post-Sales Agent",
+                "type": "ai_tool",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Get folder": {
+          "main": [
+            [
+              {
+                "node": "Download Files",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "get_orders": {
+          "ai_tool": [
+            [
+              {
+                "node": "Post-Sales Agent",
+                "type": "ai_tool",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "GPT 4o-mini": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "Post-Sales Agent",
+                "type": "ai_languageModel",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Get tracking": {
+          "main": [
+            [
+              {
+                "node": "Set tracking code",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "get_tracking": {
+          "ai_tool": [
+            [
+              {
+                "node": "Post-Sales Agent",
+                "type": "ai_tool",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Simple Memory": {
+          "ai_memory": [
+            [
+              {
+                "node": "Post-Sales Agent",
+                "type": "ai_memory",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Download Files": {
+          "main": [
+            [
+              {
+                "node": "Qdrant Vector Store1",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Token Splitter": {
+          "ai_textSplitter": [
+            [
+              {
+                "node": "Default Data Loader",
+                "type": "ai_textSplitter",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Post-Sales Agent": {
+          "main": [
+            []
+          ]
+        },
+        "human_assistence": {
+          "ai_tool": [
+            [
+              {
+                "node": "Post-Sales Agent",
+                "type": "ai_tool",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Embeddings OpenAI": {
+          "ai_embedding": [
+            [
+              {
+                "node": "Qdrant Vector Store",
+                "type": "ai_embedding",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "OpenAI Chat Model": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "ToS",
+                "type": "ai_languageModel",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Embeddings OpenAI1": {
+          "ai_embedding": [
+            [
+              {
+                "node": "Qdrant Vector Store1",
+                "type": "ai_embedding",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Refresh collection": {
+          "main": [
+            [
+              {
+                "node": "Get folder",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Default Data Loader": {
+          "ai_document": [
+            [
+              {
+                "node": "Qdrant Vector Store1",
+                "type": "ai_document",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Qdrant Vector Store": {
+          "ai_vectorStore": [
+            [
+              {
+                "node": "ToS",
+                "type": "ai_vectorStore",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "When chat message received": {
+          "main": [
+            [
+              {
+                "node": "Post-Sales Agent",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "When Executed by Another Workflow": {
+          "main": [
+            [
+              {
+                "node": "Get tracking",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "When clicking ‘Test workflow’": {
+          "main": [
+            [
+              {
+                "node": "Create collection",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "Refresh collection",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "stripe-zoom-payments",
+    "title": "Stripe-Paid Zoom Booking",
+    "description": "Collects payments via Stripe Checkout, records attendees in Sheets, emails confirmations, and provisions Zoom sessions.",
+    "problem": "Consultants want to gate Zoom meetings behind payment without juggling multiple tools manually.",
+    "tags": [
+      "stripe",
+      "zoom",
+      "payments",
+      "forms"
+    ],
+    "workflow": {
+      "id": "2DT5BW5tOdy87AUl",
+      "meta": {
+        "instanceId": "8418cffce8d48086ec0a73fd90aca708aa07591f2fefa6034d87fe12a09de26e"
+      },
+      "name": "Streamline Your Zoom Meetings with Secure, Automated Stripe Payments",
+      "tags": [],
+      "nodes": [
+        {
+          "id": "fcc38ae8-0dbf-4676-b47b-ba77f97a38b8",
+          "name": "Create Zoom meeting",
+          "type": "n8n-nodes-base.zoom",
+          "position": [
+            180,
+            480
+          ],
+          "parameters": {
+            "topic": "={{ $('Creation Form').item.json.title }}",
+            "authentication": "oAuth2",
+            "additionalFields": {
+              "password": "={{ Math.random().toString(36).slice(-4); }}",
+              "startTime": "={{ new Date(new Date($('Creation Form').item.json.date_start).getTime() + ($('Creation Form').item.json.hour * 3600000) + ($('Creation Form').item.json.minute * 60000)).toISOString() }}"
+            }
+          },
+          "credentials": {
+            "zoomOAuth2Api": {
+              "id": "JQ9fG5WNTVssHxGj",
+              "name": "Zoom account"
+            }
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "3d2dea09-c463-447b-9a9d-daca8fdcac06",
+          "name": "Create Stripe Product",
+          "type": "n8n-nodes-base.httpRequest",
+          "position": [
+            400,
+            480
+          ],
+          "parameters": {
+            "url": "https://api.stripe.com/v1/products",
+            "method": "POST",
+            "options": {},
+            "sendBody": true,
+            "contentType": "form-urlencoded",
+            "authentication": "predefinedCredentialType",
+            "bodyParameters": {
+              "parameters": [
+                {
+                  "name": "name",
+                  "value": "={{ $('Creation Form').item.json.title }}"
+                },
+                {
+                  "name": "default_price_data[unit_amount]",
+                  "value": "={{ $('Creation Form').item.json.price * 100 }}"
+                },
+                {
+                  "name": "default_price_data[currency]",
+                  "value": "={{ $('Config').item.json.currency }}"
+                }
+              ]
+            },
+            "nodeCredentialType": "stripeApi"
+          },
+          "credentials": {
+            "stripeApi": {
+              "id": "qjose8z3RR7Xzm7b",
+              "name": "Stripe Dev"
+            }
+          },
+          "typeVersion": 4.1
+        },
+        {
+          "id": "01ab74fb-19a1-42ef-a0ad-31107c7ded3f",
+          "name": "Config",
+          "type": "n8n-nodes-base.set",
+          "notes": "Setup your flow",
+          "position": [
+            -220,
+            640
+          ],
+          "parameters": {
+            "options": {},
+            "assignments": {
+              "assignments": [
+                {
+                  "id": "038b54b7-9559-444e-8653-c5256a5b784e",
+                  "name": "currency",
+                  "type": "string",
+                  "value": "EUR"
+                },
+                {
+                  "id": "64d1eeee-cabe-403b-a634-f3238f586f58",
+                  "name": "sheet_url",
+                  "type": "string",
+                  "value": "https://docs.google.com/spreadsheets/d/1ZliqqBNo6X0iM9yXBOiCG1e4Q7L7bQKMFmjvbSgUSnA/edit#gid=0"
+                },
+                {
+                  "id": "997fe5a1-f601-458d-899c-673dff4acb04",
+                  "name": "teacher_email",
+                  "type": "string",
+                  "value": "emm.bernard@gmail.com"
+                }
+              ]
+            }
+          },
+          "notesInFlow": true,
+          "typeVersion": 3.3
+        },
+        {
+          "id": "2aa87b96-924b-472c-8cc6-2de028ce0195",
+          "name": "Send email to teacher",
+          "type": "n8n-nodes-base.gmail",
+          "position": [
+            1040,
+            480
+          ],
+          "parameters": {
+            "sendTo": "={{ $('Config').item.json.teacher_email }}",
+            "message": "=<b>Congratulations, your event has been succesfully created 🎉</b><br/><br/>\n\nTitle: {{ $('Creation Form').item.json.title }}<br/>\nPrice:  {{ $('Creation Form').item.json.price }} {{ $('Config').item.json.currency }}<br/>\nStart date: {{ $('Creation Form').item.json.date_start }}<br/><br/>\n\n<b>Payment link:</b><br/>\n {{ $('Create payment link').item.json.url }}<br/>\n<i>Start sharing this link to get subscriptions</i><br/><br/>\n<b>Participant list:</b><br/>\n{{ $('Config').item.json.sheet_url }}#gid={{ $('Create Stripe Product').item.json.created }}\n<br/><br/>\n<b>Zoom infos:</b><br/>\nLink: {{ $('Create Zoom meeting').item.json.join_url }}<br/>\nSession ID: {{ $('Create Zoom meeting').item.json.id }}<br/>\nPassword: {{ $('Create Zoom meeting').item.json.password }}<br/> ",
+            "options": {},
+            "subject": "=🎉 {{ $('Creation Form').item.json.title }} has been created!"
+          },
+          "credentials": {
+            "gmailOAuth2": {
+              "id": "DMcPDN0IHPwGmI7f",
+              "name": "Gmail account"
+            }
+          },
+          "typeVersion": 2.1
+        },
+        {
+          "id": "40f66f09-19c9-40eb-a9c4-138464ccd371",
+          "name": "Create participant list",
+          "type": "n8n-nodes-base.googleSheets",
+          "position": [
+            840,
+            480
+          ],
+          "parameters": {
+            "title": "={{ $('Creation Form').item.json.date_start }} - {{ $('Creation Form').item.json.title }} - {{ $('Create Stripe Product').item.json.created }}",
+            "options": {
+              "index": 0,
+              "sheetId": "={{ $('Create Stripe Product').item.json.created }}"
+            },
+            "operation": "create",
+            "documentId": {
+              "__rl": true,
+              "mode": "url",
+              "value": "={{ $('Config').item.json.sheet_url }}"
+            }
+          },
+          "credentials": {
+            "googleSheetsOAuth2Api": {
+              "id": "RICzFHixgHXMuKmg",
+              "name": "Google Sheets account"
+            }
+          },
+          "typeVersion": 4.3,
+          "alwaysOutputData": true
+        },
+        {
+          "id": "67ff21d2-57b8-4ccd-91ee-a1bff1ea23b2",
+          "name": "Add participant to list",
+          "type": "n8n-nodes-base.googleSheets",
+          "position": [
+            400,
+            800
+          ],
+          "parameters": {
+            "columns": {
+              "value": {},
+              "schema": [
+                {
+                  "id": "city",
+                  "type": "string",
+                  "display": true,
+                  "removed": false,
+                  "required": false,
+                  "displayName": "city",
+                  "defaultMatch": false,
+                  "canBeUsedToMatch": true
+                },
+                {
+                  "id": "email",
+                  "type": "string",
+                  "display": true,
+                  "removed": false,
+                  "required": false,
+                  "displayName": "email",
+                  "defaultMatch": false,
+                  "canBeUsedToMatch": true
+                },
+                {
+                  "id": "name",
+                  "type": "string",
+                  "display": true,
+                  "removed": false,
+                  "required": false,
+                  "displayName": "name",
+                  "defaultMatch": false,
+                  "canBeUsedToMatch": true
+                },
+                {
+                  "id": "country",
+                  "type": "string",
+                  "display": true,
+                  "removed": false,
+                  "required": false,
+                  "displayName": "country",
+                  "defaultMatch": false,
+                  "canBeUsedToMatch": true
+                },
+                {
+                  "id": "postal_code",
+                  "type": "string",
+                  "display": true,
+                  "removed": false,
+                  "required": false,
+                  "displayName": "postal_code",
+                  "defaultMatch": false,
+                  "canBeUsedToMatch": true
+                },
+                {
+                  "id": "amount",
+                  "type": "string",
+                  "display": true,
+                  "removed": false,
+                  "required": false,
+                  "displayName": "amount",
+                  "defaultMatch": false,
+                  "canBeUsedToMatch": true
+                },
+                {
+                  "id": "currency",
+                  "type": "string",
+                  "display": true,
+                  "removed": false,
+                  "required": false,
+                  "displayName": "currency",
+                  "defaultMatch": false,
+                  "canBeUsedToMatch": true
+                }
+              ],
+              "mappingMode": "autoMapInputData",
+              "matchingColumns": []
+            },
+            "options": {},
+            "operation": "append",
+            "sheetName": {
+              "__rl": true,
+              "mode": "id",
+              "value": "={{ $('On payment').item.json.data.object.metadata.event_sheet_id }}"
+            },
+            "documentId": {
+              "__rl": true,
+              "mode": "url",
+              "value": "={{ $('Config').item.json.sheet_url }}"
+            }
+          },
+          "credentials": {
+            "googleSheetsOAuth2Api": {
+              "id": "RICzFHixgHXMuKmg",
+              "name": "Google Sheets account"
+            }
+          },
+          "typeVersion": 4.3
+        },
+        {
+          "id": "67e317ba-77d5-4f77-8fe2-d38e1a68c6f1",
+          "name": "Send confirmation to participant",
+          "type": "n8n-nodes-base.gmail",
+          "position": [
+            620,
+            800
+          ],
+          "parameters": {
+            "sendTo": "={{ $('On payment').item.json.data.object.customer_details.email }}",
+            "message": "=Dear {{ $('On payment').item.json.data.object.customer_details.name }},<br/><br/>\n\nWe are very happy to announce that your subscription to our event <b>{{ $json.title }}</b> starting on <b>{{ $json.start }}</b> is now confirmed.<br/><br/>\n\nHere are the infos you will need to participate:<br/> \nZoom link:  {{ $('On payment').item.json.data.object.metadata.zoom_link }}<br/>\nZoom password:{{ $('On payment').item.json.data.object.metadata.zoom_password }}<br/>\nZoom ID: {{ $('On payment').item.json.data.object.metadata.zoom_id }}<br/><br/> \n\nLooking forward to see you there!<br/>\nKind regards<br/>",
+            "options": {
+              "appendAttribution": false
+            },
+            "subject": "Than you for your subscription 🙏"
+          },
+          "credentials": {
+            "gmailOAuth2": {
+              "id": "DMcPDN0IHPwGmI7f",
+              "name": "Gmail account"
+            }
+          },
+          "typeVersion": 2.1
+        },
+        {
+          "id": "ac5ca5f3-f9ca-494f-8e78-33dd663111ab",
+          "name": "Notify teacher",
+          "type": "n8n-nodes-base.gmail",
+          "position": [
+            840,
+            800
+          ],
+          "parameters": {
+            "sendTo": "={{ $('Config').item.json.teacher_email }}",
+            "message": "=<b>A new participant registred for the event {{ $('Retrieve event infos').item.json.title }} ({{ $('Retrieve event infos').item.json.start }})!</b><br/><br/>\n\n<b>Name: {{ $('On payment').item.json.data.object.customer_details.name }}</b><br/>\n<b>Email: {{ $('On payment').item.json.data.object.customer_details.email }}</b><br/><br/>\n\n<b>Participant list:</b><br/>\n{{ $('Config').item.json.sheet_url }}#gid={{ $('On payment').item.json.data.object.metadata.event_sheet_id }} ",
+            "options": {},
+            "subject": "New participant registred ☝️"
+          },
+          "credentials": {
+            "gmailOAuth2": {
+              "id": "DMcPDN0IHPwGmI7f",
+              "name": "Gmail account"
+            }
+          },
+          "typeVersion": 2.1
+        },
+        {
+          "id": "33e5283f-3854-4ada-8412-858c205f1d1e",
+          "name": "Create payment link",
+          "type": "n8n-nodes-base.httpRequest",
+          "position": [
+            620,
+            480
+          ],
+          "parameters": {
+            "url": "https://api.stripe.com/v1/payment_links",
+            "method": "POST",
+            "options": {},
+            "sendBody": true,
+            "contentType": "form-urlencoded",
+            "authentication": "predefinedCredentialType",
+            "bodyParameters": {
+              "parameters": [
+                {
+                  "name": "line_items[0][price]",
+                  "value": "={{ $json.default_price }}"
+                },
+                {
+                  "name": "line_items[0][quantity]",
+                  "value": "1"
+                },
+                {
+                  "name": "metadata[event_sheet_id]",
+                  "value": "={{ $('Create Stripe Product').item.json.created }}"
+                },
+                {
+                  "name": "metadata[zoom_link]",
+                  "value": "={{ $('Create Zoom meeting').item.json.join_url }}"
+                },
+                {
+                  "name": "metadata[zoom_password]",
+                  "value": "={{ $('Create Zoom meeting').item.json.password }}"
+                },
+                {
+                  "name": "metadata[zoom_id]",
+                  "value": "={{ $('Create Zoom meeting').item.json.id }}"
+                },
+                {
+                  "name": "metadata[title]",
+                  "value": "={{ $('Creation Form').item.json.title }}"
+                },
+                {
+                  "name": "metadata[start_time]",
+                  "value": "={{ $('Create Zoom meeting').item.json.start_time }}"
+                },
+                {
+                  "name": "metadata[price]",
+                  "value": "={{ $('Creation Form').item.json.price }}"
+                },
+                {
+                  "name": "metadata[currency]",
+                  "value": "={{ $('Config').item.json.currency }}"
+                }
+              ]
+            },
+            "nodeCredentialType": "stripeApi"
+          },
+          "credentials": {
+            "stripeApi": {
+              "id": "qjose8z3RR7Xzm7b",
+              "name": "Stripe Dev"
+            }
+          },
+          "typeVersion": 4.1
+        },
+        {
+          "id": "600c5382-bdac-4131-a784-399f5be2b54b",
+          "name": "Format participant",
+          "type": "n8n-nodes-base.set",
+          "position": [
+            180,
+            800
+          ],
+          "parameters": {
+            "options": {},
+            "assignments": {
+              "assignments": [
+                {
+                  "id": "dabd3bc2-ca92-4d99-a223-b0ad18945121",
+                  "name": "email",
+                  "type": "string",
+                  "value": "={{ $('On payment').item.json.data.object.customer_details.email }}"
+                },
+                {
+                  "id": "d40709f6-ffcd-4055-a374-9044a9a5e3b2",
+                  "name": "name",
+                  "type": "string",
+                  "value": "={{ $('On payment').item.json.data.object.customer_details.name }}"
+                }
+              ]
+            }
+          },
+          "typeVersion": 3.3
+        },
+        {
+          "id": "c8a90ac5-14cd-4ff2-bd5b-c35724f085d1",
+          "name": "Format event",
+          "type": "n8n-nodes-base.set",
+          "position": [
+            840,
+            280
+          ],
+          "parameters": {
+            "options": {},
+            "assignments": {
+              "assignments": [
+                {
+                  "id": "a29943ba-b516-41a8-8f85-5bcee5eda0d1",
+                  "name": "title",
+                  "type": "string",
+                  "value": "={{ $('Creation Form').item.json.title }}"
+                },
+                {
+                  "id": "bf642fde-c4c2-42b4-beed-ef65efdab55b",
+                  "name": "start",
+                  "type": "string",
+                  "value": "={{ $('Creation Form').item.json.date_start }}"
+                },
+                {
+                  "id": "33f7a58e-624d-4ccc-bbea-ed3365cede20",
+                  "name": "price",
+                  "type": "number",
+                  "value": "={{ $('Creation Form').item.json.price }}"
+                },
+                {
+                  "id": "c948f71e-3b12-4c6a-a1f9-ee9a511fe262",
+                  "name": "currency",
+                  "type": "string",
+                  "value": "={{ $('Config').item.json.currency }}"
+                },
+                {
+                  "id": "887461ca-db0d-442e-8008-5fe6a6fbdd8f",
+                  "name": "zoom_link",
+                  "type": "string",
+                  "value": "={{ $('Create Zoom meeting').item.json.join_url }}"
+                },
+                {
+                  "id": "4b2bd5e2-3bd5-443a-94a3-9ababfd9d881",
+                  "name": "zoom_id",
+                  "type": "string",
+                  "value": "={{ $('Create Zoom meeting').item.json.id }}"
+                },
+                {
+                  "id": "a1cea8e2-9954-4143-b71f-5ea194a873dd",
+                  "name": "zoom_password",
+                  "type": "string",
+                  "value": "={{ $('Create Zoom meeting').item.json.password }}"
+                },
+                {
+                  "id": "faa52bc6-dfbe-49e2-bc95-dae198a61293",
+                  "name": "payment_link",
+                  "type": "string",
+                  "value": "={{ $json.url }}"
+                },
+                {
+                  "id": "d7f5f0f5-cc7b-436a-9ad1-0b8f410c62c6",
+                  "name": "payment_id",
+                  "type": "string",
+                  "value": "={{ $json.id }}"
+                },
+                {
+                  "id": "020b22d0-f525-4120-9f8b-2fa33e88c2e1",
+                  "name": "event_sheet_id",
+                  "type": "string",
+                  "value": "={{ $json.metadata.event_sheet_id }}"
+                }
+              ]
+            }
+          },
+          "typeVersion": 3.3
+        },
+        {
+          "id": "def10b04-98c3-46cc-bdeb-9592c7466992",
+          "name": "Store event",
+          "type": "n8n-nodes-base.googleSheets",
+          "position": [
+            1040,
+            280
+          ],
+          "parameters": {
+            "columns": {
+              "value": {},
+              "schema": [],
+              "mappingMode": "autoMapInputData",
+              "matchingColumns": []
+            },
+            "options": {},
+            "operation": "append",
+            "sheetName": {
+              "__rl": true,
+              "mode": "id",
+              "value": "0"
+            },
+            "documentId": {
+              "__rl": true,
+              "mode": "url",
+              "value": "={{ $('Config').item.json.sheet_url }}"
+            }
+          },
+          "credentials": {
+            "googleSheetsOAuth2Api": {
+              "id": "RICzFHixgHXMuKmg",
+              "name": "Google Sheets account"
+            }
+          },
+          "typeVersion": 4.3,
+          "alwaysOutputData": true
+        },
+        {
+          "id": "594fc7a1-f299-49c4-a25b-07cf2ced16f7",
+          "name": "Creation Form",
+          "type": "n8n-nodes-base.formTrigger",
+          "position": [
+            -500,
+            480
+          ],
+          "webhookId": "1c6fe52c-48ab-4688-b5ae-7e24361aa603",
+          "parameters": {
+            "path": "1c6fe52c-48ab-4688-b5ae-7e24361aa602",
+            "options": {},
+            "formTitle": "Create a new meeting",
+            "formFields": {
+              "values": [
+                {
+                  "fieldLabel": "title",
+                  "requiredField": true
+                },
+                {
+                  "fieldType": "number",
+                  "fieldLabel": "price",
+                  "requiredField": true
+                },
+                {
+                  "fieldType": "date",
+                  "fieldLabel": "date_start",
+                  "requiredField": true
+                },
+                {
+                  "fieldType": "number",
+                  "fieldLabel": "hour"
+                },
+                {
+                  "fieldType": "number",
+                  "fieldLabel": "minute"
+                }
+              ]
+            },
+            "responseMode": "lastNode",
+            "formDescription": "This automates the creation of a Zoom Meeting and a Stripe Payment page, streamlining your event setup process."
+          },
+          "typeVersion": 2
+        },
+        {
+          "id": "18fec11b-da39-4fe2-afab-d1585e3d9a99",
+          "name": "On payment",
+          "type": "n8n-nodes-base.stripeTrigger",
+          "disabled": true,
+          "position": [
+            -500,
+            780
+          ],
+          "webhookId": "ee7d6932-0583-47a3-b442-8bc161eee5e9",
+          "parameters": {
+            "events": [
+              "checkout.session.completed"
+            ]
+          },
+          "credentials": {
+            "stripeApi": {
+              "id": "qjose8z3RR7Xzm7b",
+              "name": "Stripe Dev"
+            }
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "1d95a7a5-7ddc-4338-9784-1d0554f39808",
+          "name": "Sticky Note1",
+          "type": "n8n-nodes-base.stickyNote",
+          "position": [
+            -220,
+            118
+          ],
+          "parameters": {
+            "color": 6,
+            "width": 275.01592825011585,
+            "height": 468.76027109756643,
+            "content": "# Setup\n### 1/ Add Your credentials\n[Zoom](https://docs.n8n.io/integrations/builtin/credentials/zoom/)\n[Google](https://docs.n8n.io/integrations/builtin/credentials/google/)\n[Stripe](https://docs.n8n.io/integrations/builtin/credentials/stripe/)\n\nNote: For Google, you need to add Gmail and Google Sheet.\n\n### 2/ Create a [new Google Sheet](https://sheets.new/).\nKeep this sheet blank for now; it contains your meeting and participant information. Place it wherever it fits best in your organization.\n\n### 3/ And fill the config node\n# 👇"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "58312523-1bee-4a56-9ab2-dc166fe30573",
+          "name": "Sticky Note2",
+          "type": "n8n-nodes-base.stickyNote",
+          "position": [
+            -920,
+            500
+          ],
+          "parameters": {
+            "color": 6,
+            "width": 372,
+            "height": 200.14793114506386,
+            "content": "# Create a meeting 👉🏻\n\nYour journey to easy event management starts here.\n\nClick this node, copy the production URL, and keep it handy. It's your personal admin tool for quickly creating new meetings. Simple and efficient!"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "09153c6b-33cb-4fd1-8fa2-3513bca01f0c",
+          "name": "Sticky Note3",
+          "type": "n8n-nodes-base.stickyNote",
+          "position": [
+            620,
+            660
+          ],
+          "parameters": {
+            "color": 6,
+            "width": 519.9859025074911,
+            "height": 106.11515926602786,
+            "content": "# 🖋️ Customize\n### Feel free to adapt email contents to your needs."
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "da13aadc-eb3c-4d99-8e2b-3e56a40d09f3",
+          "name": "if is creation flow",
+          "type": "n8n-nodes-base.if",
+          "position": [
+            -20,
+            640
+          ],
+          "parameters": {
+            "options": {
+              "looseTypeValidation": true
+            },
+            "conditions": {
+              "options": {
+                "leftValue": "",
+                "caseSensitive": true,
+                "typeValidation": "loose"
+              },
+              "combinator": "and",
+              "conditions": [
+                {
+                  "id": "40ddf809-1602-4120-ae7e-8be61437b50d",
+                  "operator": {
+                    "type": "boolean",
+                    "operation": "true",
+                    "singleValue": true
+                  },
+                  "leftValue": "={{ $(\"Creation Form\").isExecuted }}",
+                  "rightValue": ""
+                }
+              ]
+            }
+          },
+          "typeVersion": 2
+        },
+        {
+          "id": "ca62dd52-cb79-45c1-a26a-91ba4c16b6ed",
+          "name": "Sticky Note",
+          "type": "n8n-nodes-base.stickyNote",
+          "position": [
+            180,
+            340
+          ],
+          "parameters": {
+            "color": 7,
+            "width": 202.64787116404852,
+            "height": 85.79488430601403,
+            "content": "### Crafted by the\n## [🥷 n8n.ninja](https://n8n.ninja)"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "aebdc1b5-ccf7-4299-a8ec-10eb448c4d72",
+          "name": "the end",
+          "type": "n8n-nodes-base.noOp",
+          "position": [
+            1040,
+            800
+          ],
+          "parameters": {},
+          "typeVersion": 1
+        }
+      ],
+      "active": true,
+      "pinData": {
+        "On payment": [
+          {
+            "json": {
+              "id": "evt_1Ou0e4BH8XCwzsfXEKVN0GkI",
+              "data": {
+                "object": {
+                  "id": "cs_test_a1G73c0pSu8hnD8y4we2ZVGy3MdmDuam1jLT07DqcBgYkuH1vOpWSkclBr",
+                  "url": null,
+                  "mode": "payment",
+                  "locale": "auto",
+                  "object": "checkout.session",
+                  "status": "complete",
+                  "consent": null,
+                  "created": 1710370285,
+                  "invoice": null,
+                  "ui_mode": "hosted",
+                  "currency": "eur",
+                  "customer": null,
+                  "livemode": false,
+                  "metadata": {
+                    "zoom_id": "86579738722",
+                    "zoom_link": "https://us06web.zoom.us/j/86579738722?pwd=i8QeOxKGO8GODInTP3gsYUjvrCYarA.1",
+                    "zoom_password": "260j",
+                    "event_sheet_id": "1710369993"
+                  },
+                  "shipping": null,
+                  "cancel_url": "https://stripe.com",
+                  "expires_at": 1710456685,
+                  "custom_text": {
+                    "submit": null,
+                    "after_submit": null,
+                    "shipping_address": null,
+                    "terms_of_service_acceptance": null
+                  },
+                  "submit_type": "auto",
+                  "success_url": "https://stripe.com",
+                  "amount_total": 2000,
+                  "payment_link": "plink_1Ou0ZCBH8XCwzsfXUongWL67",
+                  "setup_intent": null,
+                  "subscription": null,
+                  "automatic_tax": {
+                    "status": null,
+                    "enabled": false,
+                    "liability": null
+                  },
+                  "client_secret": null,
+                  "custom_fields": [],
+                  "shipping_rate": null,
+                  "total_details": {
+                    "amount_tax": 0,
+                    "amount_discount": 0,
+                    "amount_shipping": 0
+                  },
+                  "customer_email": null,
+                  "payment_intent": "pi_3Ou0e2BH8XCwzsfX14Vi1Pak",
+                  "payment_status": "paid",
+                  "recovered_from": null,
+                  "amount_subtotal": 2000,
+                  "after_expiration": null,
+                  "customer_details": {
+                    "name": "Emmanuel Bern",
+                    "email": "emm.bernard@gmail.com",
+                    "phone": null,
+                    "address": {
+                      "city": "Lausanne",
+                      "line1": "Avenue Charles Dickens 10",
+                      "line2": null,
+                      "state": null,
+                      "country": "CH",
+                      "postal_code": "1006"
+                    },
+                    "tax_ids": [],
+                    "tax_exempt": "none"
+                  },
+                  "invoice_creation": {
+                    "enabled": false,
+                    "invoice_data": {
+                      "footer": null,
+                      "issuer": null,
+                      "metadata": {},
+                      "description": null,
+                      "custom_fields": null,
+                      "account_tax_ids": null,
+                      "rendering_options": null
+                    }
+                  },
+                  "shipping_options": [],
+                  "customer_creation": "if_required",
+                  "consent_collection": null,
+                  "client_reference_id": null,
+                  "currency_conversion": null,
+                  "payment_method_types": [
+                    "card",
+                    "bancontact",
+                    "eps",
+                    "giropay",
+                    "ideal",
+                    "link",
+                    "klarna"
+                  ],
+                  "allow_promotion_codes": false,
+                  "payment_method_options": {
+                    "card": {
+                      "request_three_d_secure": "automatic"
+                    }
+                  },
+                  "phone_number_collection": {
+                    "enabled": false
+                  },
+                  "payment_method_collection": "always",
+                  "billing_address_collection": "auto",
+                  "shipping_address_collection": null,
+                  "payment_method_configuration_details": {
+                    "id": "pmc_1Om7TPBH8XCwzsfXBB30jrJh",
+                    "parent": null
+                  }
+                }
+              },
+              "type": "checkout.session.completed",
+              "object": "event",
+              "created": 1710370296,
+              "request": {
+                "id": null,
+                "idempotency_key": null
+              },
+              "livemode": false,
+              "api_version": "2020-08-27",
+              "pending_webhooks": 4
+            }
+          }
+        ]
+      },
+      "settings": {
+        "executionOrder": "v1"
+      },
+      "versionId": "9e350a8f-30e0-43ab-8dab-a7edbfd637d8",
+      "connections": {
+        "Config": {
+          "main": [
+            [
+              {
+                "node": "if is creation flow",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "On payment": {
+          "main": [
+            [
+              {
+                "node": "Config",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Format event": {
+          "main": [
+            [
+              {
+                "node": "Store event",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Creation Form": {
+          "main": [
+            [
+              {
+                "node": "Config",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Notify teacher": {
+          "main": [
+            [
+              {
+                "node": "the end",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Format participant": {
+          "main": [
+            [
+              {
+                "node": "Add participant to list",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Create Zoom meeting": {
+          "main": [
+            [
+              {
+                "node": "Create Stripe Product",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Create payment link": {
+          "main": [
+            [
+              {
+                "node": "Create participant list",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "Format event",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "if is creation flow": {
+          "main": [
+            [
+              {
+                "node": "Create Zoom meeting",
+                "type": "main",
+                "index": 0
+              }
+            ],
+            [
+              {
+                "node": "Format participant",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Create Stripe Product": {
+          "main": [
+            [
+              {
+                "node": "Create payment link",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Add participant to list": {
+          "main": [
+            [
+              {
+                "node": "Send confirmation to participant",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Create participant list": {
+          "main": [
+            [
+              {
+                "node": "Send email to teacher",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Send confirmation to participant": {
+          "main": [
+            [
+              {
+                "node": "Notify teacher",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "stripe-quickbooks-sync",
+    "title": "Stripe → QuickBooks Invoice Sync",
+    "description": "Listens to Stripe events, looks up QuickBooks customers, and posts invoices/charges to accounting automatically.",
+    "problem": "Finance teams need Stripe transactions reflected in QuickBooks without exporting CSVs.",
+    "tags": [
+      "stripe",
+      "quickbooks",
+      "accounting"
+    ],
+    "workflow": {
+      "meta": {
+        "instanceId": "6f3fb2495ae05d668c93cbf9e1649128d6e08178f8a900941cf97e588f18fdfc",
+        "templateCredsSetupCompleted": true
+      },
+      "nodes": [
+        {
+          "id": "7fe02521-c46a-4314-9387-b7b4983fa859",
+          "name": "POST Sales Receipt",
+          "type": "n8n-nodes-base.httpRequest",
+          "position": [
+            1320,
+            -120
+          ],
+          "parameters": {
+            "url": "https://sandbox-quickbooks.api.intuit.com/v3/company/9341453851324714/salesreceipt?minorversion=73",
+            "method": "POST",
+            "options": {},
+            "jsonBody": "={\n  \"Line\": [\n    {\n      \"Description\": \"{{ $json.data.object.description }}\",\n      \"DetailType\": \"SalesItemLineDetail\",\n      \"SalesItemLineDetail\": {\n        \"TaxCodeRef\": {\n          \"value\": \"NON\"\n        },\n        \"Qty\": 1,\n        \"UnitPrice\": {{ $json.data.object.amount_received / 100 }},\n        \"ItemRef\": {\n          \"name\": \"Subscription\", \n          \"value\": \"10\"\n        }\n      },\n      \"Amount\": {{ $json.data.object.amount / 100 }},\n      \"LineNum\": 1\n    }\n  ],\n  \"CustomerRef\": {\n    \"value\": {{ $input.all()[2].json.QueryResponse.Customer[0].BillAddr.Id }},\n    \"name\": \"{{ $input.all()[2].json.QueryResponse.Customer[0].DisplayName }}\"\n  },\n  \"CurrencyRef\": {\n    \"value\": \"{{ $json.data.object.currency.toUpperCase() }}\"\n  },\n  \"PrivateNote\": \"Payment from Stripe Payment Intent ID: {{ $json.data.object.id }}\"\n}",
+            "sendBody": true,
+            "specifyBody": "json",
+            "authentication": "predefinedCredentialType",
+            "nodeCredentialType": "quickBooksOAuth2Api"
+          },
+          "credentials": {
+            "quickBooksOAuth2Api": {
+              "id": "IUNAfwwSgnbwWygB",
+              "name": "QuickBooks Online account"
+            }
+          },
+          "executeOnce": true,
+          "typeVersion": 4.2
+        },
+        {
+          "id": "5ed429d7-c93d-48c8-b603-ca8d7efb57ed",
+          "name": "GET Quickbooks Customer",
+          "type": "n8n-nodes-base.httpRequest",
+          "position": [
+            400,
+            -20
+          ],
+          "parameters": {
+            "url": "=https://sandbox-quickbooks.api.intuit.com/v3/company/9341453851324714/query?query=select * from Customer Where PrimaryEmailAddr = '{{ $json.email }}'&minorversion=73\n\n",
+            "options": {},
+            "authentication": "predefinedCredentialType",
+            "nodeCredentialType": "quickBooksOAuth2Api"
+          },
+          "credentials": {
+            "httpCustomAuth": {
+              "id": "hqXGCVkt6W41KDDK",
+              "name": "Custom Auth account"
+            },
+            "quickBooksOAuth2Api": {
+              "id": "IUNAfwwSgnbwWygB",
+              "name": "QuickBooks Online account"
+            }
+          },
+          "typeVersion": 4.2
+        },
+        {
+          "id": "bef5b4c3-4948-4294-bd80-7039342edf0d",
+          "name": "Get Stripe Customer",
+          "type": "n8n-nodes-base.stripe",
+          "position": [
+            240,
+            -140
+          ],
+          "parameters": {
+            "resource": "customer",
+            "customerId": "={{ $json.data.object.customer }}"
+          },
+          "credentials": {
+            "stripeApi": {
+              "id": "o6KHVZiU8S7O38wq",
+              "name": "Stripe account"
+            }
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "042fff2c-b5e7-4877-b935-f6a707118c4a",
+          "name": "New Payment",
+          "type": "n8n-nodes-base.stripeTrigger",
+          "position": [
+            80,
+            -260
+          ],
+          "webhookId": "5cc15770-f762-4389-8372-1b2926de4570",
+          "parameters": {
+            "events": [
+              "payment_intent.succeeded"
+            ]
+          },
+          "credentials": {
+            "stripeApi": {
+              "id": "o6KHVZiU8S7O38wq",
+              "name": "Stripe account"
+            }
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "12235c25-712b-4e84-b744-60573e00d381",
+          "name": "If Customer Exists",
+          "type": "n8n-nodes-base.if",
+          "position": [
+            560,
+            100
+          ],
+          "parameters": {
+            "options": {},
+            "conditions": {
+              "options": {
+                "version": 2,
+                "leftValue": "",
+                "caseSensitive": true,
+                "typeValidation": "strict"
+              },
+              "combinator": "and",
+              "conditions": [
+                {
+                  "id": "aef7393c-c4ff-4196-887d-6a9b057381f8",
+                  "operator": {
+                    "type": "string",
+                    "operation": "exists",
+                    "singleValue": true
+                  },
+                  "leftValue": "={{ $json.QueryResponse.Customer[0].PrimaryEmailAddr.Address }}",
+                  "rightValue": ""
+                }
+              ]
+            }
+          },
+          "typeVersion": 2.2
+        },
+        {
+          "id": "68f63246-cb95-494f-918c-c0c6da5a64f9",
+          "name": "Use Stripe Customer",
+          "type": "n8n-nodes-base.merge",
+          "position": [
+            880,
+            120
+          ],
+          "parameters": {},
+          "executeOnce": true,
+          "typeVersion": 3
+        },
+        {
+          "id": "e9eea332-7109-479f-8f50-65b3b9438e0e",
+          "name": "Create QuickBooks Customer",
+          "type": "n8n-nodes-base.quickbooks",
+          "position": [
+            1100,
+            120
+          ],
+          "parameters": {
+            "operation": "create",
+            "displayName": "={{ $input.all()[0].json.name }}",
+            "additionalFields": {
+              "Balance": "={{ $input.all()[0].json.balance }}",
+              "PrimaryEmailAddr": "={{ $input.all()[0].json.email }}"
+            }
+          },
+          "credentials": {
+            "quickBooksOAuth2Api": {
+              "id": "IUNAfwwSgnbwWygB",
+              "name": "QuickBooks Online account"
+            }
+          },
+          "executeOnce": true,
+          "typeVersion": 1
+        },
+        {
+          "id": "f805f03d-93b7-4e3b-8b6a-37d9dd802368",
+          "name": "Merge Stripe and QuickBooks Data",
+          "type": "n8n-nodes-base.merge",
+          "position": [
+            1100,
+            -120
+          ],
+          "parameters": {
+            "numberInputs": 3
+          },
+          "typeVersion": 3
+        },
+        {
+          "id": "b9c31838-2bb7-4882-bd15-c096cb97e225",
+          "name": "Merge Payment and QuickBooks Customer",
+          "type": "n8n-nodes-base.merge",
+          "position": [
+            1320,
+            120
+          ],
+          "parameters": {},
+          "executeOnce": true,
+          "typeVersion": 3
+        },
+        {
+          "id": "cb69fcee-8d5d-47ab-be76-9e25cb0a7f42",
+          "name": "POST Sales Receipt To QuickBooks",
+          "type": "n8n-nodes-base.httpRequest",
+          "position": [
+            1540,
+            120
+          ],
+          "parameters": {
+            "url": "https://sandbox-quickbooks.api.intuit.com/v3/company/9341453851324714/salesreceipt?minorversion=73",
+            "method": "POST",
+            "options": {},
+            "jsonBody": "={\n  \"Line\": [\n    {\n      \"Description\": \"{{ $json.data.object.description }}\",\n      \"DetailType\": \"SalesItemLineDetail\",\n      \"SalesItemLineDetail\": {\n        \"TaxCodeRef\": {\n          \"value\": \"NON\"\n        },\n        \"Qty\": 1,\n        \"UnitPrice\": {{ $json.data.object.amount_received / 100 }},\n        \"ItemRef\": {\n          \"name\": \"Subscription\", \n          \"value\": \"10\"\n        }\n      },\n      \"Amount\": {{ $json.data.object.amount / 100 }},\n      \"LineNum\": 1\n    }\n  ],\n  \"CustomerRef\": {\n    \"value\": {{ $input.all()[1].json.Id}},\n    \"name\": \"{{ $input.all()[1].json.DisplayName }}\"\n  },\n  \"CurrencyRef\": {\n    \"value\": \"{{ $json.data.object.currency.toUpperCase() }}\"\n  },\n  \"PrivateNote\": \"Payment from Stripe Payment Intent ID: {{ $json.data.object.id }}\"\n}",
+            "sendBody": true,
+            "specifyBody": "json",
+            "authentication": "predefinedCredentialType",
+            "nodeCredentialType": "quickBooksOAuth2Api"
+          },
+          "credentials": {
+            "quickBooksOAuth2Api": {
+              "id": "IUNAfwwSgnbwWygB",
+              "name": "QuickBooks Online account"
+            }
+          },
+          "executeOnce": true,
+          "typeVersion": 4.2
+        }
+      ],
+      "pinData": {
+        "New Payment": [
+          {
+            "id": "evt_3Qjf7fJJNVDH5POn01Am9Q1x",
+            "data": {
+              "object": {
+                "id": "pi_3Qjf54D14htxZ8341jkWWJJs",
+                "amount": 9500,
+                "object": "payment_intent",
+                "review": null,
+                "source": null,
+                "status": "succeeded",
+                "created": 1737456794,
+                "invoice": "in_1Qje8QD14htxZ834S3Gh3Nn6",
+                "currency": "usd",
+                "customer": "cus_R4OkhTTT1ebzPl",
+                "livemode": false,
+                "metadata": {},
+                "shipping": null,
+                "processing": null,
+                "application": null,
+                "canceled_at": null,
+                "description": "Subscription update",
+                "next_action": null,
+                "on_behalf_of": null,
+                "client_secret": "pi_3Qjf54D14htxZ8341jkWWJJs_secret_FXltcZHFUDM8I4F0AQjRPE9Vz",
+                "latest_charge": "ch_3Qjf54D14htxZ8341xwQhggm",
+                "receipt_email": null,
+                "transfer_data": null,
+                "amount_details": {
+                  "tip": {}
+                },
+                "capture_method": "automatic",
+                "payment_method": "pm_1Qh6nED14htxZ834bTgSzUQy",
+                "transfer_group": null,
+                "amount_received": 9500,
+                "amount_capturable": 0,
+                "last_payment_error": null,
+                "setup_future_usage": null,
+                "cancellation_reason": null,
+                "confirmation_method": "automatic",
+                "payment_method_types": [
+                  "amazon_pay",
+                  "card",
+                  "cashapp",
+                  "link"
+                ],
+                "statement_descriptor": null,
+                "application_fee_amount": null,
+                "payment_method_options": {
+                  "card": {
+                    "network": null,
+                    "installments": null,
+                    "mandate_options": null,
+                    "request_three_d_secure": "automatic"
+                  },
+                  "link": {
+                    "persistent_token": null
+                  },
+                  "cashapp": {},
+                  "amazon_pay": {
+                    "express_checkout_element_session_id": null
+                  }
+                },
+                "automatic_payment_methods": null,
+                "statement_descriptor_suffix": null,
+                "payment_method_configuration_details": null
+              }
+            },
+            "type": "payment_intent.succeeded",
+            "object": "event",
+            "created": 1737456956,
+            "request": {
+              "id": "req_vbXfG1vUORKZJ6",
+              "idempotency_key": "e63d5e07-f753-429c-bd06-c642e23d9ff8"
+            },
+            "livemode": false,
+            "api_version": "2020-08-27",
+            "pending_webhooks": 3
+          }
+        ],
+        "Get Stripe Customer": [
+          {
+            "id": "cus_R4OkhTTT1ebzPl",
+            "name": "Test Usershvili",
+            "email": "Birds@Intuit.com",
+            "phone": null,
+            "object": "customer",
+            "address": {
+              "city": null,
+              "line1": null,
+              "line2": null,
+              "state": null,
+              "country": "GE",
+              "postal_code": null
+            },
+            "balance": 0,
+            "created": 1729495354,
+            "currency": "usd",
+            "discount": null,
+            "livemode": false,
+            "metadata": {},
+            "shipping": null,
+            "delinquent": false,
+            "tax_exempt": "none",
+            "test_clock": null,
+            "description": null,
+            "default_source": null,
+            "invoice_prefix": "F73B0901",
+            "default_currency": "usd",
+            "invoice_settings": {
+              "footer": null,
+              "custom_fields": null,
+              "rendering_options": null,
+              "default_payment_method": null
+            },
+            "preferred_locales": [
+              "en-GB"
+            ]
+          }
+        ]
+      },
+      "connections": {
+        "New Payment": {
+          "main": [
+            [
+              {
+                "node": "Get Stripe Customer",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "Merge Stripe and QuickBooks Data",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "Merge Payment and QuickBooks Customer",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "If Customer Exists": {
+          "main": [
+            [
+              {
+                "node": "Merge Stripe and QuickBooks Data",
+                "type": "main",
+                "index": 2
+              }
+            ],
+            [
+              {
+                "node": "Use Stripe Customer",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "POST Sales Receipt": {
+          "main": [
+            []
+          ]
+        },
+        "Get Stripe Customer": {
+          "main": [
+            [
+              {
+                "node": "GET Quickbooks Customer",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "Use Stripe Customer",
+                "type": "main",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "Use Stripe Customer": {
+          "main": [
+            [
+              {
+                "node": "Create QuickBooks Customer",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "GET Quickbooks Customer": {
+          "main": [
+            [
+              {
+                "node": "If Customer Exists",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "Merge Stripe and QuickBooks Data",
+                "type": "main",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "Create QuickBooks Customer": {
+          "main": [
+            [
+              {
+                "node": "Merge Payment and QuickBooks Customer",
+                "type": "main",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "Merge Stripe and QuickBooks Data": {
+          "main": [
+            [
+              {
+                "node": "POST Sales Receipt",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Merge Payment and QuickBooks Customer": {
+          "main": [
+            [
+              {
+                "node": "POST Sales Receipt To QuickBooks",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "pipedrive-billing-handoff",
+    "title": "Pipedrive + Stripe Deal Billing",
+    "description": "Scheduled workflow that inspects Pipedrive deals, builds Stripe charges, and syncs results via Function & ItemList nodes.",
+    "problem": "Sales ops need closed deals to trigger billing automatically so finance isn’t chasing spreadsheets.",
+    "tags": [
+      "pipedrive",
+      "stripe",
+      "sales-ops"
+    ],
+    "workflow": {
+      "meta": {
+        "instanceId": "8c8c5237b8e37b006a7adce87f4369350c58e41f3ca9de16196d3197f69eabcd"
+      },
+      "nodes": [
+        {
+          "id": "28349bfd-f68e-4479-9508-28d408033d09",
+          "name": "Get customers",
+          "type": "n8n-nodes-base.stripe",
+          "position": [
+            5360,
+            1100
+          ],
+          "parameters": {
+            "filters": {},
+            "resource": "customer",
+            "operation": "getAll",
+            "returnAll": true
+          },
+          "credentials": {
+            "stripeApi": {
+              "id": "26",
+              "name": "Stripe account"
+            }
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "3f3d2389-e9ab-4140-8b04-f0a07003cecc",
+          "name": "Rename fields and keep only needed fields",
+          "type": "n8n-nodes-base.set",
+          "position": [
+            5560,
+            1100
+          ],
+          "parameters": {
+            "values": {
+              "string": [
+                {
+                  "name": "customerName",
+                  "value": "={{ $json[\"name\"] }}"
+                },
+                {
+                  "name": "customerId",
+                  "value": "={{ $json[\"id\"] }}"
+                }
+              ]
+            },
+            "options": {},
+            "keepOnlySet": true
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "d6d3ccff-f565-49c9-9cda-8e278d298433",
+          "name": "Add customer name to charge data",
+          "type": "n8n-nodes-base.merge",
+          "position": [
+            5860,
+            920
+          ],
+          "parameters": {
+            "mode": "mergeByKey",
+            "propertyName1": "customer",
+            "propertyName2": "customerId"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "eadce8e7-f523-485b-8cc0-5a336c8633ef",
+          "name": "Search organisation",
+          "type": "n8n-nodes-base.pipedrive",
+          "position": [
+            6140,
+            1060
+          ],
+          "parameters": {
+            "term": "={{ $json[\"customerName\"] }}",
+            "resource": "organization",
+            "operation": "search",
+            "additionalFields": {}
+          },
+          "credentials": {
+            "pipedriveApi": {
+              "id": "96",
+              "name": "Pipedrive account"
+            }
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "dde08b48-21b0-44af-a66d-ff69399608e7",
+          "name": "Add organisation Information to charge data",
+          "type": "n8n-nodes-base.merge",
+          "position": [
+            6400,
+            940
+          ],
+          "parameters": {
+            "join": "inner",
+            "mode": "mergeByIndex"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "6cbd0f06-0f10-4360-8c5c-e181679ba370",
+          "name": "Create note with charge information",
+          "type": "n8n-nodes-base.pipedrive",
+          "position": [
+            6620,
+            940
+          ],
+          "parameters": {
+            "content": "={{ $json[\"description\"] }}: {{ $json[\"amount\"] / 100 }} {{ $json[\"currency\"] }}",
+            "resource": "note",
+            "additionalFields": {
+              "org_id": "={{ $json[\"id\"] }}"
+            }
+          },
+          "credentials": {
+            "pipedriveApi": {
+              "id": "96",
+              "name": "Pipedrive account"
+            }
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "c6ed5a89-b50a-40ad-bd78-62ffc2430fde",
+          "name": "Get last execution timestamp",
+          "type": "n8n-nodes-base.functionItem",
+          "position": [
+            5140,
+            900
+          ],
+          "parameters": {
+            "functionCode": "// Code here will run once per input item.\n// More info and help: https://docs.n8n.io/nodes/n8n-nodes-base.functionItem\n// Tip: You can use luxon for dates and $jmespath for querying JSON structures\n\n// Add a new field called 'myNewField' to the JSON of the item\nconst staticData = getWorkflowStaticData('global');\n\nif(!staticData.lastExecution){\n  staticData.lastExecution = Math.round( new Date().getTime() / 1000 );\n}\n\nitem.executionTimeStamp = Math.round( new Date().getTime() / 1000 );\nitem.lastExecution = staticData.lastExecution;\n\n\nreturn item;"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "41b2c937-d479-4402-b428-29faabe32845",
+          "name": "Set new last execution timestamp",
+          "type": "n8n-nodes-base.functionItem",
+          "position": [
+            6820,
+            940
+          ],
+          "parameters": {
+            "functionCode": "// Code here will run once per input item.\n// More info and help: https://docs.n8n.io/nodes/n8n-nodes-base.functionItem\n// Tip: You can use luxon for dates and $jmespath for querying JSON structures\n\n// Add a new field called 'myNewField' to the JSON of the item\nconst staticData = getWorkflowStaticData('global');\n\nstaticData.lastExecution = $item(0).$node[\"Get last execution timestamp\"].executionTimeStamp;\n\nreturn item;"
+          },
+          "executeOnce": true,
+          "typeVersion": 1
+        },
+        {
+          "id": "56612271-08c4-4347-92b1-b898c68c3460",
+          "name": "Split array of charges to items",
+          "type": "n8n-nodes-base.itemLists",
+          "position": [
+            5560,
+            900
+          ],
+          "parameters": {
+            "options": {},
+            "fieldToSplitOut": "data"
+          },
+          "typeVersion": 1
+        },
+        {
+          "id": "b866ba46-6269-4c8d-8021-ea99591d676d",
+          "name": "Search for charges in Stripe",
+          "type": "n8n-nodes-base.httpRequest",
+          "position": [
+            5360,
+            900
+          ],
+          "parameters": {
+            "url": "https://api.stripe.com/v1/charges/search",
+            "options": {},
+            "authentication": "predefinedCredentialType",
+            "queryParametersUi": {
+              "parameter": [
+                {
+                  "name": "query",
+                  "value": "=created>{{$json[\"lastExecution\"]}} AND status:\"succeeded\""
+                }
+              ]
+            },
+            "nodeCredentialType": "stripeApi"
+          },
+          "credentials": {
+            "stripeApi": {
+              "id": "26",
+              "name": "Stripe account"
+            }
+          },
+          "typeVersion": 2
+        },
+        {
+          "id": "a3249f70-1cd4-4d5f-8f27-15badcf10296",
+          "name": "Every day at 8 am",
+          "type": "n8n-nodes-base.cron",
+          "position": [
+            4920,
+            900
+          ],
+          "parameters": {
+            "triggerTimes": {
+              "item": [
+                {
+                  "hour": 8
+                }
+              ]
+            }
+          },
+          "typeVersion": 1
+        }
+      ],
+      "connections": {
+        "Get customers": {
+          "main": [
+            [
+              {
+                "node": "Rename fields and keep only needed fields",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Every day at 8 am": {
+          "main": [
+            [
+              {
+                "node": "Get last execution timestamp",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Search organisation": {
+          "main": [
+            [
+              {
+                "node": "Add organisation Information to charge data",
+                "type": "main",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "Get last execution timestamp": {
+          "main": [
+            [
+              {
+                "node": "Search for charges in Stripe",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Search for charges in Stripe": {
+          "main": [
+            [
+              {
+                "node": "Split array of charges to items",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Split array of charges to items": {
+          "main": [
+            [
+              {
+                "node": "Add customer name to charge data",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Add customer name to charge data": {
+          "main": [
+            [
+              {
+                "node": "Search organisation",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "Add organisation Information to charge data",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Create note with charge information": {
+          "main": [
+            [
+              {
+                "node": "Set new last execution timestamp",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Rename fields and keep only needed fields": {
+          "main": [
+            [
+              {
+                "node": "Add customer name to charge data",
+                "type": "main",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "Add organisation Information to charge data": {
+          "main": [
+            [
+              {
+                "node": "Create note with charge information",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        }
+      }
+    }
   }
 ]
