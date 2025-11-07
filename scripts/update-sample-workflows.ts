@@ -141,6 +141,66 @@ const samples: SampleMeta[] = [
     tags: ["instagram", "influencer", "scheduler", "fal"],
     file: "data/workflows/episodes/episode_35_influencer_machine.json",
   },
+  {
+    id: "seo-keyword-rank-tracker",
+    title: "Keyword Rank Tracker (Sheets)",
+    description:
+      "Daily schedule that calls Serper, normalizes ranking data, and writes results plus deltas into Google Sheets dashboards.",
+    problem:
+      "SEO teams need rank tracking without paying for SaaS limits; this workflow tracks unlimited keywords per site.",
+    tags: ["seo", "ranks", "google-sheets", "serper"],
+    file: "data/workflows/episodes/marvo_keyword_rank_tracker.json",
+  },
+  {
+    id: "seo-serp-analysis",
+    title: "SERP & Competitor Analyzer",
+    description:
+      "Pulls SERP data from Serper, crawls top results via Crawl4AI, and builds structured competitor summaries for writers.",
+    problem:
+      "Content teams spend 30+ minutes per article doing manual SERP research; this template automates the entire brief.",
+    tags: ["seo", "serp", "crawl", "briefs"],
+    file: "data/workflows/episodes/marvo_serp_analysis.json",
+  },
+  {
+    id: "gsc-ai-writer",
+    title: "GSC AI SEO Writer",
+    description:
+      "Fetches page/query data from Google Search Console, feeds it into Gemini, and outputs rewrite suggestions plus new sections.",
+    problem:
+      "Optimizing underperforming articles requires juggling GSC data and AI prompts; this workflow packages insights automatically.",
+    tags: ["seo", "gsc", "ai", "writer"],
+    file: "data/workflows/episodes/marvo_gsc_ai_seo_writer.json",
+  },
+  {
+    id: "ai-overview-audit",
+    title: "AI Overview Analyzer",
+    description:
+      "Scrapes Google's AI Overviews for a keyword, extracts entities/sources, and generates a content blueprint to earn inclusion.",
+    problem:
+      "Brands want to appear inside AI Overview answers, but it's unclear what structure Google expects; this agent reverse engineers it.",
+    tags: ["seo", "ai-overview", "analysis"],
+    file: "data/workflows/episodes/marvo_ai_overview_analyzer.json",
+  },
+  {
+    id: "gsc-api-toolkit",
+    title: "Google Search Console API Toolkit",
+    description:
+      "Bundle of 12 prebuilt nodes/queries that pull query, page, device, and indexing metrics for advanced SEO analysis.",
+    problem:
+      "Analysts spend hours wiring up GSC for each use case; this template provides ready-made building blocks.",
+    tags: ["gsc", "api", "analytics"],
+    file: "data/workflows/episodes/marvo_gsc_api_examples.json",
+  },
+  {
+    id: "json-report-generator",
+    title: "JSON → HTML Report Generator",
+    description:
+      "Accepts arbitrary JSON payloads and renders a styled HTML report with sections, tables, and download links.",
+    problem:
+      "Teams need sharable reports from automation outputs; this template formats data for stakeholders automatically.",
+    tags: ["reports", "html", "automation"],
+    file: "data/workflows/episodes/marvo_report_generator.json",
+  },
 ];
 
 async function main() {
