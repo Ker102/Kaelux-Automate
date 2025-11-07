@@ -14,6 +14,17 @@ docker compose -f docker-compose.dev.yml up qdrant
 
 Stop with `Ctrl+C` or `docker compose -f docker-compose.dev.yml stop qdrant`.
 
+## Seed Example Workflows
+
+Once Qdrant is running and `GEMINI_API_KEY` is set, seed the sample collection:
+
+```bash
+npx tsx scripts/update-sample-workflows.ts   # rebuild curated dataset (optional)
+npm run seed:qdrant
+```
+
+This loads `data/workflows/sample-workflows.json`, embeds each example with Gemini (`text-embedding-004` by default), and writes them into the `ai_workflow_examples` collection. Edit the JSON file or point the script at your own dataset to customize.
+
 ## Environment Variables
 
 | Env Variable      | Description                                     |
