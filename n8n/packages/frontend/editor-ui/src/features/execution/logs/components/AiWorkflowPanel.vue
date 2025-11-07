@@ -116,11 +116,21 @@ function handleInsert() {
 	}
 
 	try {
+		const nodeCount = Array.isArray(suggestion.workflow.nodes)
+			? suggestion.workflow.nodes.length
+			: 0;
+
 		nodeViewEventBus.emit('importWorkflowData', {
 			data: suggestion.workflow,
 			tidyUp: true,
 			regenerateIds: true,
 			trackEvents: false,
+			toast: {
+				title: locale.baseText('logs.aiPanel.toast.title'),
+				message: locale.baseText('logs.aiPanel.toast.message', {
+					interpolate: { count: nodeCount },
+				}),
+			},
 		});
 		emit('insert', suggestion);
 	} catch (error) {

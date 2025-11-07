@@ -1016,6 +1016,14 @@ async function onImportWorkflowDataEvent(data: IDataObject) {
 	fitView();
 
 	selectNodes(workflowData.nodes?.map((node) => node.id) ?? []);
+	if (data.toast) {
+		const toastData = data.toast as { title?: string; message?: string; type?: 'success' | 'error' };
+		toast.showMessage({
+			title: toastData.title ?? i18n.baseText('logs.aiPanel.toast.title'),
+			type: toastData.type ?? 'success',
+			message: toastData.message,
+		});
+	}
 	if (data.tidyUp) {
 		const nodesIdsToTidyUp = data.nodesIdsToTidyUp as string[];
 		setTimeout(async () => {
