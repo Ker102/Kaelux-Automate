@@ -628,6 +628,7 @@ async function main() {
         description: sample.description,
         problem: sample.problem,
         tags: sample.tags,
+        metadata: sample.metadata,
         workflow: workflowJson,
       };
     })
