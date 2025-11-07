@@ -7,3 +7,6 @@ export const PLAN_APPROVAL_MESSAGE = 'Proceed with the plan';
 export const AI_NODES_PACKAGE_NAME = '@n8n/n8n-nodes-langchain';
 
 export const AI_ASSISTANT_MAX_CONTENT_LENGTH = 100; // in kilobytes
+
+export const AI_WORKFLOW_ENDPOINT =
+	import.meta.env.VITE_AI_WORKFLOW_ENDPOINT ?? 'http://localhost:3000/api/ai/workflow';

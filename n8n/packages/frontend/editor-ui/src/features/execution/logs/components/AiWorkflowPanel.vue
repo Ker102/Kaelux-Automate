@@ -1,17 +1,44 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from '@n8n/i18n';
 import { N8nButton, N8nCallout, N8nText } from '@n8n/design-system';
+import { AI_WORKFLOW_ENDPOINT } from '@/app/constants';
+
+interface WorkflowSuggestion {
+	id: string;
+	prompt: string;
+	summary: string;
+	workflow: unknown;
+	workflowJson: string;
+	notes: string[];
+	rawText: string;
+	createdAt: string;
+}
 
 const locale = useI18n();
-
 const prompt = ref('');
-const ideas = ref<string[]>([]);
 const isGenerating = ref(false);
+const errorMessage = ref<string | null>(null);
+const suggestions = ref<WorkflowSuggestion[]>([]);
+const endpoint = AI_WORKFLOW_ENDPOINT;
 
-const emit = defineEmits<{ generate: [string] }>();
+const emit = defineEmits<{
+	generate: [string];
+	insert: [WorkflowSuggestion];
+}>();
 
-function handleGenerate() {
+const latestSuggestion = computed(() => suggestions.value[0]);
+const hasHistory = computed(() => suggestions.value.length > 1);
+
+function makeSuggestionId() {
+	if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+		return crypto.randomUUID();
+	}
+
+	return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+async function handleGenerate() {
 	const value = prompt.value.trim();
 
 	if (!value) {
@@ -19,14 +46,71 @@ function handleGenerate() {
 	}
 
 	isGenerating.value = true;
-	ideas.value.unshift(value);
-	emit('generate', value);
-	prompt.value = '';
+	errorMessage.value = null;
 
-	// Temporary loading simulation until the real API is connected.
-	setTimeout(() => {
+	try {
+		const response = await fetch(endpoint, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ prompt: value }),
+		});
+
+		const payload = (await response.json().catch(() => ({}))) as {
+			suggestion?: {
+				summary?: string;
+				workflow?: unknown;
+				notes?: string[];
+				rawText?: string;
+			};
+			error?: string;
+		};
+
+		if (!response.ok || !payload.suggestion) {
+			throw new Error(payload.error ?? locale.baseText('logs.aiPanel.error.generic'));
+		}
+
+		const suggestion: WorkflowSuggestion = {
+			id: makeSuggestionId(),
+			prompt: value,
+			summary:
+				payload.suggestion.summary ?? locale.baseText('logs.aiPanel.defaultSummary'),
+			workflow: payload.suggestion.workflow ?? {},
+			workflowJson: JSON.stringify(payload.suggestion.workflow ?? {}, null, 2),
+			notes: payload.suggestion.notes ?? [],
+			rawText: payload.suggestion.rawText ?? '',
+			createdAt: new Date().toISOString(),
+		};
+
+		suggestions.value.unshift(suggestion);
+		emit('generate', value);
+		prompt.value = '';
+	} catch (error) {
+		const message =
+			error instanceof Error
+				? error.message
+				: locale.baseText('logs.aiPanel.error.generic');
+		errorMessage.value = message;
+	} finally {
 		isGenerating.value = false;
-	}, 600);
+	}
+}
+
+function handleInsert() {
+	const suggestion = latestSuggestion.value;
+
+	if (!suggestion) {
+		return;
+	}
+
+	emit('insert', suggestion);
+}
+
+function formatTimestamp(timestamp: string) {
+	const date = new Date(timestamp);
+
+	return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 </script>
 
@@ -62,22 +146,57 @@ function handleGenerate() {
 				>
 					{{ locale.baseText('logs.aiPanel.generateButton') }}
 				</N8nButton>
-				<N8nButton type="tertiary" size="medium" :disabled="isGenerating">
+				<N8nButton
+					type="tertiary"
+					size="medium"
+					:disabled="!latestSuggestion || isGenerating"
+					@click.prevent="handleInsert"
+				>
 					{{ locale.baseText('logs.aiPanel.insertButton') }}
 				</N8nButton>
 			</div>
 		</form>
 
-		<N8nCallout icon="sparkles" theme="info">
+		<N8nCallout v-if="errorMessage" icon="alert-triangle" theme="danger">
+			{{ errorMessage }}
+		</N8nCallout>
+
+		<N8nCallout v-else icon="sparkles" theme="info">
 			{{ locale.baseText('logs.aiPanel.infoCallout') }}
 		</N8nCallout>
 
-		<section v-if="ideas.length > 0" :class="$style.history">
-			<N8nText tag="p" size="medium" color="text-base" bold>
+		<section v-if="latestSuggestion" :class="$style.result">
+			<header>
+				<N8nText tag="p" size="medium" color="text-base" bold>
+					{{ locale.baseText('logs.aiPanel.latestSuggestion') }}
+				</N8nText>
+				<N8nText tag="span" size="small" color="text-light">
+					{{ formatTimestamp(latestSuggestion.createdAt) }}
+				</N8nText>
+			</header>
+			<p :class="$style.summary">{{ latestSuggestion.summary }}</p>
+			<div v-if="latestSuggestion.notes.length" :class="$style.notes">
+				<ul>
+					<li v-for="note in latestSuggestion.notes" :key="note">{{ note }}</li>
+				</ul>
+			</div>
+			<div :class="$style.jsonPreview">
+				<pre><code>{{ latestSuggestion.workflowJson }}</code></pre>
+			</div>
+		</section>
+
+		<section v-if="hasHistory" :class="$style.history">
+			<N8nText tag="p" size="small" color="text-light">
 				{{ locale.baseText('logs.aiPanel.historyTitle') }}
 			</N8nText>
 			<ul>
-				<li v-for="idea in ideas" :key="idea">{{ idea }}</li>
+				<li
+					v-for="suggestion in suggestions.slice(1)"
+					:key="suggestion.id"
+				>
+					<strong>{{ formatTimestamp(suggestion.createdAt) }}:</strong>
+					<span>{{ suggestion.prompt }}</span>
+				</li>
 			</ul>
 		</section>
 	</div>
@@ -93,6 +212,7 @@ function handleGenerate() {
 	background-color: var(--color--foreground);
 	border-radius: var(--border-radius-large);
 	border: var(--border);
+	overflow: auto;
 }
 
 .header {
@@ -136,9 +256,49 @@ function handleGenerate() {
 	gap: var(--spacing-2xs);
 }
 
-.history {
+.result {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-xs);
+}
+
+.summary {
+	font-size: var(--font-size-s);
+	color: var(--color--text-base);
+	margin: 0;
+}
+
+.notes {
+	background-color: var(--color--background--light-2);
+	border-radius: var(--border-radius-base);
+	padding: var(--spacing-2xs) var(--spacing-xs);
+
+	ul {
+		margin: 0;
+		padding-left: var(--spacing-m);
+	}
+}
+
+.jsonPreview {
 	flex: 1;
+	background-color: var(--color--background--dark);
+	border-radius: var(--border-radius-base);
+	padding: var(--spacing-xs);
 	overflow: auto;
+	border: 1px solid var(--color--foreground-dark);
+
+	pre {
+		margin: 0;
+		font-size: var(--font-size-xs);
+		line-height: 1.4;
+		white-space: pre-wrap;
+		word-break: break-word;
+	}
+}
+
+.history {
+	border-top: 1px solid var(--color--foreground-dark);
+	padding-top: var(--spacing-xs);
 
 	ul {
 		margin: 0;

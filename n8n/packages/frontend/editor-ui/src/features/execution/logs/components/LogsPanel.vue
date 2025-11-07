@@ -22,7 +22,7 @@ import { useWorkflowsStore } from '@/app/stores/workflows.store';
 import { N8nResizeWrapper, N8nTabs } from '@n8n/design-system';
 import { LOGS_FOOTER_TABS } from '@/features/execution/logs/logs.constants';
 const props = withDefaults(defineProps<{ isReadOnly?: boolean }>(), { isReadOnly: false });
-const emit = defineEmits<{ 'ai-generate': [string] }>();
+const emit = defineEmits<{ 'ai-generate': [string]; 'ai-insert': [unknown] }>();
 
 const container = useTemplateRef('container');
 const logsContainer = useTemplateRef('logsContainer');
@@ -297,7 +297,10 @@ function handleChangeOutputTableColumnCollapsing(columnName: string | null) {
 							</LogsDetailsPanel>
 						</div>
 						<div v-else :class="$style.aiPanelWrapper">
-							<AiWorkflowPanel @generate="emit('ai-generate', $event)" />
+							<AiWorkflowPanel
+								@generate="emit('ai-generate', $event)"
+								@insert="emit('ai-insert', $event)"
+							/>
 						</div>
 					</div>
 				</div>
