@@ -1,8 +1,9 @@
-import { type LogDetailsPanelState } from '@/features/execution/logs/logs.types';
+import { type LogDetailsPanelState, type LogsFooterTab } from '@/features/execution/logs/logs.types';
 import { useTelemetry } from '@/app/composables/useTelemetry';
 import {
 	LOCAL_STORAGE_LOGS_PANEL_DETAILS_PANEL,
 	LOCAL_STORAGE_LOGS_PANEL_DETAILS_PANEL_SUB_NODE,
+	LOCAL_STORAGE_LOGS_PANEL_ACTIVE_TAB,
 	LOCAL_STORAGE_LOGS_PANEL_OPEN,
 	LOCAL_STORAGE_LOGS_SYNC_SELECTION,
 } from '@/app/constants';
@@ -12,6 +13,7 @@ import { computed, ref } from 'vue';
 import {
 	LOG_DETAILS_PANEL_STATE,
 	LOGS_PANEL_STATE,
+	LOGS_FOOTER_TABS,
 } from '@/features/execution/logs/logs.constants';
 import type { ChatMessage } from '@n8n/chat/types';
 import { v4 as uuid } from 'uuid';
@@ -41,6 +43,11 @@ export const useLogsStore = defineStore('logs', () => {
 		writeDefaults: false,
 	});
 	const isSubNodeSelected = ref(false);
+	const activeFooterTab = useLocalStorage<LogsFooterTab>(
+		LOCAL_STORAGE_LOGS_PANEL_ACTIVE_TAB,
+		LOGS_FOOTER_TABS.LOGS,
+		{ writeDefaults: false },
+	);
 
 	const telemetry = useTelemetry();
 
@@ -121,6 +128,10 @@ export const useLogsStore = defineStore('logs', () => {
 		isLogSelectionSyncedWithCanvas.value = value ?? !isLogSelectionSyncedWithCanvas.value;
 	}
 
+	function setActiveFooterTab(tab: LogsFooterTab) {
+		activeFooterTab.value = tab;
+	}
+
 	function addChatMessage(message: ChatMessage) {
 		chatSessionMessages.value.push(message);
 	}
@@ -135,6 +146,7 @@ export const useLogsStore = defineStore('logs', () => {
 		isLogSelectionSyncedWithCanvas: computed(() => isLogSelectionSyncedWithCanvas.value),
 		chatSessionId: computed(() => chatSessionId.value),
 		chatSessionMessages: computed(() => chatSessionMessages.value),
+		activeFooterTab: computed(() => activeFooterTab.value),
 		addChatMessage,
 		setHeight,
 		toggleOpen,
@@ -143,6 +155,7 @@ export const useLogsStore = defineStore('logs', () => {
 		toggleInputOpen,
 		toggleOutputOpen,
 		toggleLogSelectionSync,
+		setActiveFooterTab,
 		resetChatSessionId,
 		resetMessages,
 	};

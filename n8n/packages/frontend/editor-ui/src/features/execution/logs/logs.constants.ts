@@ -15,3 +15,8 @@ export const LOG_DETAILS_PANEL_STATE = {
 	OUTPUT: 'output',
 	BOTH: 'both',
 } as const;
+
+export const LOGS_FOOTER_TABS = {
+	LOGS: 'logs',
+	AI: 'ai',
+} as const;

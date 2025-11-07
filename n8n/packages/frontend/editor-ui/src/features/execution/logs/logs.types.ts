@@ -1,6 +1,7 @@
 import type {
 	LOG_DETAILS_PANEL_STATE,
 	LOGS_PANEL_STATE,
+	LOGS_FOOTER_TABS,
 } from '@/features/execution/logs/logs.constants';
 import type { INodeUi, LlmTokenUsageData } from '@/Interface';
 import type { IRunExecutionData, ITaskData, Workflow } from 'n8n-workflow';
@@ -45,6 +46,8 @@ export type LogsPanelState = (typeof LOGS_PANEL_STATE)[keyof typeof LOGS_PANEL_S
 
 export type LogDetailsPanelState =
 	(typeof LOG_DETAILS_PANEL_STATE)[keyof typeof LOG_DETAILS_PANEL_STATE];
+
+export type LogsFooterTab = (typeof LOGS_FOOTER_TABS)[keyof typeof LOGS_FOOTER_TABS];
 
 export interface LogTreeFilter {
 	rootNodeId: string;

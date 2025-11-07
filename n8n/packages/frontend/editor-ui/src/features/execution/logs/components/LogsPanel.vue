@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { nextTick, computed, useTemplateRef, ref } from 'vue';
+import { useI18n } from '@n8n/i18n';
 import { useChatState } from '@/features/execution/logs/composables/useChatState';
 import LogsOverviewPanel from '@/features/execution/logs/components/LogsOverviewPanel.vue';
 import ChatMessagesPanel from '@/features/execution/logs/components/ChatMessagesPanel.vue';
 import LogsDetailsPanel from '@/features/execution/logs/components/LogDetailsPanel.vue';
 import LogsPanelActions from '@/features/execution/logs/components/LogsPanelActions.vue';
+import AiWorkflowPanel from '@/features/execution/logs/components/AiWorkflowPanel.vue';
 import { useLogsExecutionData } from '@/features/execution/logs/composables/useLogsExecutionData';
 import { useNDVStore } from '@/features/ndv/shared/ndv.store';
 import { ndvEventBus } from '@/features/ndv/shared/ndv.eventBus';
@@ -17,8 +19,10 @@ import { type KeyMap } from '@/app/composables/useKeybindings';
 import LogsViewKeyboardEventListener from './LogsViewKeyboardEventListener.vue';
 import { useWorkflowsStore } from '@/app/stores/workflows.store';
 
-import { N8nResizeWrapper } from '@n8n/design-system';
+import { N8nResizeWrapper, N8nTabs } from '@n8n/design-system';
+import { LOGS_FOOTER_TABS } from '@/features/execution/logs/logs.constants';
 const props = withDefaults(defineProps<{ isReadOnly?: boolean }>(), { isReadOnly: false });
+const emit = defineEmits<{ 'ai-generate': [string] }>();
 
 const container = useTemplateRef('container');
 const logsContainer = useTemplateRef('logsContainer');
@@ -28,6 +32,7 @@ const popOutContent = useTemplateRef('popOutContent');
 const logsStore = useLogsStore();
 const ndvStore = useNDVStore();
 const workflowsStore = useWorkflowsStore();
+const locale = useI18n();
 const workflowName = computed(() => workflowsStore.workflow.name);
 
 const {
@@ -85,6 +90,29 @@ const logsPanelActionsProps = computed<InstanceType<typeof LogsPanelActions>['$p
 	onToggleOpen,
 	onToggleSyncSelection: logsStore.toggleLogSelectionSync,
 }));
+const footerTabOptions = computed(() => [
+	{
+		label: locale.baseText('logs.footer.tabs.logs'),
+		value: LOGS_FOOTER_TABS.LOGS,
+	},
+	{
+		label: locale.baseText('logs.footer.tabs.ai'),
+		value: LOGS_FOOTER_TABS.AI,
+	},
+]);
+const activeFooterTab = computed({
+	get: () => logsStore.activeFooterTab,
+	set: (tab: (typeof LOGS_FOOTER_TABS)[keyof typeof LOGS_FOOTER_TABS]) =>
+		logsStore.setActiveFooterTab(tab),
+});
+
+const isAiFooterTabActive = computed(
+	() => activeFooterTab.value === LOGS_FOOTER_TABS.AI && isOpen.value,
+);
+
+function handleFooterTabChange(tab: (typeof LOGS_FOOTER_TABS)[keyof typeof LOGS_FOOTER_TABS]) {
+	logsStore.setActiveFooterTab(tab);
+}
 const inputCollapsingColumnName = computed(() =>
 	inputTableColumnCollapsing.value?.nodeName === selected.value?.node.name
 		? (inputTableColumnCollapsing.value?.columnName ?? null)
@@ -195,62 +223,82 @@ function handleChangeOutputTableColumnCollapsing(columnName: string | null) {
 						/>
 					</N8nResizeWrapper>
 					<div ref="logsContainer" :class="$style.logsContainer">
-						<N8nResizeWrapper
-							:class="$style.overviewResizer"
-							:width="overviewPanelWidth"
-							:style="{ width: isLogDetailsVisuallyOpen ? `${overviewPanelWidth}px` : '' }"
-							:supported-directions="['right']"
-							:is-resizing-enabled="isLogDetailsOpen"
-							:window="popOutWindow"
-							@resize="onOverviewPanelResize"
-							@resizeend="handleResizeOverviewPanelEnd"
-						>
-							<LogsOverviewPanel
-								:class="$style.logsOverview"
+						<div :class="$style.tabsBar">
+							<N8nTabs
+								size="small"
+								:model-value="activeFooterTab"
+								:options="footerTabOptions"
+								@update:model-value="handleFooterTabChange"
+							/>
+							<LogsPanelActions
+								v-if="isAiFooterTabActive"
+								v-bind="logsPanelActionsProps"
+							/>
+						</div>
+						<div v-if="!isAiFooterTabActive" :class="$style.logsPanels">
+							<N8nResizeWrapper
+								:class="$style.overviewResizer"
+								:width="overviewPanelWidth"
+								:style="{ width: isLogDetailsVisuallyOpen ? `${overviewPanelWidth}px` : '' }"
+								:supported-directions="['right']"
+								:is-resizing-enabled="isLogDetailsOpen"
+								:window="popOutWindow"
+								@resize="onOverviewPanelResize"
+								@resizeend="handleResizeOverviewPanelEnd"
+							>
+								<LogsOverviewPanel
+									:class="$style.logsOverview"
+									:is-open="isOpen"
+									:is-read-only="isReadOnly"
+									:is-compact="isLogDetailsVisuallyOpen"
+									:selected="selected"
+									:execution="execution"
+									:entries="entries"
+									:latest-node-info="latestNodeNameById"
+									:flat-log-entries="flatLogEntries"
+									:is-header-clickable="!isPoppedOut"
+									@click-header="onToggleOpen"
+									@select="select"
+									@clear-execution-data="resetExecutionData"
+									@toggle-expanded="toggleExpanded"
+									@open-ndv="handleOpenNdv"
+								>
+									<template #actions>
+										<LogsPanelActions
+											v-if="!isLogDetailsVisuallyOpen"
+											v-bind="logsPanelActionsProps"
+										/>
+									</template>
+								</LogsOverviewPanel>
+							</N8nResizeWrapper>
+							<LogsDetailsPanel
+								v-if="isLogDetailsVisuallyOpen && selected"
+								:class="$style.logDetails"
 								:is-open="isOpen"
-								:is-read-only="isReadOnly"
-								:is-compact="isLogDetailsVisuallyOpen"
-								:selected="selected"
-								:execution="execution"
-								:entries="entries"
-								:latest-node-info="latestNodeNameById"
-								:flat-log-entries="flatLogEntries"
+								:log-entry="selected"
+								:window="popOutWindow"
+								:latest-info="latestNodeNameById[selected.node.id]"
+								:panels="logsStore.detailsState"
+								:collapsing-input-table-column-name="inputCollapsingColumnName"
+								:collapsing-output-table-column-name="outputCollapsingColumnName"
 								:is-header-clickable="!isPoppedOut"
 								@click-header="onToggleOpen"
-								@select="select"
-								@clear-execution-data="resetExecutionData"
-								@toggle-expanded="toggleExpanded"
-								@open-ndv="handleOpenNdv"
+								@toggle-input-open="logsStore.toggleInputOpen"
+								@toggle-output-open="logsStore.toggleOutputOpen"
+								@collapsing-input-table-column-changed="handleChangeInputTableColumnCollapsing"
+								@collapsing-output-table-column-changed="handleChangeOutputTableColumnCollapsing"
 							>
 								<template #actions>
 									<LogsPanelActions
-										v-if="!isLogDetailsVisuallyOpen"
+										v-if="isLogDetailsVisuallyOpen"
 										v-bind="logsPanelActionsProps"
 									/>
 								</template>
-							</LogsOverviewPanel>
-						</N8nResizeWrapper>
-						<LogsDetailsPanel
-							v-if="isLogDetailsVisuallyOpen && selected"
-							:class="$style.logDetails"
-							:is-open="isOpen"
-							:log-entry="selected"
-							:window="popOutWindow"
-							:latest-info="latestNodeNameById[selected.node.id]"
-							:panels="logsStore.detailsState"
-							:collapsing-input-table-column-name="inputCollapsingColumnName"
-							:collapsing-output-table-column-name="outputCollapsingColumnName"
-							:is-header-clickable="!isPoppedOut"
-							@click-header="onToggleOpen"
-							@toggle-input-open="logsStore.toggleInputOpen"
-							@toggle-output-open="logsStore.toggleOutputOpen"
-							@collapsing-input-table-column-changed="handleChangeInputTableColumnCollapsing"
-							@collapsing-output-table-column-changed="handleChangeOutputTableColumnCollapsing"
-						>
-							<template #actions>
-								<LogsPanelActions v-if="isLogDetailsVisuallyOpen" v-bind="logsPanelActionsProps" />
-							</template>
-						</LogsDetailsPanel>
+							</LogsDetailsPanel>
+						</div>
+						<div v-else :class="$style.aiPanelWrapper">
+							<AiWorkflowPanel @generate="emit('ai-generate', $event)" />
+						</div>
 					</div>
 				</div>
 			</N8nResizeWrapper>
@@ -295,6 +343,25 @@ function handleChangeOutputTableColumnCollapsing(columnName: string | null) {
 	width: 0;
 	flex-grow: 1;
 	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+
+	& > *:not(:last-child) {
+		border-bottom: var(--border);
+	}
+}
+
+.tabsBar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: var(--spacing-2xs) var(--spacing-s);
+	background-color: var(--color--foreground);
+}
+
+.logsPanels {
+	flex: 1;
+	display: flex;
 	align-items: stretch;
 
 	& > *:not(:last-child) {
@@ -318,5 +385,13 @@ function handleChangeOutputTableColumnCollapsing(columnName: string | null) {
 .logsDetails {
 	width: 0;
 	flex-grow: 1;
+}
+
+.aiPanelWrapper {
+	flex: 1;
+	display: flex;
+	overflow: auto;
+	background-color: var(--color--background--light-2);
+	padding: var(--spacing-m);
 }
 </style>
