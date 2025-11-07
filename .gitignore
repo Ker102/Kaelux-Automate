@@ -5,6 +5,7 @@
 /.data
 /.pnp
 .pnp.*
+/workflows
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
