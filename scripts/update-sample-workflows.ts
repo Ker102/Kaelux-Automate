@@ -1,6 +1,15 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+type SampleMetadata = {
+  industries: string[];
+  domains: string[];
+  channels: string[];
+  trigger: "manual" | "scheduled" | "webhook" | "multi";
+  complexity: "low" | "medium" | "high";
+  integrations: string[];
+};
+
 type SampleMeta = {
   id: string;
   title: string;
@@ -8,6 +17,7 @@ type SampleMeta = {
   problem: string;
   tags: string[];
   file: string;
+  metadata: SampleMetadata;
 };
 
 const samples: SampleMeta[] = [
@@ -20,6 +30,14 @@ const samples: SampleMeta[] = [
       "Knowledge workers spend too much time scanning sources each morning; this agent compiles the highlights automatically.",
     tags: ["ai", "slack", "digest", "rss", "automation"],
     file: "data/workflows/episodes/episode_2_daily_digest.json",
+    metadata: {
+      industries: ["media", "productivity"],
+      domains: ["daily-digest", "summaries"],
+      channels: ["slack", "email"],
+      trigger: "scheduled",
+      complexity: "high",
+      integrations: ["RSS Feed", "Slack", "Gmail", "YouTube"]
+    },
   },
   {
     id: "job-board-linkedin-leadgen",
@@ -30,6 +48,14 @@ const samples: SampleMeta[] = [
       "Manual lead research is slow; this workflow automates sourcing and enrichment for sales and recruiting teams.",
     tags: ["leadgen", "linkedin", "research", "airtable", "sales"],
     file: "data/workflows/episodes/episode_6_linkedin_leadgen.json",
+    metadata: {
+      industries: ["sales", "recruiting"],
+      domains: ["lead-generation", "prospecting"],
+      channels: ["linkedin", "airtable", "email"],
+      trigger: "scheduled",
+      complexity: "high",
+      integrations: ["LinkedIn", "Airtable", "Google Sheets", "Gemini"]
+    },
   },
   {
     id: "postiz-social-scheduler",
@@ -40,6 +66,14 @@ const samples: SampleMeta[] = [
       "Creators need a repeatable way to share the same asset across multiple channels without logging into each platform.",
     tags: ["social", "postiz", "video", "scheduler"],
     file: "data/workflows/episodes/episode_12_postiz.json",
+    metadata: {
+      industries: ["marketing", "social"],
+      domains: ["content-distribution", "video"],
+      channels: ["postiz", "tiktok", "youtube", "instagram"],
+      trigger: "manual",
+      complexity: "medium",
+      integrations: ["Postiz", "Seedance", "Fal.ai", "Telegram"]
+    },
   },
   {
     id: "reddit-startup-ideas",
@@ -50,6 +84,14 @@ const samples: SampleMeta[] = [
       "Finding validated startup ideas is tedious; this agent mines Reddit discussions and converts them into structured ideas.",
     tags: ["reddit", "startup", "notion", "summaries", "ai"],
     file: "data/workflows/episodes/episode_15_startup_ideas.json",
+    metadata: {
+      industries: ["founder", "product"],
+      domains: ["research", "ideation"],
+      channels: ["notion"],
+      trigger: "manual",
+      complexity: "medium",
+      integrations: ["Reddit", "Gemini", "Notion"]
+    },
   },
   {
     id: "linkedin-hitl-writer",
@@ -60,6 +102,14 @@ const samples: SampleMeta[] = [
       "Marketing teams want AI-generated posts but insist on a human-in-the-loop signoff to keep messaging on brand.",
     tags: ["linkedin", "content", "approval", "marketing"],
     file: "data/workflows/episodes/episode_3_linkedin_hitl.json",
+    metadata: {
+      industries: ["marketing"],
+      domains: ["copywriting", "human-in-the-loop"],
+      channels: ["linkedin", "email"],
+      trigger: "manual",
+      complexity: "high",
+      integrations: ["LinkedIn", "Gemini", "Gmail", "Slack"]
+    },
   },
   {
     id: "google-deep-research",
@@ -70,6 +120,14 @@ const samples: SampleMeta[] = [
       "Analysts need trustworthy research packs before writing; this workflow automates discovery, extraction, and consolidation.",
     tags: ["research", "google", "scraping", "ai"],
     file: "data/workflows/episodes/episode_4_deep_research.json",
+    metadata: {
+      industries: ["research", "seo"],
+      domains: ["deep-research", "scraping"],
+      channels: ["notion", "docs"],
+      trigger: "manual",
+      complexity: "high",
+      integrations: ["Google Programmable Search", "Crawl4AI", "OpenAI"]
+    },
   },
   {
     id: "ai-blog-writer",
@@ -80,6 +138,14 @@ const samples: SampleMeta[] = [
       "Content teams struggle to turn raw research into long-form articles; this agent packages insights into publishable drafts.",
     tags: ["blog", "content", "research", "writing"],
     file: "data/workflows/episodes/episode_5_blog_writer.json",
+    metadata: {
+      industries: ["marketing", "content"],
+      domains: ["blogging", "long-form"],
+      channels: ["notion", "google-docs"],
+      trigger: "manual",
+      complexity: "high",
+      integrations: ["OpenAI", "Notion", "Google Docs"]
+    },
   },
   {
     id: "shopify-product-videos",
@@ -90,6 +156,14 @@ const samples: SampleMeta[] = [
       "Merchants want consistent video assets for ads and PDPs but can’t produce them manually for every SKU.",
     tags: ["shopify", "video", "fal", "seedance", "commerce"],
     file: "data/workflows/episodes/episode_17_shopify_videos.json",
+    metadata: {
+      industries: ["ecommerce", "marketing"],
+      domains: ["video-generation"],
+      channels: ["youtube", "instagram"],
+      trigger: "manual",
+      complexity: "high",
+      integrations: ["Shopify", "Seedance", "Fal.ai", "Latentsync", "ElevenLabs"]
+    },
   },
   {
     id: "scary-story-tiktok",
@@ -100,6 +174,14 @@ const samples: SampleMeta[] = [
       "Faceless YouTube/TikTok channels need a constant stream of spooky stories without writing or editing each clip.",
     tags: ["tiktok", "reddit", "video", "horror", "fal"],
     file: "data/workflows/episodes/episode_18_scary_tiktok.json",
+    metadata: {
+      industries: ["media", "entertainment"],
+      domains: ["short-video"],
+      channels: ["tiktok", "youtube"],
+      trigger: "manual",
+      complexity: "high",
+      integrations: ["Reddit", "Together AI", "Postiz", "Fal.ai"]
+    },
   },
   {
     id: "wan-text-to-video",
@@ -110,6 +192,14 @@ const samples: SampleMeta[] = [
       "Creators want to experiment with Wan 2.2 without manual API calls; this workflow automates job submission and retrieval.",
     tags: ["video", "modal", "comfyui", "wan", "ai"],
     file: "data/workflows/episodes/episode_20_wan_t2v.json",
+    metadata: {
+      industries: ["media", "creative"],
+      domains: ["video-generation"],
+      channels: ["modal", "comfyui"],
+      trigger: "manual",
+      complexity: "medium",
+      integrations: ["Wan 2.2", "Modal", "ComfyUI"]
+    },
   },
   {
     id: "sleep-music-longform",
@@ -120,6 +210,14 @@ const samples: SampleMeta[] = [
       "Sleep-music channels struggle to produce long videos daily; this flow automates narration, visuals, and audio blending.",
     tags: ["sleep", "music", "youtube", "ai", "longform"],
     file: "data/workflows/episodes/episode_22_sleep_music.json",
+    metadata: {
+      industries: ["media", "audio"],
+      domains: ["music-generation"],
+      channels: ["youtube"],
+      trigger: "manual",
+      complexity: "high",
+      integrations: ["OpenAI", "ElevenLabs", "Imagen4", "Seedance"]
+    },
   },
   {
     id: "ugc-nanobanana",
@@ -130,6 +228,14 @@ const samples: SampleMeta[] = [
       "Brands need UGC ads fast but real creator shoots are expensive; this agent fabricates them programmatically.",
     tags: ["ugc", "ads", "nanobanana", "seedance", "marketing"],
     file: "data/workflows/episodes/episode_23_ugc_nanobanana.json",
+    metadata: {
+      industries: ["marketing", "ugc"],
+      domains: ["video-ads"],
+      channels: ["instagram", "tiktok"],
+      trigger: "manual",
+      complexity: "high",
+      integrations: ["Google nanobanana", "Fal.ai", "ElevenLabs", "Seedance"]
+    },
   },
   {
     id: "influencer-machine",
@@ -140,6 +246,14 @@ const samples: SampleMeta[] = [
       "AI influencer brands need coordinated publishing across multiple personas; this workflow manages planning + posting.",
     tags: ["instagram", "influencer", "scheduler", "fal"],
     file: "data/workflows/episodes/episode_35_influencer_machine.json",
+    metadata: {
+      industries: ["marketing", "social"],
+      domains: ["content-scheduling"],
+      channels: ["instagram", "google-sheets"],
+      trigger: "scheduled",
+      complexity: "high",
+      integrations: ["Instagram Graph", "Fal.ai", "Google Sheets", "PostgreSQL"]
+    },
   },
   {
     id: "seo-keyword-rank-tracker",
@@ -150,6 +264,14 @@ const samples: SampleMeta[] = [
       "SEO teams need rank tracking without paying for SaaS limits; this workflow tracks unlimited keywords per site.",
     tags: ["seo", "ranks", "google-sheets", "serper"],
     file: "data/workflows/episodes/marvo_keyword_rank_tracker.json",
+    metadata: {
+      industries: ["seo", "analytics"],
+      domains: ["rank-tracking"],
+      channels: ["google-sheets"],
+      trigger: "scheduled",
+      complexity: "medium",
+      integrations: ["Serper", "Google Sheets", "PostgreSQL"]
+    },
   },
   {
     id: "seo-serp-analysis",
@@ -160,6 +282,14 @@ const samples: SampleMeta[] = [
       "Content teams spend 30+ minutes per article doing manual SERP research; this template automates the entire brief.",
     tags: ["seo", "serp", "crawl", "briefs"],
     file: "data/workflows/episodes/marvo_serp_analysis.json",
+    metadata: {
+      industries: ["seo"],
+      domains: ["serp-analysis", "competitive-research"],
+      channels: ["reports"],
+      trigger: "manual",
+      complexity: "high",
+      integrations: ["Serper", "Crawl4AI", "Firecrawl", "Google Docs"]
+    },
   },
   {
     id: "gsc-ai-writer",
@@ -170,6 +300,14 @@ const samples: SampleMeta[] = [
       "Optimizing underperforming articles requires juggling GSC data and AI prompts; this workflow packages insights automatically.",
     tags: ["seo", "gsc", "ai", "writer"],
     file: "data/workflows/episodes/marvo_gsc_ai_seo_writer.json",
+    metadata: {
+      industries: ["seo", "content"],
+      domains: ["content-optimization"],
+      channels: ["google-docs", "notion"],
+      trigger: "manual",
+      complexity: "high",
+      integrations: ["Google Search Console", "Gemini", "Notion"]
+    },
   },
   {
     id: "ai-overview-audit",
@@ -180,6 +318,14 @@ const samples: SampleMeta[] = [
       "Brands want to appear inside AI Overview answers, but it's unclear what structure Google expects; this agent reverse engineers it.",
     tags: ["seo", "ai-overview", "analysis"],
     file: "data/workflows/episodes/marvo_ai_overview_analyzer.json",
+    metadata: {
+      industries: ["seo"],
+      domains: ["ai-overview", "research"],
+      channels: ["reports"],
+      trigger: "manual",
+      complexity: "medium",
+      integrations: ["Google Search", "OpenAI"]
+    },
   },
   {
     id: "gsc-api-toolkit",
@@ -190,6 +336,14 @@ const samples: SampleMeta[] = [
       "Analysts spend hours wiring up GSC for each use case; this template provides ready-made building blocks.",
     tags: ["gsc", "api", "analytics"],
     file: "data/workflows/episodes/marvo_gsc_api_examples.json",
+    metadata: {
+      industries: ["seo", "analytics"],
+      domains: ["data-pipelines"],
+      channels: ["bigquery", "google-sheets"],
+      trigger: "manual",
+      complexity: "medium",
+      integrations: ["Google Search Console", "BigQuery"]
+    },
   },
   {
     id: "json-report-generator",
@@ -200,6 +354,14 @@ const samples: SampleMeta[] = [
       "Teams need sharable reports from automation outputs; this template formats data for stakeholders automatically.",
     tags: ["reports", "html", "automation"],
     file: "data/workflows/episodes/marvo_report_generator.json",
+    metadata: {
+      industries: ["analytics", "operations"],
+      domains: ["reporting"],
+      channels: ["html", "email"],
+      trigger: "manual",
+      complexity: "low",
+      integrations: ["Custom JSON"]
+    },
   },
   {
     id: "notion-todoist-two-way-sync",
@@ -210,6 +372,14 @@ const samples: SampleMeta[] = [
       "Teams maintaining parallel task systems need reliable bidirectional sync with conflict handling.",
     tags: ["notion", "todoist", "sync", "webhook", "redis"],
     file: "data/workflows/episodes/dan_1897_notion_todoist_sync.json",
+    metadata: {
+      industries: ["productivity"],
+      domains: ["two-way-sync"],
+      channels: ["notion", "todoist"],
+      trigger: "multi",
+      complexity: "high",
+      integrations: ["Notion", "Todoist", "Redis", "Webhook"]
+    },
   },
   {
     id: "youtube-playlist-summarizer",
@@ -220,6 +390,14 @@ const samples: SampleMeta[] = [
       "Knowledge workers want digestible summaries of hours-long playlists without manual watching.",
     tags: ["youtube", "summaries", "redis", "qdrant", "gemini"],
     file: "data/workflows/episodes/dan_0971_youtube_summary.json",
+    metadata: {
+      industries: ["media", "knowledge"],
+      domains: ["summaries", "research"],
+      channels: ["slack", "docs"],
+      trigger: "manual",
+      complexity: "high",
+      integrations: ["YouTube", "Redis", "Qdrant", "Gemini"]
+    },
   },
   {
     id: "notion-clockify-sync",
@@ -230,6 +408,14 @@ const samples: SampleMeta[] = [
       "Ops teams struggle to reconcile project plans with actual time entries across tools.",
     tags: ["notion", "clockify", "time-tracking", "webhook"],
     file: "data/workflows/episodes/dan_1498_notion_clockify.json",
+    metadata: {
+      industries: ["operations"],
+      domains: ["time-tracking"],
+      channels: ["notion", "clockify"],
+      trigger: "webhook",
+      complexity: "medium",
+      integrations: ["Notion", "Clockify"]
+    },
   },
   {
     id: "bamboohr-webhook-sandbox",
@@ -240,6 +426,14 @@ const samples: SampleMeta[] = [
       "Testing webhook-driven HR flows is painful; this template lets you inspect payloads and automate BambooHR handling.",
     tags: ["bamboohr", "webhook", "slack", "cal.com"],
     file: "data/workflows/episodes/dan_1977_webhook_test.json",
+    metadata: {
+      industries: ["hr"],
+      domains: ["hr-automation"],
+      channels: ["slack", "email"],
+      trigger: "webhook",
+      complexity: "medium",
+      integrations: ["BambooHR", "Cal.com", "OpenAI", "Slack"]
+    },
   },
   {
     id: "social-publishing-factory",
@@ -250,6 +444,14 @@ const samples: SampleMeta[] = [
       "Marketing teams need one automation to fan out content across every network while keeping humans in the loop.",
     tags: ["social", "telegram", "linkedin", "instagram", "facebook"],
     file: "data/workflows/episodes/dan_1342_social_factory.json",
+    metadata: {
+      industries: ["marketing", "social"],
+      domains: ["content-publishing"],
+      channels: ["telegram", "linkedin", "instagram", "twitter", "facebook"],
+      trigger: "manual",
+      complexity: "high",
+      integrations: ["Telegram", "LinkedIn", "Instagram", "Facebook", "Twitter/X"]
+    },
   },
   {
     id: "shopify-to-d365",
@@ -260,6 +462,14 @@ const samples: SampleMeta[] = [
       "Ecommerce ops struggle to mirror Shopify transactions inside ERP without manual re-entry.",
     tags: ["shopify", "d365", "ecommerce", "erp"],
     file: "data/workflows/episodes/dan_1560_shopify_d365.json",
+    metadata: {
+      industries: ["ecommerce", "finance"],
+      domains: ["erp-sync", "order-management"],
+      channels: ["d365"],
+      trigger: "webhook",
+      complexity: "high",
+      integrations: ["Shopify", "Dynamics 365", "HTTP"]
+    },
   },
   {
     id: "whatsapp-erp-router",
@@ -270,6 +480,14 @@ const samples: SampleMeta[] = [
       "Support teams need to convert customer WhatsApp threads into structured ERP tickets automatically.",
     tags: ["whatsapp", "erpnext", "support"],
     file: "data/workflows/episodes/dan_1274_whatsapp_router.json",
+    metadata: {
+      industries: ["support", "operations"],
+      domains: ["ticket-routing"],
+      channels: ["whatsapp", "outlook"],
+      trigger: "webhook",
+      complexity: "high",
+      integrations: ["WhatsApp", "ERPNext", "Outlook", "Gemini"]
+    },
   },
   {
     id: "slack-incident-webhook",
@@ -280,6 +498,14 @@ const samples: SampleMeta[] = [
       "Security teams need a consistent intake for incidents from forms/webhooks with Slack-based collaboration.",
     tags: ["slack", "incident", "forms", "security"],
     file: "data/workflows/episodes/dan_0644_slack_incident.json",
+    metadata: {
+      industries: ["security"],
+      domains: ["incident-response"],
+      channels: ["slack"],
+      trigger: "webhook",
+      complexity: "medium",
+      integrations: ["Slack", "TheHive", "Form Trigger"]
+    },
   },
   {
     id: "suspicious-login-watch",
@@ -290,6 +516,14 @@ const samples: SampleMeta[] = [
       "Ops teams need early warning when risky logins occur across multiple properties.",
     tags: ["security", "postgres", "slack", "monitoring"],
     file: "data/workflows/episodes/dan_2014_suspicious_login.json",
+    metadata: {
+      industries: ["security"],
+      domains: ["monitoring"],
+      channels: ["slack"],
+      trigger: "scheduled",
+      complexity: "medium",
+      integrations: ["PostgreSQL", "Slack", "HTML"]
+    },
   },
   {
     id: "woocommerce-shipping-dhl",
@@ -300,6 +534,14 @@ const samples: SampleMeta[] = [
       "Store owners want automatic shipping label orchestration between WooCommerce and DHL without manual exports.",
     tags: ["woocommerce", "dhl", "shipping", "forms"],
     file: "data/workflows/episodes/dan_0457_woocommerce_shipping.json",
+    metadata: {
+      industries: ["ecommerce", "logistics"],
+      domains: ["fulfillment"],
+      channels: ["woocommerce", "dhl"],
+      trigger: "webhook",
+      complexity: "high",
+      integrations: ["WooCommerce", "DHL", "OpenAI"]
+    },
   },
   {
     id: "woocommerce-ai-chatbot",
@@ -310,6 +552,14 @@ const samples: SampleMeta[] = [
       "Support teams need an AI assistant that understands WooCommerce orders and can provide follow-up steps automatically.",
     tags: ["woocommerce", "telegram", "support", "rag"],
     file: "data/workflows/episodes/dan_1575_woocommerce_ai_chatbot.json",
+    metadata: {
+      industries: ["ecommerce", "support"],
+      domains: ["support-chatbot"],
+      channels: ["telegram"],
+      trigger: "webhook",
+      complexity: "high",
+      integrations: ["WooCommerce", "Telegram", "Cal.com", "Qdrant", "OpenAI"]
+    },
   },
   {
     id: "stripe-zoom-payments",
@@ -320,6 +570,14 @@ const samples: SampleMeta[] = [
       "Consultants want to gate Zoom meetings behind payment without juggling multiple tools manually.",
     tags: ["stripe", "zoom", "payments", "forms"],
     file: "data/workflows/episodes/dan_0739_stripe_zoom.json",
+    metadata: {
+      industries: ["consulting", "events"],
+      domains: ["booking", "payments"],
+      channels: ["zoom", "email"],
+      trigger: "webhook",
+      complexity: "medium",
+      integrations: ["Stripe", "Zoom", "Google Sheets", "Gmail"]
+    },
   },
   {
     id: "stripe-quickbooks-sync",
@@ -330,6 +588,14 @@ const samples: SampleMeta[] = [
       "Finance teams need Stripe transactions reflected in QuickBooks without exporting CSVs.",
     tags: ["stripe", "quickbooks", "accounting"],
     file: "data/workflows/episodes/dan_0707_stripe_quickbooks.json",
+    metadata: {
+      industries: ["finance"],
+      domains: ["accounting"],
+      channels: ["quickbooks"],
+      trigger: "webhook",
+      complexity: "medium",
+      integrations: ["Stripe", "QuickBooks"]
+    },
   },
   {
     id: "pipedrive-billing-handoff",
@@ -340,6 +606,14 @@ const samples: SampleMeta[] = [
       "Sales ops need closed deals to trigger billing automatically so finance isn’t chasing spreadsheets.",
     tags: ["pipedrive", "stripe", "sales-ops"],
     file: "data/workflows/episodes/dan_0246_pipedrive_billing.json",
+    metadata: {
+      industries: ["sales", "finance"],
+      domains: ["billing"],
+      channels: ["pipedrive", "stripe"],
+      trigger: "scheduled",
+      complexity: "medium",
+      integrations: ["Pipedrive", "Stripe", "FunctionItem"]
+    },
   },
 ];
 
