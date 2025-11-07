@@ -3,6 +3,8 @@ import { computed, ref } from 'vue';
 import { useI18n } from '@n8n/i18n';
 import { N8nButton, N8nCallout, N8nText } from '@n8n/design-system';
 import { AI_WORKFLOW_ENDPOINT } from '@/app/constants';
+import { nodeViewEventBus } from '@/app/event-bus/node-view';
+import type { WorkflowDataUpdate } from '@/Interface';
 
 interface WorkflowSuggestion {
 	id: string;
@@ -36,6 +38,10 @@ function makeSuggestionId() {
 	}
 
 	return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function isWorkflowPayload(value: unknown): value is WorkflowDataUpdate {
+	return typeof value === 'object' && value !== null && 'nodes' in (value as Record<string, unknown>);
 }
 
 async function handleGenerate() {
@@ -104,7 +110,25 @@ function handleInsert() {
 		return;
 	}
 
-	emit('insert', suggestion);
+	if (!isWorkflowPayload(suggestion.workflow)) {
+		errorMessage.value = locale.baseText('logs.aiPanel.error.invalidWorkflow');
+		return;
+	}
+
+	try {
+		nodeViewEventBus.emit('importWorkflowData', {
+			data: suggestion.workflow,
+			tidyUp: true,
+			regenerateIds: true,
+			trackEvents: false,
+		});
+		emit('insert', suggestion);
+	} catch (error) {
+		errorMessage.value =
+			error instanceof Error
+				? error.message
+				: locale.baseText('logs.aiPanel.error.importFailed');
+	}
 }
 
 function formatTimestamp(timestamp: string) {
