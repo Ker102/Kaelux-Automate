@@ -241,6 +241,56 @@ const samples: SampleMeta[] = [
     tags: ["bamboohr", "webhook", "slack", "cal.com"],
     file: "data/workflows/episodes/dan_1977_webhook_test.json",
   },
+  {
+    id: "social-publishing-factory",
+    title: "Omni-Channel Social Publishing Factory",
+    description:
+      "Uploads assets, crafts prompts, and pushes content to Telegram, LinkedIn, Instagram, Facebook, and Twitter with approval flows.",
+    problem:
+      "Marketing teams need one automation to fan out content across every network while keeping humans in the loop.",
+    tags: ["social", "telegram", "linkedin", "instagram", "facebook"],
+    file: "data/workflows/episodes/dan_1342_social_factory.json",
+  },
+  {
+    id: "shopify-to-d365",
+    title: "Shopify → D365 Sales Doc Sync",
+    description:
+      "Transforms Shopify orders into D365 Business Central sales orders/invoices using SplitOut/Batch patterns and HTTP connectors.",
+    problem:
+      "Ecommerce ops struggle to mirror Shopify transactions inside ERP without manual re-entry.",
+    tags: ["shopify", "d365", "ecommerce", "erp"],
+    file: "data/workflows/episodes/dan_1560_shopify_d365.json",
+  },
+  {
+    id: "whatsapp-erp-router",
+    title: "WhatsApp ERP Support Router",
+    description:
+      "Ingests WhatsApp webhooks, enriches messages via Gemini, and routes cases into ERPNext + Outlook workflows.",
+    problem:
+      "Support teams need to convert customer WhatsApp threads into structured ERP tickets automatically.",
+    tags: ["whatsapp", "erpnext", "support"],
+    file: "data/workflows/episodes/dan_1274_whatsapp_router.json",
+  },
+  {
+    id: "slack-incident-webhook",
+    title: "Slack Incident Intake Hub",
+    description:
+      "Uses form triggers, Hive alerting, and Slack responses to capture incidents, enrich them, and push follow-ups.",
+    problem:
+      "Security teams need a consistent intake for incidents from forms/webhooks with Slack-based collaboration.",
+    tags: ["slack", "incident", "forms", "security"],
+    file: "data/workflows/episodes/dan_0644_slack_incident.json",
+  },
+  {
+    id: "suspicious-login-watch",
+    title: "Suspicious Login Detection",
+    description:
+      "Monitors Postgres auth events, applies custom HTML/email checks, and notifies Slack when thresholds are met.",
+    problem:
+      "Ops teams need early warning when risky logins occur across multiple properties.",
+    tags: ["security", "postgres", "slack", "monitoring"],
+    file: "data/workflows/episodes/dan_2014_suspicious_login.json",
+  },
 ];
 
 async function main() {
