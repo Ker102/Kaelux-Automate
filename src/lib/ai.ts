@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_MODEL = process.env.GEMINI_MODEL ?? "gemini-2.0-pro-exp";
+const GEMINI_MODEL = process.env.GEMINI_MODEL ?? "gemini-2.5-pro";
 
 if (!GEMINI_API_KEY) {
   // Fail fast during boot; runtime route will surface a 500 with a clearer message.
