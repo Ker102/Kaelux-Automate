@@ -81,6 +81,66 @@ const samples: SampleMeta[] = [
     tags: ["blog", "content", "research", "writing"],
     file: "data/workflows/episodes/episode_5_blog_writer.json",
   },
+  {
+    id: "shopify-product-videos",
+    title: "Shopify Product Video Factory",
+    description:
+      "Collects Shopify catalog data, feeds prompts into Seedance + Fal/Latentsync, and assembles talking avatar product videos.",
+    problem:
+      "Merchants want consistent video assets for ads and PDPs but can’t produce them manually for every SKU.",
+    tags: ["shopify", "video", "fal", "seedance", "commerce"],
+    file: "data/workflows/episodes/episode_17_shopify_videos.json",
+  },
+  {
+    id: "scary-story-tiktok",
+    title: "Scary Story TikTok Generator",
+    description:
+      "Scrapes Reddit horror prompts, writes scripts with Gemini, renders scenes with Together AI, and posts short-form videos.",
+    problem:
+      "Faceless YouTube/TikTok channels need a constant stream of spooky stories without writing or editing each clip.",
+    tags: ["tiktok", "reddit", "video", "horror", "fal"],
+    file: "data/workflows/episodes/episode_18_scary_tiktok.json",
+  },
+  {
+    id: "wan-text-to-video",
+    title: "Wan 2.2 Text-to-Video Launcher",
+    description:
+      "Wraps Modal + ComfyUI endpoints to trigger Wan 2.2 video renders from text prompts and retrieve resulting clips.",
+    problem:
+      "Creators want to experiment with Wan 2.2 without manual API calls; this workflow automates job submission and retrieval.",
+    tags: ["video", "modal", "comfyui", "wan", "ai"],
+    file: "data/workflows/episodes/episode_20_wan_t2v.json",
+  },
+  {
+    id: "sleep-music-longform",
+    title: "Sleep Music Long-form Creator",
+    description:
+      "Combines GPT-5 scripts, ElevenLabs music, seed scenes, and editing logic to output hour-long sleep tracks ready for YouTube.",
+    problem:
+      "Sleep-music channels struggle to produce long videos daily; this flow automates narration, visuals, and audio blending.",
+    tags: ["sleep", "music", "youtube", "ai", "longform"],
+    file: "data/workflows/episodes/episode_22_sleep_music.json",
+  },
+  {
+    id: "ugc-nanobanana",
+    title: "UGC Ads with Nanobanana",
+    description:
+      "Generates UGC-style ad scenes using Google nanobanana, ElevenLabs, and Seedance, then stitches them into paid media assets.",
+    problem:
+      "Brands need UGC ads fast but real creator shoots are expensive; this agent fabricates them programmatically.",
+    tags: ["ugc", "ads", "nanobanana", "seedance", "marketing"],
+    file: "data/workflows/episodes/episode_23_ugc_nanobanana.json",
+  },
+  {
+    id: "influencer-machine",
+    title: "Instagram Influencer Machine",
+    description:
+      "Plans weekly content, generates captions/images via Fal.ai, stores schedules in DB tables, and posts to Instagram Business accounts.",
+    problem:
+      "AI influencer brands need coordinated publishing across multiple personas; this workflow manages planning + posting.",
+    tags: ["instagram", "influencer", "scheduler", "fal"],
+    file: "data/workflows/episodes/episode_35_influencer_machine.json",
+  },
 ];
 
 async function main() {
