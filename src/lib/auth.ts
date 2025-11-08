@@ -4,6 +4,8 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { compare } from "bcrypt";
 import { prisma } from "@/lib/prisma";
 
+const authSecret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
+
 export const {
   handlers: { GET, POST },
   auth,
@@ -15,7 +17,7 @@ export const {
     strategy: "database",
   },
   trustHost: true,
-  secret: process.env.AUTH_SECRET,
+  secret: authSecret,
   pages: {
     signIn: "/sign-in",
   },
