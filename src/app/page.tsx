@@ -25,15 +25,22 @@ export default async function Home() {
       </section>
 
       {session ? (
-        <section className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm">
-          <h2 className="text-xl font-semibold text-zinc-900">
+        <section className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-white/15 dark:bg-white/5">
+          <h2 className="text-xl font-semibold text-zinc-900 dark:text-white">
             Welcome, {userIdentifier}
           </h2>
-          <p className="mt-2 text-sm text-zinc-600">
-            Your account is ready. Next up, we&apos;ll wire in the workflow
-            builder and vector-enhanced prompting.
+          <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+            Open the embedded n8n canvas to decide where the AI side panel
+            should live. Once you&apos;re done exploring, use the sign-out
+            button to switch accounts.
           </p>
-          <div className="mt-6">
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link
+              href="/builder"
+              className="inline-flex items-center justify-center rounded-full bg-zinc-900 px-5 py-2 text-sm font-medium text-white transition hover:bg-zinc-700 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100"
+            >
+              Open n8n builder preview
+            </Link>
             <SignOutButton />
           </div>
         </section>

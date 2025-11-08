@@ -26,3 +26,19 @@ services:
       QDRANT__TELEMETRY__DISABLE: "true"
     volumes:
       - ./.data/qdrant:/qdrant/storage
+
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: project05-n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      N8N_HOST: localhost
+      N8N_PORT: 5678
+      N8N_PROTOCOL: http
+      WEBHOOK_URL: http://localhost:5678/
+      GENERIC_TIMEZONE: UTC
+      N8N_USER_FOLDER: /home/node/.n8n
+    volumes:
+      - ./.data/n8n:/home/node/.n8n
