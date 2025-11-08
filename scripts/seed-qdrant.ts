@@ -9,12 +9,22 @@ import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 import { QdrantVectorStore } from "@langchain/community/vectorstores/qdrant";
 import { QdrantClient } from "@qdrant/js-client-rest";
 
+type SampleMetadata = {
+  industries?: string[];
+  domains?: string[];
+  channels?: string[];
+  trigger?: string;
+  complexity?: string;
+  integrations?: string[];
+};
+
 type SampleWorkflow = {
   id: string;
   title: string;
   description: string;
   problem: string;
   tags: string[];
+  metadata?: SampleMetadata;
   workflow: Record<string, unknown>;
 };
 
@@ -47,6 +57,7 @@ function buildDocument(sample: SampleWorkflow) {
   const nodeCount = Array.isArray(sample.workflow?.nodes)
     ? sample.workflow.nodes.length
     : 0;
+  const metadata = sample.metadata ?? {};
 
   const content = [
     sample.title,
@@ -57,6 +68,13 @@ function buildDocument(sample: SampleWorkflow) {
     "",
     `Tags: ${sample.tags.join(", ")}`,
     `Node count: ${nodeCount}`,
+    `Industries: ${metadata.industries?.join(", ") ?? "n/a"}`,
+    `Domains: ${metadata.domains?.join(", ") ?? "n/a"}`,
+    `Channels: ${metadata.channels?.join(", ") ?? "n/a"}`,
+    `Trigger: ${metadata.trigger ?? "n/a"} | Complexity: ${
+      metadata.complexity ?? "n/a"
+    }`,
+    `Integrations: ${metadata.integrations?.join(", ") ?? "n/a"}`,
   ].join("\n");
 
   return new Document({
@@ -65,6 +83,7 @@ function buildDocument(sample: SampleWorkflow) {
       id: sample.id,
       title: sample.title,
       tags: sample.tags,
+       metadata,
       workflow: sample.workflow,
     },
   });
