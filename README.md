@@ -14,6 +14,17 @@ What you get:
 - `qdrant`: vector store on port `6333`.
 - `n8n`: reference UI on port `5678` (embedded at `/builder`).
 
+### Rebuilding the n8n image (after UI changes)
+
+```bash
+cd n8n
+VITE_AI_WORKFLOW_ENDPOINT=http://app:3000/api/ai/workflow \
+VITE_AI_SAMPLE_PROMPTS_ENDPOINT=http://app:3000/api/ai/prompts \
+pnpm build:docker   # produces n8nio/n8n:local
+cd ..
+docker compose -f docker-compose.dev.yml up -d n8n   # restart service with new image
+```
+
 ### Database & Seeding
 
 ```bash

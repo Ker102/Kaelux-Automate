@@ -51,7 +51,7 @@ services:
       - ./.data/qdrant:/qdrant/storage
 
   n8n:
-    image: n8nio/n8n:latest
+    image: n8nio/n8n:local
     container_name: project05-n8n
     restart: unless-stopped
     ports:
@@ -65,3 +65,6 @@ services:
       N8N_USER_FOLDER: /home/node/.n8n
     volumes:
       - ./.data/n8n:/home/node/.n8n
+    depends_on:
+      app:
+        condition: service_started
