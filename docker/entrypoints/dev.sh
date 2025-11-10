@@ -4,7 +4,7 @@ set -euo pipefail
 cd /app
 
 if [ -f package-lock.json ]; then
-  npm install
+  npm install --legacy-peer-deps
 fi
 
 npx prisma generate

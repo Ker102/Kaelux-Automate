@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Install app dependencies
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Generate Prisma client so scripts work even before bind-mounts
 COPY prisma ./prisma
