@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useI18n } from '@n8n/i18n';
 import { N8nButton, N8nCallout, N8nText } from '@n8n/design-system';
 import { AI_WORKFLOW_ENDPOINT, AI_SAMPLE_PROMPTS_ENDPOINT } from '@/app/constants';
@@ -42,6 +42,38 @@ const promptExamples = ref<PromptExample[]>([]);
 const promptExamplesError = ref<string | null>(null);
 const isLoadingPromptExamples = ref(true);
 const highlightedExampleId = ref<string | null>(null);
+
+const STORAGE_KEY = 'ai-workflow-builder:suggestions';
+const STORAGE_LIMIT = 8;
+
+if (typeof window !== 'undefined') {
+	try {
+		const stored = window.localStorage.getItem(STORAGE_KEY);
+		if (stored) {
+			const parsed = JSON.parse(stored);
+			if (Array.isArray(parsed)) {
+				suggestions.value = parsed;
+			}
+		}
+	} catch (error) {
+		console.warn('[AI builder] Unable to restore saved suggestions', error);
+	}
+
+	watch(
+		() => suggestions.value,
+		(value) => {
+			try {
+				window.localStorage.setItem(
+					STORAGE_KEY,
+					JSON.stringify(value.slice(0, STORAGE_LIMIT))
+				);
+			} catch (error) {
+				console.warn('[AI builder] Unable to persist suggestions', error);
+			}
+		},
+		{ deep: true }
+	);
+}
 
 const emit = defineEmits<{
 	generate: [string];
@@ -173,6 +205,7 @@ async function handleGenerate() {
 		};
 
 		suggestions.value.unshift(suggestion);
+		suggestions.value = suggestions.value.slice(0, STORAGE_LIMIT);
 		emit('generate', value);
 		prompt.value = '';
 	} catch (error) {

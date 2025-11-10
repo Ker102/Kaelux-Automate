@@ -27,10 +27,10 @@
       "trigger": "scheduled",
       "complexity": "high",
       "integrations": [
-        "RSS Feed",
-        "Slack",
-        "Gmail",
-        "YouTube"
+        "rss feed",
+        "slack",
+        "gmail",
+        "youtube"
       ]
     },
     "workflow": {
@@ -1257,10 +1257,10 @@
       "trigger": "scheduled",
       "complexity": "high",
       "integrations": [
-        "LinkedIn",
-        "Airtable",
-        "Google Sheets",
-        "Gemini"
+        "linkedin",
+        "airtable",
+        "google sheets",
+        "gemini"
       ]
     },
     "workflow": {
@@ -3452,10 +3452,10 @@
       "trigger": "manual",
       "complexity": "medium",
       "integrations": [
-        "Postiz",
-        "Seedance",
-        "Fal.ai",
-        "Telegram"
+        "postiz",
+        "seedance",
+        "fal.ai",
+        "telegram"
       ]
     },
     "workflow": {
@@ -3992,9 +3992,9 @@
       "trigger": "manual",
       "complexity": "medium",
       "integrations": [
-        "Reddit",
-        "Gemini",
-        "Notion"
+        "reddit",
+        "gemini",
+        "notion"
       ]
     },
     "workflow": {
@@ -4950,10 +4950,10 @@
       "trigger": "manual",
       "complexity": "high",
       "integrations": [
-        "LinkedIn",
-        "Gemini",
-        "Gmail",
-        "Slack"
+        "linkedin",
+        "gemini",
+        "gmail",
+        "slack"
       ]
     },
     "workflow": {
@@ -5823,9 +5823,9 @@
       "trigger": "manual",
       "complexity": "high",
       "integrations": [
-        "Google Programmable Search",
-        "Crawl4AI",
-        "OpenAI"
+        "google programmable search",
+        "crawl4ai",
+        "openai"
       ]
     },
     "workflow": {
@@ -6713,9 +6713,9 @@
       "trigger": "manual",
       "complexity": "high",
       "integrations": [
-        "OpenAI",
-        "Notion",
-        "Google Docs"
+        "openai",
+        "notion",
+        "google docs"
       ]
     },
     "workflow": {
@@ -7505,11 +7505,11 @@
       "trigger": "manual",
       "complexity": "high",
       "integrations": [
-        "Shopify",
-        "Seedance",
-        "Fal.ai",
-        "Latentsync",
-        "ElevenLabs"
+        "shopify",
+        "seedance",
+        "fal.ai",
+        "latentsync",
+        "elevenlabs"
       ]
     },
     "workflow": {
@@ -10033,10 +10033,10 @@
       "trigger": "manual",
       "complexity": "high",
       "integrations": [
-        "Reddit",
-        "Together AI",
-        "Postiz",
-        "Fal.ai"
+        "reddit",
+        "together ai",
+        "postiz",
+        "fal.ai"
       ]
     },
     "workflow": {
@@ -12738,9 +12738,9 @@
       "trigger": "manual",
       "complexity": "medium",
       "integrations": [
-        "Wan 2.2",
-        "Modal",
-        "ComfyUI"
+        "wan 2.2",
+        "modal",
+        "comfyui"
       ]
     },
     "workflow": {
@@ -13201,10 +13201,10 @@
       "trigger": "manual",
       "complexity": "high",
       "integrations": [
-        "OpenAI",
-        "ElevenLabs",
-        "Imagen4",
-        "Seedance"
+        "openai",
+        "elevenlabs",
+        "imagen4",
+        "seedance"
       ]
     },
     "workflow": {
@@ -14720,10 +14720,10 @@
       "trigger": "manual",
       "complexity": "high",
       "integrations": [
-        "Google nanobanana",
-        "Fal.ai",
-        "ElevenLabs",
-        "Seedance"
+        "google nanobanana",
+        "fal.ai",
+        "elevenlabs",
+        "seedance"
       ]
     },
     "workflow": {
@@ -17307,10 +17307,10 @@
       "trigger": "scheduled",
       "complexity": "high",
       "integrations": [
-        "Instagram Graph",
-        "Fal.ai",
-        "Google Sheets",
-        "PostgreSQL"
+        "instagram graph",
+        "fal.ai",
+        "google sheets",
+        "postgresql"
       ]
     },
     "workflow": {
@@ -20965,9 +20965,9 @@
       "trigger": "scheduled",
       "complexity": "medium",
       "integrations": [
-        "Serper",
-        "Google Sheets",
-        "PostgreSQL"
+        "serper",
+        "google sheets",
+        "postgresql"
       ]
     },
     "workflow": {
@@ -22105,10 +22105,10 @@
       "trigger": "manual",
       "complexity": "high",
       "integrations": [
-        "Serper",
-        "Crawl4AI",
-        "Firecrawl",
-        "Google Docs"
+        "serper",
+        "crawl4ai",
+        "firecrawl",
+        "google docs"
       ]
     },
     "workflow": {
@@ -23901,9 +23901,9 @@
       "trigger": "manual",
       "complexity": "high",
       "integrations": [
-        "Google Search Console",
-        "Gemini",
-        "Notion"
+        "google search console",
+        "gemini",
+        "notion"
       ]
     },
     "workflow": {
@@ -24952,8 +24952,8 @@
       "trigger": "manual",
       "complexity": "medium",
       "integrations": [
-        "Google Search",
-        "OpenAI"
+        "google search",
+        "openai"
       ]
     },
     "workflow": {
@@ -25183,8 +25183,8 @@
       "trigger": "manual",
       "complexity": "medium",
       "integrations": [
-        "Google Search Console",
-        "BigQuery"
+        "google search console",
+        "bigquery"
       ]
     },
     "workflow": {
@@ -26016,7 +26016,7 @@
       "trigger": "manual",
       "complexity": "low",
       "integrations": [
-        "Custom JSON"
+        "custom json"
       ]
     },
     "workflow": {
@@ -26348,10 +26348,10 @@
       "trigger": "multi",
       "complexity": "high",
       "integrations": [
-        "Notion",
-        "Todoist",
-        "Redis",
-        "Webhook"
+        "notion",
+        "todoist",
+        "redis",
+        "webhook"
       ]
     },
     "workflow": {
@@ -33997,10 +33997,10 @@
       "trigger": "manual",
       "complexity": "high",
       "integrations": [
-        "YouTube",
-        "Redis",
-        "Qdrant",
-        "Gemini"
+        "youtube",
+        "redis",
+        "qdrant",
+        "gemini"
       ]
     },
     "workflow": {
@@ -36203,8 +36203,8 @@
       "trigger": "webhook",
       "complexity": "medium",
       "integrations": [
-        "Notion",
-        "Clockify"
+        "notion",
+        "clockify"
       ]
     },
     "workflow": {
@@ -38566,10 +38566,10 @@
       "trigger": "webhook",
       "complexity": "medium",
       "integrations": [
-        "BambooHR",
-        "Cal.com",
-        "OpenAI",
-        "Slack"
+        "bamboohr",
+        "cal.com",
+        "openai",
+        "slack"
       ]
     },
     "workflow": {
@@ -40048,11 +40048,11 @@
       "trigger": "manual",
       "complexity": "high",
       "integrations": [
-        "Telegram",
-        "LinkedIn",
-        "Instagram",
-        "Facebook",
-        "Twitter/X"
+        "telegram",
+        "linkedin",
+        "instagram",
+        "facebook",
+        "twitter/x"
       ]
     },
     "workflow": {
@@ -42954,9 +42954,9 @@
       "trigger": "webhook",
       "complexity": "high",
       "integrations": [
-        "Shopify",
-        "Dynamics 365",
-        "HTTP"
+        "shopify",
+        "dynamics 365",
+        "http"
       ]
     },
     "workflow": {
@@ -44543,10 +44543,10 @@
       "trigger": "webhook",
       "complexity": "high",
       "integrations": [
-        "WhatsApp",
-        "ERPNext",
-        "Outlook",
-        "Gemini"
+        "whatsapp",
+        "erpnext",
+        "outlook",
+        "gemini"
       ]
     },
     "workflow": {
@@ -45652,9 +45652,9 @@
       "trigger": "webhook",
       "complexity": "medium",
       "integrations": [
-        "Slack",
-        "TheHive",
-        "Form Trigger"
+        "slack",
+        "thehive",
+        "form trigger"
       ]
     },
     "workflow": {
@@ -50109,9 +50109,9 @@
       "trigger": "scheduled",
       "complexity": "medium",
       "integrations": [
-        "PostgreSQL",
-        "Slack",
-        "HTML"
+        "postgresql",
+        "slack",
+        "html"
       ]
     },
     "workflow": {
@@ -51369,9 +51369,9 @@
       "trigger": "webhook",
       "complexity": "high",
       "integrations": [
-        "WooCommerce",
-        "DHL",
-        "OpenAI"
+        "woocommerce",
+        "dhl",
+        "openai"
       ]
     },
     "workflow": {
@@ -52487,11 +52487,11 @@
       "trigger": "webhook",
       "complexity": "high",
       "integrations": [
-        "WooCommerce",
-        "Telegram",
-        "Cal.com",
-        "Qdrant",
-        "OpenAI"
+        "woocommerce",
+        "telegram",
+        "cal.com",
+        "qdrant",
+        "openai"
       ]
     },
     "workflow": {
@@ -53463,10 +53463,10 @@
       "trigger": "webhook",
       "complexity": "medium",
       "integrations": [
-        "Stripe",
-        "Zoom",
-        "Google Sheets",
-        "Gmail"
+        "stripe",
+        "zoom",
+        "google sheets",
+        "gmail"
       ]
     },
     "workflow": {
@@ -54494,8 +54494,8 @@
       "trigger": "webhook",
       "complexity": "medium",
       "integrations": [
-        "Stripe",
-        "QuickBooks"
+        "stripe",
+        "quickbooks"
       ]
     },
     "workflow": {
@@ -54994,9 +54994,9 @@
       "trigger": "scheduled",
       "complexity": "medium",
       "integrations": [
-        "Pipedrive",
-        "Stripe",
-        "FunctionItem"
+        "pipedrive",
+        "stripe",
+        "functionitem"
       ]
     },
     "workflow": {
