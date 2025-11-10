@@ -3,7 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useI18n } from '@n8n/i18n';
 import { N8nButton, N8nCallout, N8nText } from '@n8n/design-system';
 import { AI_WORKFLOW_ENDPOINT, AI_SAMPLE_PROMPTS_ENDPOINT } from '@/app/constants';
-import { nodeViewEventBus } from '@/app/event-bus/node-view';
+import { useCanvasOperations } from '@/app/composables/useCanvasOperations';
 import type { WorkflowDataUpdate } from '@/Interface';
 
 interface WorkflowSuggestion {
@@ -42,6 +42,7 @@ const promptExamples = ref<PromptExample[]>([]);
 const promptExamplesError = ref<string | null>(null);
 const isLoadingPromptExamples = ref(true);
 const highlightedExampleId = ref<string | null>(null);
+const canvasOperations = useCanvasOperations();
 
 const STORAGE_KEY = 'ai-workflow-builder:suggestions';
 const STORAGE_LIMIT = 8;
@@ -219,7 +220,7 @@ async function handleGenerate() {
 	}
 }
 
-function handleInsert() {
+async function handleInsert() {
 	const suggestion = latestSuggestion.value;
 
 	if (!suggestion) {
@@ -236,8 +237,7 @@ function handleInsert() {
 			? suggestion.workflow.nodes.length
 			: 0;
 
-		nodeViewEventBus.emit('importWorkflowData', {
-			data: suggestion.workflow,
+		await canvasOperations.importWorkflowData(suggestion.workflow, 'ai-builder', {
 			tidyUp: true,
 			regenerateIds: true,
 			trackEvents: false,
