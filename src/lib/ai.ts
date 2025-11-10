@@ -7,6 +7,10 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = process.env.GEMINI_MODEL ?? "gemini-2.5-pro";
 const GEMINI_FALLBACK_MODEL =
   process.env.GEMINI_FALLBACK_MODEL ?? "gemini-2.5-flash";
+const GEMINI_MAX_RETRIES =
+  Number(process.env.GEMINI_MAX_RETRIES ?? 3) || 3;
+const GEMINI_RETRY_BASE_DELAY_MS =
+  Number(process.env.GEMINI_RETRY_BASE_DELAY_MS ?? 2000) || 2000;
 const GEMINI_EMBED_MODEL =
   process.env.GEMINI_EMBED_MODEL ?? "text-embedding-004";
 const QDRANT_URL = process.env.QDRANT_URL ?? "http://localhost:6333";
@@ -355,42 +359,71 @@ export async function generateWorkflowSuggestion(
     text: `User request:\n${prompt}`,
   });
 
-  async function invokeModel(modelName: string) {
-    const model = genAI.getGenerativeModel({
-      model: modelName,
-      systemInstruction,
-    });
+  async function invokeModel(
+    modelName: string,
+    maxRetries = GEMINI_MAX_RETRIES
+  ) {
     const payload = userParts.map((part) => part.text).join("\n\n");
-    try {
-      const generation = await model.generateContent(payload);
-      const raw = generation.response.text().trim();
-      console.debug(`[AI] raw response from ${modelName}:`, raw);
-      return raw;
-    } catch (error) {
-      console.error(`[AI] Gemini call failed for ${modelName}`, {
-        message: error instanceof Error ? error.message : error,
-        cause: (error as { cause?: unknown })?.cause,
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      const model = genAI.getGenerativeModel({
+        model: modelName,
+        systemInstruction,
       });
-      throw error;
+
+      try {
+        const generation = await model.generateContent(payload);
+        const raw = generation.response.text().trim();
+        console.debug(`[AI] raw response from ${modelName}:`, raw);
+        return raw;
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : String(error);
+        const status = (error as { status?: number }).status;
+        const isRetryable =
+          status === 503 ||
+          /503/.test(message) ||
+          message.toLowerCase().includes("overloaded");
+
+        if (!isRetryable || attempt === maxRetries) {
+          console.error(`[AI] Gemini call failed for ${modelName}`, {
+            attempt,
+            message,
+            cause: (error as { cause?: unknown })?.cause,
+          });
+          throw error;
+        }
+
+        const delay =
+          GEMINI_RETRY_BASE_DELAY_MS * 2 ** (attempt - 1);
+        console.warn(
+          `[AI] ${modelName} attempt ${attempt} failed (${message}). Retrying in ${delay}ms...`
+        );
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
     }
+
+    throw new Error(`Failed to invoke ${modelName} after retries.`);
   }
 
-  let rawText: string;
-  try {
-    rawText = await invokeModel(GEMINI_MODEL);
-  } catch (primaryError) {
-    if (
-      GEMINI_FALLBACK_MODEL &&
-      GEMINI_FALLBACK_MODEL !== GEMINI_MODEL
-    ) {
-      console.warn(
-        `[AI] Primary model ${GEMINI_MODEL} failed, falling back to ${GEMINI_FALLBACK_MODEL}`
-      );
-      rawText = await invokeModel(GEMINI_FALLBACK_MODEL);
-    } else {
+  async function invokeWithFallback() {
+    try {
+      return await invokeModel(GEMINI_MODEL);
+    } catch (primaryError) {
+      if (
+        GEMINI_FALLBACK_MODEL &&
+        GEMINI_FALLBACK_MODEL !== GEMINI_MODEL
+      ) {
+        console.warn(
+          `[AI] Primary model ${GEMINI_MODEL} failed, falling back to ${GEMINI_FALLBACK_MODEL}`
+        );
+        return await invokeModel(GEMINI_FALLBACK_MODEL);
+      }
       throw primaryError;
     }
   }
+
+  const rawText = await invokeWithFallback();
 
   try {
     const parsed = JSON.parse(extractJsonPayload(rawText)) as {
