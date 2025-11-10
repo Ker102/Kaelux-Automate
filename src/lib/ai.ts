@@ -7,6 +7,8 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = process.env.GEMINI_MODEL ?? "gemini-2.5-pro";
 const GEMINI_FALLBACK_MODEL =
   process.env.GEMINI_FALLBACK_MODEL ?? "gemini-2.5-flash";
+const GEMINI_SECONDARY_FALLBACK_MODEL =
+  process.env.GEMINI_SECONDARY_FALLBACK_MODEL ?? "gemini-1.5-pro";
 const GEMINI_MAX_RETRIES =
   Number(process.env.GEMINI_MAX_RETRIES ?? 3) || 3;
 const GEMINI_RETRY_BASE_DELAY_MS =
@@ -406,7 +408,7 @@ export async function generateWorkflowSuggestion(
     throw new Error(`Failed to invoke ${modelName} after retries.`);
   }
 
-  async function invokeWithFallback() {
+  async function invokeWithFallbackChain() {
     try {
       return await invokeModel(GEMINI_MODEL);
     } catch (primaryError) {
@@ -417,13 +419,27 @@ export async function generateWorkflowSuggestion(
         console.warn(
           `[AI] Primary model ${GEMINI_MODEL} failed, falling back to ${GEMINI_FALLBACK_MODEL}`
         );
-        return await invokeModel(GEMINI_FALLBACK_MODEL);
+        try {
+          return await invokeModel(GEMINI_FALLBACK_MODEL);
+        } catch (secondaryError) {
+          if (
+            GEMINI_SECONDARY_FALLBACK_MODEL &&
+            GEMINI_SECONDARY_FALLBACK_MODEL !== GEMINI_FALLBACK_MODEL &&
+            GEMINI_SECONDARY_FALLBACK_MODEL !== GEMINI_MODEL
+          ) {
+            console.warn(
+              `[AI] Secondary model ${GEMINI_FALLBACK_MODEL} failed, falling back to ${GEMINI_SECONDARY_FALLBACK_MODEL}`
+            );
+            return await invokeModel(GEMINI_SECONDARY_FALLBACK_MODEL);
+          }
+          throw secondaryError;
+        }
       }
       throw primaryError;
     }
   }
 
-  const rawText = await invokeWithFallback();
+  const rawText = await invokeWithFallbackChain();
 
   try {
     const parsed = JSON.parse(extractJsonPayload(rawText)) as {
