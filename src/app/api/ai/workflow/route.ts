@@ -3,6 +3,7 @@ import { generateWorkflowSuggestion } from "@/lib/ai";
 
 type WorkflowRequestBody = {
   prompt?: string;
+  workflowContext?: unknown;
 };
 
 const corsHeaders = new Headers({
@@ -34,7 +35,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const suggestion = await generateWorkflowSuggestion(prompt);
+    const suggestion = await generateWorkflowSuggestion(prompt, {
+      existingWorkflow: body.workflowContext,
+    });
 
     return applyCors(
       NextResponse.json(

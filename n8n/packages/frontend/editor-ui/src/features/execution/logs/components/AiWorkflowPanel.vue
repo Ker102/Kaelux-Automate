@@ -4,6 +4,8 @@ import { useI18n } from '@n8n/i18n';
 import { N8nButton, N8nCallout, N8nText } from '@n8n/design-system';
 import { AI_WORKFLOW_ENDPOINT, AI_SAMPLE_PROMPTS_ENDPOINT } from '@/app/constants';
 import { useCanvasOperations } from '@/app/composables/useCanvasOperations';
+import { useWorkflowsStore } from '@/app/stores/workflows.store';
+import type { IConnections, INodeUi } from '@/Interface';
 import type { WorkflowDataUpdate } from '@/Interface';
 
 interface WorkflowSuggestion {
@@ -43,6 +45,32 @@ const promptExamplesError = ref<string | null>(null);
 const isLoadingPromptExamples = ref(true);
 const highlightedExampleId = ref<string | null>(null);
 const canvasOperations = useCanvasOperations();
+const workflowsStore = useWorkflowsStore();
+
+const activeWorkflowSnapshot = computed(() => {
+	const workflow = workflowsStore.workflow;
+	if (!workflow || !workflow.nodes?.length) {
+		return null;
+	}
+
+	const simplifiedNodes = workflow.nodes.map((node: INodeUi) => ({
+		id: node.id,
+		name: node.name,
+		type: node.type,
+		position: node.position,
+		parameters: node.parameters,
+		notes: node.notes,
+	}));
+
+	const connections: IConnections = workflow.connections ?? {};
+
+	return {
+		id: workflow.id,
+		name: workflow.name,
+		nodes: simplifiedNodes,
+		connections,
+	};
+});
 
 const STORAGE_KEY = 'ai-workflow-builder:suggestions';
 const STORAGE_LIMIT = 8;
@@ -176,7 +204,10 @@ async function handleGenerate() {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ prompt: value }),
+			body: JSON.stringify({
+				prompt: value,
+				workflowContext: activeWorkflowSnapshot.value,
+			}),
 		});
 
 		const payload = (await response.json().catch(() => ({}))) as {

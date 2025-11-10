@@ -76,6 +76,24 @@ export type AiWorkflowSuggestion = {
   rawText: string;
 };
 
+type ExistingWorkflowContext = {
+  id?: string;
+  name?: string;
+  nodes?: Array<{
+    id?: string;
+    name?: string;
+    type?: string;
+    position?: unknown;
+    parameters?: unknown;
+    notes?: unknown;
+  }>;
+  connections?: unknown;
+};
+
+type GenerateWorkflowOptions = {
+  existingWorkflow?: unknown;
+};
+
 type RetrievedWorkflow = {
   title?: string;
   summary?: string;
@@ -206,6 +224,62 @@ Workflow:
 ${workflowSnippet}`;
     })
     .join("\n\n");
+}
+
+function normalizeExistingWorkflowContext(
+  value: unknown
+): ExistingWorkflowContext | null {
+  if (!value || typeof value !== "object") {
+    return null;
+  }
+
+  const context = value as ExistingWorkflowContext;
+  if (!context.nodes || !Array.isArray(context.nodes) || context.nodes.length === 0) {
+    return null;
+  }
+
+  return {
+    id: context.id,
+    name: context.name,
+    nodes: context.nodes.map((node) => ({
+      id: node.id,
+      name: node.name,
+      type: node.type,
+      position: node.position,
+      parameters: node.parameters,
+      notes: node.notes,
+    })),
+    connections: context.connections,
+  };
+}
+
+function formatWorkflowContextForPrompt(context: ExistingWorkflowContext): string {
+  const nodeCount = context.nodes?.length ?? 0;
+  const maxNodes = 20;
+  const nodesPreview = (context.nodes ?? [])
+    .slice(0, maxNodes)
+    .map((node, index) => {
+      let params = "";
+      try {
+        params = JSON.stringify(node.parameters)?.slice(0, 400) ?? "";
+      } catch {
+        params = "";
+      }
+
+      return `Node ${index + 1}: ${node.name ?? node.id ?? "(unnamed)"} [${
+        node.type ?? "unknown"
+      }]
+  Position: ${JSON.stringify(node.position)}
+  Parameters: ${params}`;
+    })
+    .join("\n\n");
+
+  const truncatedNote =
+    nodeCount > maxNodes ? `\n...(truncated ${nodeCount - maxNodes} nodes)` : "";
+
+  return `Existing workflow snapshot (nodes: ${nodeCount}):\nWorkflow name: ${
+    context.name ?? "(unnamed)"
+  }\n${nodesPreview}${truncatedNote}`;
 }
 
 type InferredMetadata = {
@@ -340,7 +414,8 @@ function extractJsonPayload(text: string): string {
 }
 
 export async function generateWorkflowSuggestion(
-  prompt: string
+  prompt: string,
+  options: GenerateWorkflowOptions = {}
 ): Promise<AiWorkflowSuggestion> {
   if (!genAI) {
     throw new Error(
@@ -350,11 +425,19 @@ export async function generateWorkflowSuggestion(
 
   const examples = await fetchWorkflowExamples(prompt);
   const fewShotContext = buildFewShotContext(examples);
+  const normalizedWorkflowContext = normalizeExistingWorkflowContext(
+    options.existingWorkflow
+  );
 
   const userParts = [];
   if (fewShotContext) {
     userParts.push({
       text: `Reference workflows:\n${fewShotContext}\n\nUse them to inspire structure, node choices, and naming.`,
+    });
+  }
+  if (normalizedWorkflowContext) {
+    userParts.push({
+      text: `${formatWorkflowContextForPrompt(normalizedWorkflowContext)}\n\nIf the user is asking for modifications, update this workflow rather than starting from scratch when possible.`,
     });
   }
   userParts.push({
