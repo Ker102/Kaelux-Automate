@@ -5,6 +5,8 @@ import { QdrantClient } from "@qdrant/js-client-rest";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = process.env.GEMINI_MODEL ?? "gemini-2.5-pro";
+const GEMINI_FALLBACK_MODEL =
+  process.env.GEMINI_FALLBACK_MODEL ?? "gemini-2.5-flash";
 const GEMINI_EMBED_MODEL =
   process.env.GEMINI_EMBED_MODEL ?? "text-embedding-004";
 const QDRANT_URL = process.env.QDRANT_URL ?? "http://localhost:6333";
@@ -358,7 +360,22 @@ export async function generateWorkflowSuggestion(
     }
   }
 
-  const rawText = await invokeModel(GEMINI_MODEL);
+  let rawText: string;
+  try {
+    rawText = await invokeModel(GEMINI_MODEL);
+  } catch (primaryError) {
+    if (
+      GEMINI_FALLBACK_MODEL &&
+      GEMINI_FALLBACK_MODEL !== GEMINI_MODEL
+    ) {
+      console.warn(
+        `[AI] Primary model ${GEMINI_MODEL} failed, falling back to ${GEMINI_FALLBACK_MODEL}`
+      );
+      rawText = await invokeModel(GEMINI_FALLBACK_MODEL);
+    } else {
+      throw primaryError;
+    }
+  }
 
   try {
     const parsed = JSON.parse(rawText) as {
