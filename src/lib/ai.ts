@@ -32,14 +32,33 @@ const embeddings =
 let vectorStorePromise: Promise<QdrantVectorStore | null> | null = null;
 
 const systemInstruction = `
-You are an assistant that converts natural language automation requests into n8n workflow JSON.
-Always respond with valid JSON that fits the following TypeScript interface:
-type AiWorkflowSuggestion = {
-  summary: string;
-  workflow: object; // valid n8n workflow JSON
-  notes?: string[];
-};
-Do not wrap the JSON in markdown fences. Keep the response short but accurate.
+You are an n8n Workflow Architect. Your job is to design production-ready workflows for automation engineers.
+
+Context you receive:
+- The user's free-form request.
+- A set of retrieved workflow examples. Each example includes metadata (industries, domains, channels, trigger, complexity, integrations) plus representative JSON.
+
+Behavioural rules:
+1. First understand the user's objective, required data sources, and delivery channels.
+2. Use the metadata from retrieved examples to align with the user's domain (e.g., if request mentions finance, prefer workflows with finance integrations). Cite relevant example titles in the notes section.
+3. Design a plan that specifies trigger(s), core nodes, data transformations, branching, and external services.
+4. Produce well-structured n8n JSON:
+   - Use descriptive node names (no placeholders like "Node 1").
+   - Include only available credentials as placeholders (e.g., "{{STRIPE_API_KEY}}").
+   - Ensure connections represent a coherent execution path.
+5. Keep the summary short (2-3 sentences) describing what the workflow achieves.
+6. Populate notes with:
+   - Required credentials or manual setup.
+   - Optional enhancements or monitoring tips.
+   - References to retrieved examples you drew inspiration from (e.g., "Inspired by Shopify → D365 Sales Doc Sync").
+7. If information is missing, make reasonable assumptions and mention them in notes.
+8. Never wrap the response in markdown fences; respond strictly with JSON matching:
+{
+  "summary": string,
+  "workflow": object,
+  "notes": string[],
+  "rawText": string
+}
 `;
 
 export type AiWorkflowSuggestion = {
@@ -53,6 +72,14 @@ type RetrievedWorkflow = {
   title?: string;
   summary?: string;
   tags?: string[];
+  metadata?: {
+    industries?: string[];
+    domains?: string[];
+    channels?: string[];
+    trigger?: string;
+    complexity?: string;
+    integrations?: string[];
+  };
   workflow?: {
     name?: string;
     nodes?: unknown;
@@ -100,13 +127,29 @@ async function fetchWorkflowExamples(
       return [];
     }
 
-    const docs = await store.similaritySearch(query, topK);
-    return docs.map((doc) => ({
-      title: (doc.metadata?.title as string) ?? "Untitled workflow",
-      summary: doc.pageContent,
-      tags: (doc.metadata?.tags as string[]) ?? [],
-      workflow: doc.metadata?.workflow as RetrievedWorkflow["workflow"],
-    }));
+    const inferred = inferMetadataFromPrompt(query);
+    const rawDocs = await store.similaritySearch(query, Math.max(topK * 3, topK));
+    const scored = rawDocs.map((doc, index) => {
+      const example: RetrievedWorkflow = {
+        title: (doc.metadata?.title as string) ?? "Untitled workflow",
+        summary: doc.pageContent,
+        tags: (doc.metadata?.tags as string[]) ?? [],
+        metadata: doc.metadata?.metadata as RetrievedWorkflow["metadata"],
+        workflow: doc.metadata?.workflow as RetrievedWorkflow["workflow"],
+      };
+      const metadataScore = scoreMetadataMatch(example, inferred);
+      return { example, metadataScore, originalIndex: index };
+    });
+
+    return scored
+      .sort((a, b) => {
+        if (b.metadataScore === a.metadataScore) {
+          return a.originalIndex - b.originalIndex;
+        }
+        return b.metadataScore - a.metadataScore;
+      })
+      .slice(0, topK)
+      .map((entry) => entry.example);
   } catch (error) {
     console.warn("[AI] Similarity search failed:", error);
     return [];
@@ -137,14 +180,140 @@ function buildFewShotContext(examples: RetrievedWorkflow[]): string {
         example.tags && example.tags.length > 0
           ? `Tags: ${example.tags.join(", ")}`
           : "";
+      const metadataText = example.metadata
+        ? `Industries: ${example.metadata.industries?.join(", ") ?? "n/a"} | Domains: ${
+            example.metadata.domains?.join(", ") ?? "n/a"
+          } | Channels: ${example.metadata.channels?.join(", ") ?? "n/a"} | Trigger: ${
+            example.metadata.trigger ?? "n/a"
+          } | Complexity: ${example.metadata.complexity ?? "n/a"} | Integrations: ${
+            example.metadata.integrations?.join(", ") ?? "n/a"
+          }`
+        : "Metadata: n/a";
 
       return `Example ${index + 1}: ${example.title}
 ${tags}
+${metadataText}
 Summary: ${example.summary ?? "n/a"}
 Workflow:
 ${workflowSnippet}`;
     })
     .join("\n\n");
+}
+
+type InferredMetadata = {
+  industries: Set<string>;
+  domains: Set<string>;
+  channels: Set<string>;
+  trigger?: string;
+};
+
+const INDUSTRY_KEYWORDS: Record<string, string[]> = {
+  ecommerce: ["shopify", "woocommerce", "stripe", "checkout", "cart", "order", "product"],
+  marketing: ["linkedin", "instagram", "tiktok", "facebook", "campaign", "content", "post", "social"],
+  finance: ["invoice", "billing", "quickbooks", "expense", "payroll", "accounting", "paypal", "finance"],
+  support: ["zendesk", "support", "ticket", "helpdesk", "customer success"],
+  hr: ["bamboohr", "resume", "interview", "ats", "candidate", "hiring"],
+  analytics: ["analytics", "serp", "seo", "search console", "rank", "report"],
+  media: ["youtube", "music", "video", "podcast", "shorts"],
+};
+
+const DOMAIN_KEYWORDS: Record<string, string[]> = {
+  "two-way-sync": ["sync", "two-way", "bi-directional"],
+  "incident-response": ["incident", "alert", "security", "monitoring"],
+  "content-scheduling": ["schedule", "calendar", "queue", "publishing"],
+  "summaries": ["summarize", "digest", "recap"],
+  "payments": ["payment", "checkout", "paid", "subscription"],
+  "ticket-routing": ["support", "ticket", "assign"],
+  "video-generation": ["video", "render", "footage"],
+  "reporting": ["report", "dashboard", "insights"],
+};
+
+const CHANNEL_KEYWORDS: Record<string, string[]> = {
+  slack: ["slack"],
+  telegram: ["telegram"],
+  whatsapp: ["whatsapp"],
+  email: ["email", "gmail", "outlook"],
+  zoom: ["zoom"],
+  notion: ["notion"],
+  quickbooks: ["quickbooks"],
+  sheets: ["google sheets", "sheet"],
+};
+
+const TRIGGER_KEYWORDS: Record<string, string[]> = {
+  webhook: ["webhook", "http", "api callback", "incoming"],
+  scheduled: ["daily", "weekly", "cron", "every day", "nightly"],
+  manual: ["manually", "on demand", "when i click"],
+};
+
+function inferMetadataFromPrompt(prompt: string): InferredMetadata {
+  const normalized = prompt.toLowerCase();
+  const industries = new Set<string>();
+  const domains = new Set<string>();
+  const channels = new Set<string>();
+  let trigger: string | undefined;
+
+  for (const [industry, keywords] of Object.entries(INDUSTRY_KEYWORDS)) {
+    if (keywords.some((kw) => normalized.includes(kw))) {
+      industries.add(industry);
+    }
+  }
+
+  for (const [domain, keywords] of Object.entries(DOMAIN_KEYWORDS)) {
+    if (keywords.some((kw) => normalized.includes(kw))) {
+      domains.add(domain);
+    }
+  }
+
+  for (const [channel, keywords] of Object.entries(CHANNEL_KEYWORDS)) {
+    if (keywords.some((kw) => normalized.includes(kw))) {
+      channels.add(channel);
+    }
+  }
+
+  for (const [triggerType, keywords] of Object.entries(TRIGGER_KEYWORDS)) {
+    if (keywords.some((kw) => normalized.includes(kw))) {
+      trigger = triggerType;
+      break;
+    }
+  }
+
+  return { industries, domains, channels, trigger };
+}
+
+function scoreMetadataMatch(
+  example: RetrievedWorkflow,
+  inferred: InferredMetadata
+): number {
+  if (!example.metadata) {
+    return 0;
+  }
+
+  let score = 0;
+  const { industries = [], domains = [], channels = [], trigger } = example.metadata;
+
+  industries.forEach((industry) => {
+    if (inferred.industries.has(industry.toLowerCase())) {
+      score += 3;
+    }
+  });
+
+  domains.forEach((domain) => {
+    if (inferred.domains.has(domain.toLowerCase())) {
+      score += 2;
+    }
+  });
+
+  channels.forEach((channel) => {
+    if (inferred.channels.has(channel.toLowerCase())) {
+      score += 1.5;
+    }
+  });
+
+  if (trigger && inferred.trigger && trigger.toLowerCase() === inferred.trigger) {
+    score += 1;
+  }
+
+  return score;
 }
 
 export async function generateWorkflowSuggestion(
@@ -159,11 +328,6 @@ export async function generateWorkflowSuggestion(
   const examples = await fetchWorkflowExamples(prompt);
   const fewShotContext = buildFewShotContext(examples);
 
-  const model = genAI.getGenerativeModel({
-    model: GEMINI_MODEL,
-    systemInstruction,
-  });
-
   const userParts = [];
   if (fewShotContext) {
     userParts.push({
@@ -174,14 +338,27 @@ export async function generateWorkflowSuggestion(
     text: `User request:\n${prompt}`,
   });
 
-  const generation = await model.generateContent([
-    {
-      role: "user",
-      parts: userParts,
-    },
-  ]);
+  async function invokeModel(modelName: string) {
+    const model = genAI.getGenerativeModel({
+      model: modelName,
+      systemInstruction,
+    });
+    const payload = userParts.map((part) => part.text).join("\n\n");
+    try {
+      const generation = await model.generateContent(payload);
+      const raw = generation.response.text().trim();
+      console.debug(`[AI] raw response from ${modelName}:`, raw);
+      return raw;
+    } catch (error) {
+      console.error(`[AI] Gemini call failed for ${modelName}`, {
+        message: error instanceof Error ? error.message : error,
+        cause: (error as { cause?: unknown })?.cause,
+      });
+      throw error;
+    }
+  }
 
-  const rawText = generation.response.text().trim();
+  const rawText = await invokeModel(GEMINI_MODEL);
 
   try {
     const parsed = JSON.parse(rawText) as {
