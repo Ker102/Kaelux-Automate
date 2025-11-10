@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useI18n } from '@n8n/i18n';
 import { N8nButton, N8nCallout, N8nText } from '@n8n/design-system';
-import { AI_WORKFLOW_ENDPOINT } from '@/app/constants';
+import { AI_WORKFLOW_ENDPOINT, AI_SAMPLE_PROMPTS_ENDPOINT } from '@/app/constants';
 import { nodeViewEventBus } from '@/app/event-bus/node-view';
 import type { WorkflowDataUpdate } from '@/Interface';
 
@@ -17,12 +17,31 @@ interface WorkflowSuggestion {
 	createdAt: string;
 }
 
+interface PromptExample {
+	id: string;
+	title: string;
+	prompt: string;
+	description: string;
+	industries: string[];
+	domains: string[];
+	channels: string[];
+	trigger?: string;
+	complexity?: string;
+	integrations: string[];
+	tags: string[];
+}
+
 const locale = useI18n();
 const prompt = ref('');
 const isGenerating = ref(false);
 const errorMessage = ref<string | null>(null);
 const suggestions = ref<WorkflowSuggestion[]>([]);
 const endpoint = AI_WORKFLOW_ENDPOINT;
+const promptsEndpoint = AI_SAMPLE_PROMPTS_ENDPOINT;
+const promptExamples = ref<PromptExample[]>([]);
+const promptExamplesError = ref<string | null>(null);
+const isLoadingPromptExamples = ref(true);
+const highlightedExampleId = ref<string | null>(null);
 
 const emit = defineEmits<{
 	generate: [string];
@@ -31,6 +50,70 @@ const emit = defineEmits<{
 
 const latestSuggestion = computed(() => suggestions.value[0]);
 const hasHistory = computed(() => suggestions.value.length > 1);
+const highlightedExample = computed(() =>
+	promptExamples.value.find((example) => example.id === highlightedExampleId.value) ??
+	promptExamples.value[0] ??
+	null,
+);
+
+onMounted(() => {
+	void loadPromptExamples();
+});
+
+async function loadPromptExamples() {
+	isLoadingPromptExamples.value = true;
+	promptExamplesError.value = null;
+
+	try {
+		const response = await fetch(promptsEndpoint, { method: 'GET' });
+		const payload = (await response.json().catch(() => ({}))) as {
+			prompts?: PromptExample[];
+			error?: string;
+		};
+
+		if (!response.ok || !payload.prompts) {
+			throw new Error(payload.error ?? locale.baseText('logs.aiPanel.error.generic'));
+		}
+
+		promptExamples.value = payload.prompts;
+		highlightedExampleId.value = payload.prompts[0]?.id ?? null;
+	} catch (error) {
+		const message =
+			error instanceof Error
+				? error.message
+				: locale.baseText('logs.aiPanel.error.generic');
+		promptExamplesError.value = message;
+	} finally {
+		isLoadingPromptExamples.value = false;
+	}
+}
+
+function handleUsePromptExample(example: PromptExample) {
+	prompt.value = example.prompt;
+	highlightedExampleId.value = example.id;
+}
+
+function handleHoverPromptExample(example: PromptExample) {
+	highlightedExampleId.value = example.id;
+}
+
+function formatMeta(values?: string[]) {
+	if (!values || values.length === 0) {
+		return '—';
+	}
+
+	return values.join(', ');
+}
+
+function describeExampleCategory(example: PromptExample) {
+	return (
+		example.industries[0] ??
+		example.domains[0] ??
+		example.channels[0] ??
+		example.tags[0] ??
+		'General'
+	);
+}
 
 function makeSuggestionId() {
 	if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
@@ -150,16 +233,85 @@ function formatTimestamp(timestamp: string) {
 
 <template>
 	<div :class="$style.container">
-		<section :class="$style.header">
-			<N8nText tag="p" size="medium" color="text-base" bold>
-				{{ locale.baseText('logs.aiPanel.title') }}
-			</N8nText>
-			<N8nText tag="p" size="small" color="text-light">
-				{{ locale.baseText('logs.aiPanel.subtitle') }}
-			</N8nText>
-		</section>
+	<section :class="$style.header">
+		<N8nText tag="p" size="medium" color="text-base" bold>
+			{{ locale.baseText('logs.aiPanel.title') }}
+		</N8nText>
+		<N8nText tag="p" size="small" color="text-light">
+			{{ locale.baseText('logs.aiPanel.subtitle') }}
+		</N8nText>
+	</section>
 
-		<form :class="$style.form" @submit.prevent="handleGenerate">
+	<section :class="$style.samples">
+		<header>
+			<N8nText tag="p" size="small" color="text-light">
+				Need inspiration? Start from one of our curated workflow requests.
+			</N8nText>
+		</header>
+		<div v-if="isLoadingPromptExamples" :class="$style.samplesLoading">
+			<N8nText tag="span" size="small" color="text-light">Loading curated prompts...</N8nText>
+		</div>
+		<N8nCallout v-else-if="promptExamplesError" icon="alert-triangle" theme="danger">
+			{{ promptExamplesError }}
+		</N8nCallout>
+		<template v-else>
+			<div :class="$style.sampleList">
+				<button
+					v-for="example in promptExamples"
+					:key="example.id"
+					type="button"
+					:class="[
+						$style.sampleChip,
+						highlightedExample?.id === example.id ? $style.sampleChipActive : '',
+					]"
+					@click="handleUsePromptExample(example)"
+					@mouseenter="handleHoverPromptExample(example)"
+				>
+					<strong>{{ example.title }}</strong>
+					<span>{{ describeExampleCategory(example) }}</span>
+				</button>
+			</div>
+			<div v-if="highlightedExample" :class="$style.sampleDetails">
+				<header>
+					<N8nText tag="p" size="small" color="text-base" bold>
+						{{ highlightedExample.title }}
+					</N8nText>
+					<N8nText tag="span" size="small" color="text-light">
+						{{ formatMeta(highlightedExample.tags) }}
+					</N8nText>
+				</header>
+				<p>{{ highlightedExample.description }}</p>
+				<ul :class="$style.metaList">
+					<li>
+						<span>Industries</span>
+						<strong>{{ formatMeta(highlightedExample.industries) }}</strong>
+					</li>
+					<li>
+						<span>Domains</span>
+						<strong>{{ formatMeta(highlightedExample.domains) }}</strong>
+					</li>
+					<li>
+						<span>Channels</span>
+						<strong>{{ formatMeta(highlightedExample.channels) }}</strong>
+					</li>
+					<li>
+						<span>Trigger</span>
+						<strong>{{ highlightedExample.trigger ?? '—' }}</strong>
+					</li>
+					<li>
+						<span>Complexity</span>
+						<strong>{{ highlightedExample.complexity ?? '—' }}</strong>
+					</li>
+					<li>
+						<span>Integrations</span>
+						<strong>{{ formatMeta(highlightedExample.integrations) }}</strong>
+					</li>
+				</ul>
+			</div>
+		</template>
+	</section>
+
+	<form :class="$style.form" @submit.prevent="handleGenerate">
 			<label :class="$style.label" for="ai-workflow-prompt">
 				{{ locale.baseText('logs.aiPanel.promptLabel') }}
 			</label>
@@ -259,6 +411,96 @@ function formatTimestamp(timestamp: string) {
 	display: flex;
 	flex-direction: column;
 	gap: var(--spacing-xs);
+}
+
+.samples {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-xs);
+	background-color: var(--color--background--light-2);
+	border-radius: var(--border-radius-large);
+	padding: var(--spacing-s);
+}
+
+.samplesLoading {
+	padding: var(--spacing-2xs) var(--spacing-xs);
+}
+
+.sampleList {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--spacing-2xs);
+}
+
+.sampleChip {
+	flex: 1 1 240px;
+	min-width: 200px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: var(--spacing-5xs);
+	background: var(--color--background);
+	border: 1px solid var(--color--foreground-dark);
+	border-radius: var(--border-radius-base);
+	padding: var(--spacing-xs);
+	cursor: pointer;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sampleChip:hover {
+	border-color: var(--color-primary);
+	box-shadow: 0 0 0 1px var(--color-primary-transparent-light);
+}
+
+.sampleChipActive {
+	border-color: var(--color-primary);
+	box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.sampleChip strong {
+	font-size: var(--font-size-s);
+}
+
+.sampleChip span {
+	font-size: var(--font-size-2xs);
+	color: var(--color--text-light);
+}
+
+.sampleDetails {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-2xs);
+	background-color: var(--color--background);
+	border-radius: var(--border-radius-base);
+	border: 1px solid var(--color--foreground-dark);
+	padding: var(--spacing-s);
+}
+
+.metaList {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: var(--spacing-3xs);
+	list-style: none;
+	margin: 0;
+	padding: 0;
+
+	li {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-6xs);
+	}
+
+	span {
+		font-size: var(--font-size-3xs);
+		color: var(--color--text-light);
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+	}
+
+	strong {
+		font-size: var(--font-size-2xs);
+		color: var(--color--text-base);
+	}
 }
 
 .label {
