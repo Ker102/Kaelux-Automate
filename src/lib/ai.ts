@@ -318,6 +318,21 @@ function scoreMetadataMatch(
   return score;
 }
 
+function extractJsonPayload(text: string): string {
+  const fenceMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fenceMatch?.[1]) {
+    return fenceMatch[1].trim();
+  }
+
+  const firstBrace = text.indexOf("{");
+  const lastBrace = text.lastIndexOf("}");
+  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+    return text.slice(firstBrace, lastBrace + 1);
+  }
+
+  return text.trim();
+}
+
 export async function generateWorkflowSuggestion(
   prompt: string
 ): Promise<AiWorkflowSuggestion> {
@@ -378,7 +393,7 @@ export async function generateWorkflowSuggestion(
   }
 
   try {
-    const parsed = JSON.parse(rawText) as {
+    const parsed = JSON.parse(extractJsonPayload(rawText)) as {
       summary: string;
       workflow: unknown;
       notes?: string[];
