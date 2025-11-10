@@ -1,0 +1,23 @@
+FROM node:22-bookworm-slim
+
+WORKDIR /app
+
+# Install app dependencies
+COPY package.json package-lock.json ./
+RUN npm install
+
+# Generate Prisma client so scripts work even before bind-mounts
+COPY prisma ./prisma
+RUN npx prisma generate
+
+# Copy entrypoints
+COPY docker/entrypoints /entrypoints
+RUN chmod +x /entrypoints/dev.sh
+
+ENV NODE_ENV=development \
+    HOST=0.0.0.0 \
+    PORT=3000
+
+EXPOSE 3000
+
+CMD ["/entrypoints/dev.sh"]

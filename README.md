@@ -1,40 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Containerized Dev Stack
 
-## Getting Started
-
-First, run the development server:
+The whole platform (Next.js app, Postgres, Qdrant, vanilla n8n) is orchestrated via Docker Compose.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# first time: create env files (.env + .env.local) with your secrets
+docker compose -f docker-compose.dev.yml up -d postgres qdrant n8n app
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+What you get:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `app`: Next.js dev server on [http://localhost:3000](http://localhost:3000) with hot reload.
+- `postgres`: backing database on port `5433`.
+- `qdrant`: vector store on port `6333`.
+- `n8n`: reference UI on port `5678` (embedded at `/builder`).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Local Vector Store (Qdrant)
-
-We run Qdrant via Docker for workflow similarity search.
+### Database & Seeding
 
 ```bash
-docker compose -f docker-compose.dev.yml up qdrant
+# run migrations / generate Prisma client inside the app container
+docker compose -f docker-compose.dev.yml exec app npx prisma migrate deploy
+docker compose -f docker-compose.dev.yml exec app npx prisma generate
+
+# seed Qdrant with the curated workflows (requires qdrant service running)
+docker compose -f docker-compose.dev.yml exec app npm run seed:qdrant
 ```
 
-The REST API is available at `http://localhost:6333`. Data is stored in `./.data/qdrant` so you can safely restart the container without losing embeddings. See `docs/vector-store.md` for more details and upcoming ingestion steps.
+### Logs & Shutdown
+
+```bash
+docker compose -f docker-compose.dev.yml logs -f app
+docker compose -f docker-compose.dev.yml down
+```
+
+All persistent data lives under `./.data/**` (Postgres, Qdrant, n8n). Remove those folders if you want a clean slate.
