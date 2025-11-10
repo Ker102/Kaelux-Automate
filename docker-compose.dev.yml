@@ -17,6 +17,7 @@ services:
       - "3000:3000"
     volumes:
       - .:/app
+      - ./docker/entrypoints/dev.sh:/entrypoints/dev.sh:ro
     depends_on:
       postgres:
         condition: service_started

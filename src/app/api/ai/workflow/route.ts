@@ -5,22 +5,22 @@ type WorkflowRequestBody = {
   prompt?: string;
 };
 
-const corsHeaders = {
+const corsHeaders = new Headers({
   "Access-Control-Allow-Origin":
     process.env.AI_WORKFLOW_ALLOWED_ORIGIN ?? "*",
   "Access-Control-Allow-Methods": "POST,OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
-};
+});
 
-function jsonWithCors<T>(body: T, init?: ResponseInit) {
-  return NextResponse.json(body, {
-    ...init,
-    headers: corsHeaders,
+function applyCors<T extends NextResponse>(response: T): T {
+  corsHeaders.forEach((value, key) => {
+    response.headers.set(key, value);
   });
+  return response;
 }
 
 export async function OPTIONS() {
-  return new NextResponse(null, { status: 204, headers: corsHeaders });
+  return applyCors(new NextResponse(null, { status: 204 }));
 }
 
 export async function POST(request: Request) {
@@ -29,28 +29,34 @@ export async function POST(request: Request) {
     const prompt = body.prompt?.trim();
 
     if (!prompt) {
-      return jsonWithCors({ error: "Prompt is required." }, { status: 400 });
+      return applyCors(
+        NextResponse.json({ error: "Prompt is required." }, { status: 400 })
+      );
     }
 
     const suggestion = await generateWorkflowSuggestion(prompt);
 
-    return jsonWithCors(
-      {
-        ok: true,
-        suggestion,
-      },
-      { status: 200 }
+    return applyCors(
+      NextResponse.json(
+        {
+          ok: true,
+          suggestion,
+        },
+        { status: 200 }
+      )
     );
   } catch (error) {
     console.error("[AI_WORKFLOW]", error);
-    return jsonWithCors(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "Failed to generate workflow suggestion.",
-      },
-      { status: 500 }
+    return applyCors(
+      NextResponse.json(
+        {
+          error:
+            error instanceof Error
+              ? error.message
+              : "Failed to generate workflow suggestion.",
+        },
+        { status: 500 }
+      )
     );
   }
 }
