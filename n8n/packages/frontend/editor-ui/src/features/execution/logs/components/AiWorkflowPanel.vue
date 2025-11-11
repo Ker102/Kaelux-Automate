@@ -8,6 +8,7 @@ import { useWorkflowsStore } from '@/app/stores/workflows.store';
 import { useWorkflowHelpers } from '@/app/composables/useWorkflowHelpers';
 import { useToast } from '@/app/composables/useToast';
 import type { INodeUi } from '@/Interface';
+import type { INodeParameters } from 'n8n-workflow';
 import type { WorkflowDataUpdate } from '@n8n/rest-api-client/api/workflows';
 
 interface WorkflowSuggestion {
@@ -64,7 +65,7 @@ const promptExamples = ref<PromptExample[]>([]);
 const promptExamplesError = ref<string | null>(null);
 const isLoadingPromptExamples = ref(true);
 const highlightedExampleId = ref<string | null>(null);
-const { importWorkflowData, deleteNodes } = useCanvasOperations();
+const { importWorkflowData, deleteNodes, replaceNodeParameters } = useCanvasOperations();
 const workflowHelpers = useWorkflowHelpers();
 const toast = useToast();
 const workflowsStore = useWorkflowsStore();
@@ -75,6 +76,7 @@ let copyTimer: ReturnType<typeof setTimeout> | undefined;
 const STORAGE_KEY = 'ai-workflow-builder:suggestions';
 const STORAGE_LIMIT = 8;
 const JSON_FEEDBACK_DURATION = 3000;
+const SUPPORTED_PATCH_ACTIONS = new Set<WorkflowAction['type']>(['update_node', 'remove_node']);
 const IF_CONDITION_DEFAULTS = {
 	caseSensitive: true,
 	leftValue: '',
@@ -160,6 +162,19 @@ function sanitizeWorkflowPayload(value: unknown): WorkflowDataUpdate {
 		...workflow,
 		nodes,
 	};
+}
+
+function getWorkflowNodeParameters(
+	workflow: WorkflowDataUpdate,
+	nodeName?: string,
+): INodeParameters | null {
+	if (!nodeName) return null;
+	const node = (workflow.nodes ?? []).find((candidate) => candidate.name === nodeName);
+	if (!node || !node.parameters || typeof node.parameters !== 'object') {
+		return null;
+	}
+
+	return node.parameters as INodeParameters;
 }
 
 function sanitizeActions(value: unknown): WorkflowAction[] {
@@ -450,6 +465,73 @@ async function generateSuggestion(request: string) {
 	emit('generate', request);
 }
 
+async function applyWorkflowActions(
+	actions: WorkflowAction[],
+	workflowPayload: WorkflowDataUpdate,
+): Promise<{ applied: boolean; errors: string[] }> {
+	const errors: string[] = [];
+	let applied = false;
+
+	const workflow = workflowsStore.workflow;
+	if (!workflow?.nodes?.length) {
+		return { applied: false, errors: ['No active workflow to modify.'] };
+	}
+
+	for (const action of actions) {
+		if (!SUPPORTED_PATCH_ACTIONS.has(action.type)) {
+			return {
+				applied: false,
+				errors: [`Action "${action.type}" is not supported for partial apply.`],
+			};
+		}
+
+		switch (action.type) {
+			case 'remove_node': {
+				if (!action.targetNode) {
+					errors.push('Remove action missing target node.');
+					continue;
+				}
+				const node = workflowsStore.getNodeByName(action.targetNode);
+				if (!node?.id) {
+					errors.push(`Node "${action.targetNode}" not found in the current workflow.`);
+					continue;
+				}
+				deleteNodes([node.id], { trackHistory: true, trackBulk: true });
+				applied = true;
+				break;
+			}
+			case 'update_node': {
+				if (!action.targetNode) {
+					errors.push('Update action missing target node.');
+					continue;
+				}
+				const node = workflowsStore.getNodeByName(action.targetNode);
+				if (!node?.id) {
+					errors.push(`Node "${action.targetNode}" not found in the current workflow.`);
+					continue;
+				}
+				const newParameters =
+					(action.details?.parameters as INodeParameters | undefined) ??
+					getWorkflowNodeParameters(workflowPayload, action.targetNode);
+				if (!newParameters) {
+					errors.push(`No parameters supplied for node "${action.targetNode}".`);
+					continue;
+				}
+				replaceNodeParameters(
+					node.id,
+					(node.parameters ?? {}) as INodeParameters,
+					newParameters,
+					{ trackHistory: true, trackBulk: true },
+				);
+				applied = true;
+				break;
+			}
+		}
+	}
+
+	return { applied, errors };
+}
+
 async function handleInsert() {
 	const suggestion = latestSuggestion.value;
 
@@ -457,14 +539,16 @@ async function handleInsert() {
 		return;
 	}
 
-	const workflowToImport = sanitizeWorkflowPayload(suggestion.workflow);
+	const workflowPayload = sanitizeWorkflowPayload(suggestion.workflow);
 
-	if (!isWorkflowPayload(workflowToImport)) {
+	if (!isWorkflowPayload(workflowPayload)) {
 		errorMessage.value = locale.baseText('logs.aiPanel.error.invalidWorkflow');
 		return;
 	}
 
-	const shouldReplaceExisting = suggestion.replacesWorkflow && hasExistingWorkflow.value;
+	const hasReplaceAction = suggestion.actions.some((action) => action.type === 'replace_workflow');
+	const shouldReplaceExisting =
+		(hasExistingWorkflow.value && suggestion.replacesWorkflow) || hasReplaceAction;
 	let rollbackSnapshot: WorkflowDataUpdate | null = null;
 
 	if (shouldReplaceExisting) {
@@ -482,12 +566,37 @@ async function handleInsert() {
 		}
 	}
 
+	const patchableActions = suggestion.actions.filter((action) =>
+		SUPPORTED_PATCH_ACTIONS.has(action.type),
+	);
+	const canApplyPatch =
+		!shouldReplaceExisting &&
+		suggestion.actions.length > 0 &&
+		patchableActions.length === suggestion.actions.length;
+
+	if (canApplyPatch) {
+		const result = await applyWorkflowActions(patchableActions, workflowPayload);
+		if (result.applied) {
+			toast.showToast({
+				title: locale.baseText('logs.aiPanel.toast.title'),
+				message: 'Applied AI-suggested changes.',
+				type: 'success',
+			});
+			emit('insert', suggestion);
+			return;
+		}
+
+		if (result.errors.length) {
+			errorMessage.value = result.errors.join(' ');
+		}
+	}
+
 	try {
-		const nodeCount = Array.isArray(workflowToImport.nodes)
-			? workflowToImport.nodes.length
+		const nodeCount = Array.isArray(workflowPayload.nodes)
+			? workflowPayload.nodes.length
 			: 0;
 
-		await importWorkflowData(workflowToImport, 'ai-builder', {
+		await importWorkflowData(workflowPayload, 'ai-builder', {
 			regenerateIds: true,
 			trackEvents: false,
 		});
