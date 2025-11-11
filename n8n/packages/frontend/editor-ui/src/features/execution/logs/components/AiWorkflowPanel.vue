@@ -325,7 +325,7 @@ function isJsonExpanded(id: string) {
 async function copyJson(json: string) {
 	try {
 		await navigator.clipboard.writeText(json);
-		copyFeedback.value = 'JSON copied to clipboard';
+		copyFeedback.value = locale.baseText('logs.aiPanel.copyJsonSuccess', 'JSON copied');
 		if (copyTimer) {
 			clearTimeout(copyTimer);
 		}
@@ -334,7 +334,7 @@ async function copyJson(json: string) {
 		}, JSON_FEEDBACK_DURATION);
 	} catch (error) {
 		console.warn('Unable to copy JSON', error);
-		copyFeedback.value = 'Unable to copy JSON';
+		copyFeedback.value = locale.baseText('logs.aiPanel.copyJsonError', 'Unable to copy');
 	}
 }
 
