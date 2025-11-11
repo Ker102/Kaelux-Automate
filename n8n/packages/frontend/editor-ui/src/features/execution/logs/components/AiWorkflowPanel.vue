@@ -421,11 +421,6 @@ const emit = defineEmits<{
 
 const latestSuggestion = computed(() => suggestions.value[0] ?? null);
 const hasHistory = computed(() => suggestions.value.length > 1);
-const highlightedExample = computed(() =>
-	promptExamples.value.find((example) => example.id === highlightedExampleId.value) ??
-	promptExamples.value[0] ??
-	null
-);
 const latestSteps = computed(() => latestSuggestion.value?.steps ?? []);
 const hasExistingWorkflow = computed(
 	() => Array.isArray(workflowsStore.workflow?.nodes) && workflowsStore.workflow.nodes.length > 0,
@@ -437,6 +432,27 @@ const hasActions = computed(() => latestActions.value.length > 0);
 const isLatestUnparsed = computed(
 	() => latestSuggestion.value?.summary === 'AI response (unparsed)',
 );
+
+const groupedPromptExamples = computed(() => {
+	if (!promptExamples.value.length) return [];
+
+	const map = new Map<string, PromptExample[]>();
+	promptExamples.value.forEach((example) => {
+		const category =
+			example.industries[0] ??
+			example.domains[0] ??
+			example.channels[0] ??
+			example.trigger ??
+			'General';
+		if (!map.has(category)) map.set(category, []);
+		map.get(category)?.push(example);
+	});
+
+	return Array.from(map.entries()).map(([category, items]) => ({
+		category,
+		items,
+	}));
+});
 
 onMounted(() => {
 	void loadPromptExamples();
@@ -475,6 +491,11 @@ function handleUsePromptExample(example: PromptExample) {
 	highlightedExampleId.value = example.id;
 }
 
+function handleApplyPromptExample(example: PromptExample) {
+	handleUsePromptExample(example);
+	void submitPrompt(example.prompt);
+}
+
 function handleHoverPromptExample(example: PromptExample) {
 	highlightedExampleId.value = example.id;
 }
@@ -485,16 +506,6 @@ function formatMeta(values?: string[]) {
 	}
 
 	return values.join(', ');
-}
-
-function describeExampleCategory(example: PromptExample) {
-	return (
-		example.industries[0] ??
-		example.domains[0] ??
-		example.channels[0] ??
-		example.tags[0] ??
-		'General'
-	);
 }
 
 function makeSuggestionId() {
@@ -953,69 +964,66 @@ function formatActionType(type: WorkflowAction['type']) {
 		<section :class="$style.samples">
 			<header>
 				<N8nText tag="p" size="small" color="text-light">
-					Need inspiration? Start from one of our curated workflow requests.
+					Start from a curated template and let the assistant adapt it to your workflow.
 				</N8nText>
 			</header>
 			<div v-if="isLoadingPromptExamples" :class="$style.samplesLoading">
 				<N8nText tag="span" size="small" color="text-light">
-					Loading curated prompts...
+					Loading curated templates...
 				</N8nText>
 			</div>
 			<N8nCallout v-else-if="promptExamplesError" icon="triangle-alert" theme="danger">
 				{{ promptExamplesError }}
 			</N8nCallout>
-			<template v-else>
-				<div :class="$style.sampleList">
-					<button
-						v-for="example in promptExamples"
-						:key="example.id"
-						type="button"
-						:class="[$style.sampleChip, highlightedExample?.id === example.id ? $style.sampleChipActive : '']"
-						@click="handleUsePromptExample(example)"
-						@mouseenter="handleHoverPromptExample(example)"
-					>
-						<strong>{{ example.title }}</strong>
-						<span>{{ describeExampleCategory(example) }}</span>
-					</button>
-				</div>
-				<div v-if="highlightedExample" :class="$style.sampleDetails">
-					<header>
-						<N8nText tag="p" size="small" color="text-base" bold>
-							{{ highlightedExample.title }}
+			<div v-else :class="$style.sampleGroups">
+				<div v-for="group in groupedPromptExamples" :key="group.category" :class="$style.sampleGroup">
+					<div :class="$style.sampleGroupHeader">
+						<N8nText tag="span" size="small" color="text-light">Category</N8nText>
+						<N8nText tag="p" size="medium" color="text-base" bold>
+							{{ group.category }}
 						</N8nText>
-						<N8nText tag="span" size="small" color="text-light">
-							{{ formatMeta(highlightedExample.tags) }}
-						</N8nText>
-					</header>
-					<p>{{ highlightedExample.description }}</p>
-					<ul :class="$style.metaList">
-						<li>
-							<span>Industries</span>
-							<strong>{{ formatMeta(highlightedExample.industries) }}</strong>
-						</li>
-						<li>
-							<span>Domains</span>
-							<strong>{{ formatMeta(highlightedExample.domains) }}</strong>
-						</li>
-						<li>
-							<span>Channels</span>
-							<strong>{{ formatMeta(highlightedExample.channels) }}</strong>
-						</li>
-						<li>
-							<span>Trigger</span>
-							<strong>{{ highlightedExample.trigger ?? '—' }}</strong>
-						</li>
-						<li>
-							<span>Complexity</span>
-							<strong>{{ highlightedExample.complexity ?? '—' }}</strong>
-						</li>
-						<li>
-							<span>Integrations</span>
-							<strong>{{ formatMeta(highlightedExample.integrations) }}</strong>
-						</li>
-					</ul>
+					</div>
+					<div :class="$style.sampleCardGrid">
+						<div
+							v-for="example in group.items"
+							:key="example.id"
+							:class="[$style.sampleCard, highlightedExampleId === example.id ? $style.sampleCardActive : '']"
+							@click="handleUsePromptExample(example)"
+							@mouseenter="handleHoverPromptExample(example)"
+						>
+							<div>
+								<N8nText tag="p" size="small" color="text-light">
+									{{ formatMeta(example.tags) }}
+								</N8nText>
+								<N8nText tag="p" size="medium" color="text-base" bold>
+									{{ example.title }}
+								</N8nText>
+								<p :class="$style.sampleDescription">{{ example.description }}</p>
+							</div>
+							<div :class="$style.sampleMetaRow">
+								<span>{{ formatMeta(example.industries) }}</span>
+								<span>{{ formatMeta(example.channels) }}</span>
+							</div>
+							<div :class="$style.sampleActions">
+								<N8nButton
+									size="small"
+									type="secondary"
+									@click.stop="handleUsePromptExample(example)"
+								>
+									Fill prompt
+								</N8nButton>
+								<N8nButton
+									size="small"
+									type="tertiary"
+									@click.stop="handleApplyPromptExample(example)"
+								>
+									Use template
+								</N8nButton>
+							</div>
+						</div>
+					</div>
 				</div>
-			</template>
+			</div>
 		</section>
 
 		<form :class="$style.form" @submit.prevent="handleGenerate">
@@ -1145,8 +1153,14 @@ function formatActionType(type: WorkflowAction['type']) {
 			</div>
 
 			<p v-if="copyFeedback" :class="$style.copyFeedback">{{ copyFeedback }}</p>
-			<div v-if="isJsonExpanded(latestSuggestion.id)" :class="$style.jsonPreview">
-				<pre><code>{{ latestSuggestion.workflowJson }}</code></pre>
+			<div v-if="isJsonExpanded(latestSuggestion.id)" :class="$style.codePreview">
+				<div :class="$style.codePreviewHeader">
+					<span>Workflow JSON</span>
+					<N8nButton size="small" type="tertiary" @click="toggleJsonVisibility(latestSuggestion.id)">
+						Close
+					</N8nButton>
+				</div>
+				<pre :class="$style.codeBlock">{{ latestSuggestion.workflowJson }}</pre>
 			</div>
 		</section>
 
@@ -1202,72 +1216,72 @@ function formatActionType(type: WorkflowAction['type']) {
 	padding: var(--spacing-2xs) var(--spacing-xs);
 }
 
-.sampleList {
+.sampleGroups {
 	display: flex;
-	flex-wrap: wrap;
+	flex-direction: column;
+	gap: var(--spacing-s);
+}
+
+.sampleGroup {
+	display: flex;
+	flex-direction: column;
 	gap: var(--spacing-2xs);
 }
 
-.sampleChip {
-	flex: 1 1 240px;
-	min-width: 200px;
+.sampleGroupHeader {
 	display: flex;
 	flex-direction: column;
-	align-items: flex-start;
-	gap: var(--spacing-5xs);
+}
+
+.sampleCardGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	gap: var(--spacing-s);
+}
+
+.sampleCard {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-xs);
 	background: var(--color--background);
-	border: 1px solid var(--color--foreground-dark);
-	border-radius: var(--border-radius-base);
-	padding: var(--spacing-xs);
-	cursor: pointer;
-	transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.sampleChip:hover {
-	border-color: var(--color-primary);
-	box-shadow: 0 0 0 1px var(--color-primary-transparent-light);
-}
-
-.sampleChipActive {
-	border-color: var(--color-primary);
-	box-shadow: 0 0 0 1px var(--color-primary);
-}
-
-.sampleDetails {
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-2xs);
-	background-color: var(--color--background);
-	border-radius: var(--border-radius-base);
+	border-radius: var(--border-radius-large);
 	border: 1px solid var(--color--foreground-dark);
 	padding: var(--spacing-s);
+	box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2);
+	cursor: pointer;
+	transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.metaList {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-	gap: var(--spacing-3xs);
-	list-style: none;
+.sampleCard:hover {
+	transform: translateY(-2px);
+	border-color: var(--color--primary);
+	box-shadow: 0 25px 40px rgba(0, 0, 0, 0.3);
+}
+
+.sampleCardActive {
+	border-color: var(--color--primary);
+	box-shadow: 0 25px 50px rgba(255, 59, 255, 0.25);
+}
+
+.sampleDescription {
+	font-size: var(--font-size-2xs);
+	color: var(--color--text-light);
 	margin: 0;
-	padding: 0;
+	min-height: 48px;
+}
 
-	li {
-		display: flex;
-		flex-direction: column;
-		gap: var(--spacing-6xs);
-	}
+.sampleMetaRow {
+	display: flex;
+	justify-content: space-between;
+	font-size: var(--font-size-3xs);
+	text-transform: uppercase;
+	color: var(--color--text--tint-1);
+	gap: var(--spacing-3xs);
+}
 
-	span {
-		font-size: var(--font-size-3xs);
-		color: var(--color--text-light);
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
-	}
-
-	strong {
-		font-size: var(--font-size-2xs);
-		color: var(--color--text-base);
-	}
+.sampleActions {
+	display: flex;
+	gap: var(--spacing-2xs);
 }
 
 .label {
