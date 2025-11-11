@@ -364,6 +364,7 @@ function findDisconnectedNodes(workflow: WorkflowDataUpdate): string[] {
 					markIncoming(connection.node);
 				});
 			});
+		});
 	});
 
 	return nodes
