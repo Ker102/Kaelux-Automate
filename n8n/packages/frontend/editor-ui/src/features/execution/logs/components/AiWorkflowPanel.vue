@@ -595,52 +595,76 @@ function describeWorkflowSteps(workflow: unknown): string[] {
 
 		<section v-if="latestSuggestion" :class="$style.result">
 			<header>
-				<N8nText tag="p" size="medium" color="text-base" bold>
-					{{ locale.baseText('logs.aiPanel.latestSuggestion') }}
-				</N8nText>
-				<N8nText tag="span" size="small" color="text-light">
-					{{ formatTimestamp(latestSuggestion.createdAt) }}
-				</N8nText>
+				<div>
+					<N8nText tag="p" size="medium" color="text-base" bold>
+						{{ locale.baseText('logs.aiPanel.latestSuggestion') }}
+					</N8nText>
+					<N8nText tag="span" size="small" color="text-light">
+						{{ formatTimestamp(latestSuggestion.createdAt) }}
+					</N8nText>
+				</div>
+				<div :class="$style.resultActions">
+					<N8nButton
+						size="small"
+						type="secondary"
+						@click="toggleJsonVisibility(latestSuggestion.id)"
+					>
+						{{ isJsonExpanded(latestSuggestion.id) ? 'Hide JSON' : 'View JSON' }}
+					</N8nButton>
+					<N8nButton
+						size="small"
+						type="tertiary"
+						@click="copyJson(latestSuggestion.workflowJson)"
+					>
+						Copy JSON
+					</N8nButton>
+				</div>
 			</header>
-			<p :class="$style.summary">{{ latestSuggestion.summary }}</p>
 
-			<ul v-if="latestSteps.length" :class="$style.steps">
-				<li v-for="step in latestSteps" :key="step">{{ step }}</li>
-			</ul>
+			<div :class="$style.resultGrid">
+				<div :class="$style.resultCard">
+					<N8nText tag="p" size="small" color="text-light" bold>
+						Summary
+					</N8nText>
+					<p :class="$style.summary">{{ latestSuggestion.summary }}</p>
+				</div>
 
-			<div v-if="latestSuggestion.notes.length" :class="$style.notes">
-				<ul>
-					<li v-for="note in latestSuggestion.notes" :key="note">{{ note }}</li>
-				</ul>
+				<div v-if="latestSteps.length" :class="$style.resultCard">
+					<N8nText tag="p" size="small" color="text-light" bold>
+						Workflow blueprint
+					</N8nText>
+					<ol :class="$style.steps">
+						<li v-for="step in latestSteps" :key="step">{{ step }}</li>
+					</ol>
+				</div>
+
+				<div v-if="latestSuggestion.notes.length" :class="$style.resultCard">
+					<N8nText tag="p" size="small" color="text-light" bold>
+						Implementation notes
+					</N8nText>
+					<ul :class="$style.notesList">
+						<li v-for="note in latestSuggestion.notes" :key="note">{{ note }}</li>
+					</ul>
+				</div>
+
+				<div v-if="hasDisconnectedNodes" :class="$style.resultCardWarning">
+					<N8nText tag="p" size="small" color="text-light" bold>
+						Connection check
+					</N8nText>
+					<p :class="$style.warningText">
+						Some nodes are not connected: {{ latestDisconnectedNodes.join(', ') }}
+					</p>
+					<N8nButton
+						size="small"
+						type="tertiary"
+						@click="handleRegenerateConnections(latestSuggestion)"
+					>
+						Regenerate with all nodes connected
+					</N8nButton>
+				</div>
 			</div>
 
-			<N8nCallout v-if="hasDisconnectedNodes" icon="circle-alert" theme="danger">
-				<p>
-					Some nodes are not connected: {{ latestDisconnectedNodes.join(', ') }}
-				</p>
-				<N8nButton
-					size="small"
-					type="tertiary"
-					@click="handleRegenerateConnections(latestSuggestion)"
-				>
-					Regenerate with all nodes connected
-				</N8nButton>
-			</N8nCallout>
-
-			<div :class="$style.jsonControls">
-				<N8nButton
-					size="small"
-					type="secondary"
-					@click="toggleJsonVisibility(latestSuggestion.id)"
-				>
-					{{ isJsonExpanded(latestSuggestion.id) ? 'Hide JSON' : 'View JSON' }}
-				</N8nButton>
-				<N8nButton size="small" type="tertiary" @click="copyJson(latestSuggestion.workflowJson)">
-					Copy JSON
-				</N8nButton>
-			</div>
 			<p v-if="copyFeedback" :class="$style.copyFeedback">{{ copyFeedback }}</p>
-
 			<div v-if="isJsonExpanded(latestSuggestion.id)" :class="$style.jsonPreview">
 				<pre><code>{{ latestSuggestion.workflowJson }}</code></pre>
 			</div>
@@ -792,7 +816,43 @@ function describeWorkflowSteps(workflow: unknown): string[] {
 .result {
 	display: flex;
 	flex-direction: column;
-	gap: var(--spacing-xs);
+	gap: var(--spacing-s);
+
+	header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: var(--spacing-s);
+		flex-wrap: wrap;
+	}
+}
+
+.resultActions {
+	display: flex;
+	gap: var(--spacing-2xs);
+	flex-wrap: wrap;
+}
+
+.resultGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: var(--spacing-s);
+}
+
+.resultCard,
+.resultCardWarning {
+	background-color: var(--color--background--light-2);
+	border-radius: var(--border-radius-base);
+	border: 1px solid var(--color--foreground-dark);
+	padding: var(--spacing-s);
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-3xs);
+}
+
+.resultCardWarning {
+	border-color: var(--color-danger);
+	background-color: color-mix(in srgb, var(--color-danger) 8%, var(--color--background--light-2));
 }
 
 .summary {
@@ -802,22 +862,29 @@ function describeWorkflowSteps(workflow: unknown): string[] {
 }
 
 .steps {
-	list-style: decimal;
 	margin: 0;
 	padding-left: var(--spacing-m);
-	color: var(--color--text-light);
+	color: var(--color--text-base);
+	font-size: var(--font-size-2xs);
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-4xs);
+}
+
+.notesList {
+	margin: 0;
+	padding-left: var(--spacing-m);
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-4xs);
+	color: var(--color--text-base);
 	font-size: var(--font-size-2xs);
 }
 
-.notes {
-	background-color: var(--color--background--light-2);
-	border-radius: var(--border-radius-base);
-	padding: var(--spacing-2xs) var(--spacing-xs);
-
-	ul {
-		margin: 0;
-		padding-left: var(--spacing-m);
-	}
+.warningText {
+	margin: 0;
+	color: var(--color-danger);
+	font-size: var(--font-size-2xs);
 }
 
 .jsonControls {
