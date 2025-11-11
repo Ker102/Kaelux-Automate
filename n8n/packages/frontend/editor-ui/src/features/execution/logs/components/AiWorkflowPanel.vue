@@ -7,8 +7,9 @@ import { useCanvasOperations } from '@/app/composables/useCanvasOperations';
 import { useWorkflowsStore } from '@/app/stores/workflows.store';
 import { useWorkflowHelpers } from '@/app/composables/useWorkflowHelpers';
 import { useToast } from '@/app/composables/useToast';
+import { mapLegacyConnectionToCanvasConnection } from '@/features/workflows/canvas/canvas.utils';
 import type { INodeUi } from '@/Interface';
-import type { INodeParameters } from 'n8n-workflow';
+import type { IConnection, INodeParameters, NodeConnectionType } from 'n8n-workflow';
 import type { WorkflowDataUpdate } from '@n8n/rest-api-client/api/workflows';
 
 interface WorkflowSuggestion {
@@ -65,7 +66,8 @@ const promptExamples = ref<PromptExample[]>([]);
 const promptExamplesError = ref<string | null>(null);
 const isLoadingPromptExamples = ref(true);
 const highlightedExampleId = ref<string | null>(null);
-const { importWorkflowData, deleteNodes, replaceNodeParameters } = useCanvasOperations();
+const { importWorkflowData, deleteNodes, replaceNodeParameters, deleteConnectionsByNodeId, createConnection } =
+	useCanvasOperations();
 const workflowHelpers = useWorkflowHelpers();
 const toast = useToast();
 const workflowsStore = useWorkflowsStore();
@@ -76,7 +78,12 @@ let copyTimer: ReturnType<typeof setTimeout> | undefined;
 const STORAGE_KEY = 'ai-workflow-builder:suggestions';
 const STORAGE_LIMIT = 8;
 const JSON_FEEDBACK_DURATION = 3000;
-const SUPPORTED_PATCH_ACTIONS = new Set<WorkflowAction['type']>(['update_node', 'remove_node']);
+const SUPPORTED_PATCH_ACTIONS = new Set<WorkflowAction['type']>([
+	'update_node',
+	'remove_node',
+	'add_node',
+	'reconnect_nodes',
+]);
 const IF_CONDITION_DEFAULTS = {
 	caseSensitive: true,
 	leftValue: '',
@@ -175,6 +182,121 @@ function getWorkflowNodeParameters(
 	}
 
 	return node.parameters as INodeParameters;
+}
+
+function getWorkflowNodeDefinition(
+	workflow: WorkflowDataUpdate,
+	nodeName?: string,
+): NonNullable<WorkflowDataUpdate['nodes']>[number] | null {
+	if (!nodeName) return null;
+	const nodes = (workflow.nodes ?? []) as NonNullable<WorkflowDataUpdate['nodes']>;
+	const node = nodes.find((candidate) => candidate.name === nodeName);
+	if (!node) return null;
+	return JSON.parse(JSON.stringify(node));
+}
+
+type ConnectionTuple = {
+	source: string;
+	target: string;
+	type: NodeConnectionType;
+	sourceIndex: number;
+	targetIndex: number;
+};
+
+function collectConnectionsForNode(workflow: WorkflowDataUpdate, nodeName: string): ConnectionTuple[] {
+	const tuples: ConnectionTuple[] = [];
+	const connections = workflow.connections ?? {};
+
+	Object.entries(connections).forEach(([sourceName, connectionByType]) => {
+		if (!connectionByType) return;
+		Object.entries(connectionByType).forEach(([typeKey, outputs]) => {
+			if (!Array.isArray(outputs)) return;
+			outputs.forEach((branch, outputIndex) => {
+				if (!Array.isArray(branch)) return;
+				branch.forEach((conn) => {
+					if (!conn || typeof conn !== 'object') return;
+					const targetName = (conn as { node?: string }).node;
+					if (!targetName) return;
+					const connectionType =
+						((conn as { type?: NodeConnectionType }).type ??
+							(typeKey as NodeConnectionType)) || 'main';
+					const targetIndex =
+						typeof (conn as { index?: number }).index === 'number'
+							? ((conn as { index?: number }).index as number)
+							: 0;
+
+					if (sourceName === nodeName || targetName === nodeName) {
+						tuples.push({
+							source: sourceName,
+							target: targetName,
+							type: connectionType,
+							sourceIndex: outputIndex,
+							targetIndex,
+						});
+					}
+				});
+			});
+		});
+	});
+
+	return tuples;
+}
+
+function applyConnectionsForNode(
+	nodeName: string,
+	workflow: WorkflowDataUpdate,
+	seenKeys: Set<string>,
+) {
+	const tuples = collectConnectionsForNode(workflow, nodeName);
+	tuples.forEach((tuple) => {
+		const key = `${tuple.source}|${tuple.target}|${tuple.type}|${tuple.sourceIndex}|${tuple.targetIndex}`;
+		if (seenKeys.has(key)) {
+			return;
+		}
+
+		const sourceNode = workflowsStore.getNodeByName(tuple.source);
+		const targetNode = workflowsStore.getNodeByName(tuple.target);
+		if (!sourceNode || !targetNode) {
+			return;
+		}
+
+		const legacyConnection: [IConnection, IConnection] = [
+			{
+				node: sourceNode.name,
+				type: tuple.type,
+				index: tuple.sourceIndex,
+			},
+			{
+				node: targetNode.name,
+				type: tuple.type,
+				index: tuple.targetIndex,
+			},
+		];
+
+		const canvasConnection = mapLegacyConnectionToCanvasConnection(
+			sourceNode,
+			targetNode,
+			legacyConnection,
+		);
+		createConnection(canvasConnection, { trackHistory: true });
+		seenKeys.add(key);
+	});
+}
+
+function extractActionNodes(action: WorkflowAction): string[] {
+	const list: string[] = [];
+	if (action.targetNode) {
+		list.push(action.targetNode);
+	}
+	const detailNodes = action.details?.nodes;
+	if (Array.isArray(detailNodes)) {
+		detailNodes.forEach((node) => {
+			if (typeof node === 'string' && node.trim()) {
+				list.push(node.trim());
+			}
+		});
+	}
+	return Array.from(new Set(list));
 }
 
 function sanitizeActions(value: unknown): WorkflowAction[] {
@@ -523,6 +645,67 @@ async function applyWorkflowActions(
 					newParameters,
 					{ trackHistory: true, trackBulk: true },
 				);
+				applied = true;
+				break;
+			}
+			case 'add_node': {
+				if (!action.targetNode) {
+					errors.push('Add action missing target node.');
+					continue;
+				}
+				if (workflowsStore.getNodeByName(action.targetNode)) {
+					errors.push(`Node "${action.targetNode}" already exists.`);
+					continue;
+				}
+
+				const definition = getWorkflowNodeDefinition(workflowPayload, action.targetNode);
+				if (!definition) {
+					errors.push(`Unable to find node "${action.targetNode}" in AI payload.`);
+					continue;
+				}
+
+				try {
+					await importWorkflowData(
+						{
+							nodes: [definition],
+							connections: {},
+						},
+						'ai-builder',
+						{
+							regenerateIds: true,
+							trackEvents: false,
+						},
+					);
+					applyConnectionsForNode(action.targetNode, workflowPayload, new Set());
+					applied = true;
+				} catch (error) {
+					errors.push(
+						`Failed to add node "${action.targetNode}": ${
+							error instanceof Error ? error.message : String(error)
+						}`,
+					);
+				}
+				break;
+			}
+			case 'reconnect_nodes': {
+				const nodeNames = extractActionNodes(action);
+				if (nodeNames.length === 0) {
+					errors.push('Reconnect action requires at least one target node.');
+					continue;
+				}
+
+				const seenKeys = new Set<string>();
+				for (const nodeName of nodeNames) {
+					const node = workflowsStore.getNodeByName(nodeName);
+					if (!node?.id) {
+						errors.push(`Cannot reconnect node "${nodeName}" because it does not exist.`);
+						continue;
+					}
+
+					deleteConnectionsByNodeId(node.id, { trackHistory: true, trackBulk: true });
+					applyConnectionsForNode(nodeName, workflowPayload, seenKeys);
+				}
+
 				applied = true;
 				break;
 			}

@@ -62,6 +62,9 @@ Behavioural rules:
    - References to retrieved examples you drew inspiration from (e.g., "Inspired by Shopify → D365 Sales Doc Sync").
 7. If information is missing, make reasonable assumptions and mention them in notes.
 8. Describe the intended changes as discrete actions (e.g., add node, update parameters, remove node, reconnect nodes). Each action must include a short summary and optionally identify the target node.
+   - For node-level actions, set `targetNode` to the node name present in the workflow JSON.
+   - For bulk reconnection actions, include `details.nodes` with the list of affected node names.
+   - Ensure any node mentioned in an action exists in the workflow JSON (with updated parameters/connections).
 9. Never wrap the response in markdown fences; respond strictly with JSON matching:
 {
   "summary": string,
