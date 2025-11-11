@@ -5,18 +5,19 @@ import { N8nButton, N8nCallout, N8nText } from '@n8n/design-system';
 import { AI_WORKFLOW_ENDPOINT, AI_SAMPLE_PROMPTS_ENDPOINT } from '@/app/constants';
 import { useCanvasOperations } from '@/app/composables/useCanvasOperations';
 import { useWorkflowsStore } from '@/app/stores/workflows.store';
-import type { IConnections, INodeUi } from '@/Interface';
-import type { WorkflowDataUpdate } from '@/Interface';
+import type { WorkflowDataUpdate, INodeUi } from '@/Interface';
 
 interface WorkflowSuggestion {
 	id: string;
 	prompt: string;
 	summary: string;
-	workflow: unknown;
+	workflow: WorkflowDataUpdate | unknown;
 	workflowJson: string;
 	notes: string[];
 	rawText: string;
 	createdAt: string;
+	steps: string[];
+	disconnectedNodes: string[];
 }
 
 interface PromptExample {
@@ -46,6 +47,13 @@ const isLoadingPromptExamples = ref(true);
 const highlightedExampleId = ref<string | null>(null);
 const canvasOperations = useCanvasOperations();
 const workflowsStore = useWorkflowsStore();
+const expandedJsonIds = ref<Record<string, boolean>>({});
+const copyFeedback = ref<string | null>(null);
+let copyTimer: ReturnType<typeof setTimeout> | undefined;
+
+const STORAGE_KEY = 'ai-workflow-builder:suggestions';
+const STORAGE_LIMIT = 8;
+const JSON_FEEDBACK_DURATION = 3000;
 
 const activeWorkflowSnapshot = computed(() => {
 	const workflow = workflowsStore.workflow;
@@ -62,18 +70,13 @@ const activeWorkflowSnapshot = computed(() => {
 		notes: node.notes,
 	}));
 
-	const connections: IConnections = workflow.connections ?? {};
-
 	return {
 		id: workflow.id,
 		name: workflow.name,
 		nodes: simplifiedNodes,
-		connections,
+		connections: workflow.connections ?? {},
 	};
 });
-
-const STORAGE_KEY = 'ai-workflow-builder:suggestions';
-const STORAGE_LIMIT = 8;
 
 if (typeof window !== 'undefined') {
 	try {
@@ -114,7 +117,10 @@ const hasHistory = computed(() => suggestions.value.length > 1);
 const highlightedExample = computed(() =>
 	promptExamples.value.find((example) => example.id === highlightedExampleId.value) ??
 	promptExamples.value[0] ??
-	null,
+	null
+);
+const latestSteps = computed(() =>
+	latestSuggestion.value ? describeWorkflowSteps(latestSuggestion.value.workflow) : []
 );
 
 onMounted(() => {
@@ -190,56 +196,18 @@ function isWorkflowPayload(value: unknown): value is WorkflowDataUpdate {
 
 async function handleGenerate() {
 	const value = prompt.value.trim();
+	if (!value) return;
 
-	if (!value) {
-		return;
-	}
+	await submitPrompt(value);
+	prompt.value = '';
+}
 
+async function submitPrompt(value: string) {
 	isGenerating.value = true;
 	errorMessage.value = null;
 
 	try {
-		const response = await fetch(endpoint, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				prompt: value,
-				workflowContext: activeWorkflowSnapshot.value,
-			}),
-		});
-
-		const payload = (await response.json().catch(() => ({}))) as {
-			suggestion?: {
-				summary?: string;
-				workflow?: unknown;
-				notes?: string[];
-				rawText?: string;
-			};
-			error?: string;
-		};
-
-		if (!response.ok || !payload.suggestion) {
-			throw new Error(payload.error ?? locale.baseText('logs.aiPanel.error.generic'));
-		}
-
-		const suggestion: WorkflowSuggestion = {
-			id: makeSuggestionId(),
-			prompt: value,
-			summary:
-				payload.suggestion.summary ?? locale.baseText('logs.aiPanel.defaultSummary'),
-			workflow: payload.suggestion.workflow ?? {},
-			workflowJson: JSON.stringify(payload.suggestion.workflow ?? {}, null, 2),
-			notes: payload.suggestion.notes ?? [],
-			rawText: payload.suggestion.rawText ?? '',
-			createdAt: new Date().toISOString(),
-		};
-
-		suggestions.value.unshift(suggestion);
-		suggestions.value = suggestions.value.slice(0, STORAGE_LIMIT);
-		emit('generate', value);
-		prompt.value = '';
+		await generateSuggestion(value);
 	} catch (error) {
 		const message =
 			error instanceof Error
@@ -249,6 +217,58 @@ async function handleGenerate() {
 	} finally {
 		isGenerating.value = false;
 	}
+}
+
+async function generateSuggestion(request: string) {
+	const response = await fetch(endpoint, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			prompt: request,
+			workflowContext: activeWorkflowSnapshot.value,
+		}),
+	});
+
+	const payload = (await response.json().catch(() => ({}))) as {
+		suggestion?: {
+			summary?: string;
+			workflow?: WorkflowDataUpdate | unknown;
+			notes?: string[];
+			rawText?: string;
+		};
+		error?: string;
+	};
+
+	if (!response.ok || !payload.suggestion) {
+		throw new Error(payload.error ?? locale.baseText('logs.aiPanel.error.generic'));
+	}
+
+	const workflowPayload = payload.suggestion.workflow;
+	const disconnectedNodes = isWorkflowPayload(workflowPayload)
+		? findDisconnectedNodes(workflowPayload)
+		: [];
+	const steps = describeWorkflowSteps(workflowPayload ?? {});
+
+	const suggestion: WorkflowSuggestion = {
+		id: makeSuggestionId(),
+		prompt: request,
+		summary:
+			payload.suggestion.summary ?? locale.baseText('logs.aiPanel.defaultSummary'),
+		workflow: workflowPayload ?? {},
+		workflowJson: JSON.stringify(workflowPayload ?? {}, null, 2),
+		notes: payload.suggestion.notes ?? [],
+		rawText: payload.suggestion.rawText ?? '',
+		createdAt: new Date().toISOString(),
+		steps,
+		disconnectedNodes,
+	};
+
+	suggestions.value.unshift(suggestion);
+	suggestions.value = suggestions.value.slice(0, STORAGE_LIMIT);
+	delete expandedJsonIds.value[suggestion.id];
+	emit('generate', request);
 }
 
 async function handleInsert() {
@@ -293,89 +313,169 @@ function formatTimestamp(timestamp: string) {
 
 	return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
+
+function toggleJsonVisibility(id: string) {
+	expandedJsonIds.value[id] = !expandedJsonIds.value[id];
+}
+
+function isJsonExpanded(id: string) {
+	return !!expandedJsonIds.value[id];
+}
+
+async function copyJson(json: string) {
+	try {
+		await navigator.clipboard.writeText(json);
+		copyFeedback.value = 'JSON copied to clipboard';
+		if (copyTimer) {
+			clearTimeout(copyTimer);
+		}
+		copyTimer = setTimeout(() => {
+			copyFeedback.value = null;
+		}, JSON_FEEDBACK_DURATION);
+	} catch (error) {
+		console.warn('Unable to copy JSON', error);
+		copyFeedback.value = 'Unable to copy JSON';
+	}
+}
+
+function findDisconnectedNodes(workflow: WorkflowDataUpdate): string[] {
+	const nodes = workflow.nodes ?? [];
+	if (!nodes.length) {
+		return [];
+	}
+
+	const incomingCount = new Map<string, number>();
+	const outgoingCount = new Map<string, number>();
+
+	const markOutgoing = (name: string) => {
+		outgoingCount.set(name, (outgoingCount.get(name) ?? 0) + 1);
+	};
+
+	const markIncoming = (name: string) => {
+		incomingCount.set(name, (incomingCount.get(name) ?? 0) + 1);
+	};
+
+	const connections = workflow.connections ?? {};
+	Object.entries(connections).forEach(([sourceNode, connectionByType]) => {
+		Object.values(connectionByType).forEach((connectionBranches) => {
+			connectionBranches.forEach((branch) => {
+				branch.forEach((connection) => {
+					markOutgoing(sourceNode);
+					markIncoming(connection.node);
+				});
+			});
+@@
+	});
+
+	return nodes
+		.filter((node) => {
+			const incoming = incomingCount.get(node.name ?? node.id ?? 'unknown') ?? 0;
+			const outgoing = outgoingCount.get(node.name ?? node.id ?? 'unknown') ?? 0;
+			return incoming === 0 && outgoing === 0;
+		})
+		.map((node) => node.name ?? node.id ?? node.type ?? 'Unnamed node');
+}
+
+async function handleRegenerateConnections(issue: WorkflowSuggestion) {
+	const missing = issue.disconnectedNodes.join(', ');
+	const promptWithFix = `${issue.prompt}\n\nEnsure these nodes are connected in the regenerated workflow: ${missing}. All nodes must participate in the flow.`;
+	await submitPrompt(promptWithFix);
+}
+
+function describeWorkflowSteps(workflow: unknown): string[] {
+	if (!isWorkflowPayload(workflow)) {
+		return [];
+	}
+
+	return (workflow.nodes ?? [])
+		.slice(0, 6)
+		.map((node, index) => {
+			const label = node.name ?? node.id ?? node.type ?? 'Node';
+			return `${index + 1}. ${label} (${node.type ?? 'unknown'})`;
+		});
+}
 </script>
 
 <template>
 	<div :class="$style.container">
-	<section :class="$style.header">
-		<N8nText tag="p" size="medium" color="text-base" bold>
-			{{ locale.baseText('logs.aiPanel.title') }}
-		</N8nText>
-		<N8nText tag="p" size="small" color="text-light">
-			{{ locale.baseText('logs.aiPanel.subtitle') }}
-		</N8nText>
-	</section>
-
-	<section :class="$style.samples">
-		<header>
-			<N8nText tag="p" size="small" color="text-light">
-				Need inspiration? Start from one of our curated workflow requests.
+		<section :class="$style.header">
+			<N8nText tag="p" size="medium" color="text-base" bold>
+				{{ locale.baseText('logs.aiPanel.title') }}
 			</N8nText>
-		</header>
-		<div v-if="isLoadingPromptExamples" :class="$style.samplesLoading">
-			<N8nText tag="span" size="small" color="text-light">Loading curated prompts...</N8nText>
-		</div>
-		<N8nCallout v-else-if="promptExamplesError" icon="alert-triangle" theme="danger">
-			{{ promptExamplesError }}
-		</N8nCallout>
-		<template v-else>
-			<div :class="$style.sampleList">
-				<button
-					v-for="example in promptExamples"
-					:key="example.id"
-					type="button"
-					:class="[
-						$style.sampleChip,
-						highlightedExample?.id === example.id ? $style.sampleChipActive : '',
-					]"
-					@click="handleUsePromptExample(example)"
-					@mouseenter="handleHoverPromptExample(example)"
-				>
-					<strong>{{ example.title }}</strong>
-					<span>{{ describeExampleCategory(example) }}</span>
-				</button>
-			</div>
-			<div v-if="highlightedExample" :class="$style.sampleDetails">
-				<header>
-					<N8nText tag="p" size="small" color="text-base" bold>
-						{{ highlightedExample.title }}
-					</N8nText>
-					<N8nText tag="span" size="small" color="text-light">
-						{{ formatMeta(highlightedExample.tags) }}
-					</N8nText>
-				</header>
-				<p>{{ highlightedExample.description }}</p>
-				<ul :class="$style.metaList">
-					<li>
-						<span>Industries</span>
-						<strong>{{ formatMeta(highlightedExample.industries) }}</strong>
-					</li>
-					<li>
-						<span>Domains</span>
-						<strong>{{ formatMeta(highlightedExample.domains) }}</strong>
-					</li>
-					<li>
-						<span>Channels</span>
-						<strong>{{ formatMeta(highlightedExample.channels) }}</strong>
-					</li>
-					<li>
-						<span>Trigger</span>
-						<strong>{{ highlightedExample.trigger ?? '—' }}</strong>
-					</li>
-					<li>
-						<span>Complexity</span>
-						<strong>{{ highlightedExample.complexity ?? '—' }}</strong>
-					</li>
-					<li>
-						<span>Integrations</span>
-						<strong>{{ formatMeta(highlightedExample.integrations) }}</strong>
-					</li>
-				</ul>
-			</div>
-		</template>
-	</section>
+			<N8nText tag="p" size="small" color="text-light">
+				{{ locale.baseText('logs.aiPanel.subtitle') }}
+			</N8nText>
+		</section>
 
-	<form :class="$style.form" @submit.prevent="handleGenerate">
+		<section :class="$style.samples">
+			<header>
+				<N8nText tag="p" size="small" color="text-light">
+					Need inspiration? Start from one of our curated workflow requests.
+				</N8nText>
+			</header>
+			<div v-if="isLoadingPromptExamples" :class="$style.samplesLoading">
+				<N8nText tag="span" size="small" color="text-light">
+					Loading curated prompts...
+				</N8nText>
+			</div>
+			<N8nCallout v-else-if="promptExamplesError" icon="alert-triangle" theme="danger">
+				{{ promptExamplesError }}
+			</N8nCallout>
+			<template v-else>
+				<div :class="$style.sampleList">
+					<button
+						v-for="example in promptExamples"
+						:key="example.id"
+						type="button"
+						:class="[$style.sampleChip, highlightedExample?.id === example.id ? $style.sampleChipActive : '']"
+						@click="handleUsePromptExample(example)"
+						@mouseenter="handleHoverPromptExample(example)"
+					>
+						<strong>{{ example.title }}</strong>
+						<span>{{ describeExampleCategory(example) }}</span>
+					</button>
+				</div>
+				<div v-if="highlightedExample" :class="$style.sampleDetails">
+					<header>
+						<N8nText tag="p" size="small" color="text-base" bold>
+							{{ highlightedExample.title }}
+						</N8nText>
+						<N8nText tag="span" size="small" color="text-light">
+							{{ formatMeta(highlightedExample.tags) }}
+						</N8nText>
+					</header>
+					<p>{{ highlightedExample.description }}</p>
+					<ul :class="$style.metaList">
+						<li>
+							<span>Industries</span>
+							<strong>{{ formatMeta(highlightedExample.industries) }}</strong>
+						</li>
+						<li>
+							<span>Domains</span>
+							<strong>{{ formatMeta(highlightedExample.domains) }}</strong>
+						</li>
+						<li>
+							<span>Channels</span>
+							<strong>{{ formatMeta(highlightedExample.channels) }}</strong>
+						</li>
+						<li>
+							<span>Trigger</span>
+							<strong>{{ highlightedExample.trigger ?? '—' }}</strong>
+						</li>
+						<li>
+							<span>Complexity</span>
+							<strong>{{ highlightedExample.complexity ?? '—' }}</strong>
+						</li>
+						<li>
+							<span>Integrations</span>
+							<strong>{{ formatMeta(highlightedExample.integrations) }}</strong>
+						</li>
+					</ul>
+				</div>
+			</template>
+		</section>
+
+		<form :class="$style.form" @submit.prevent="handleGenerate">
 			<label :class="$style.label" for="ai-workflow-prompt">
 				{{ locale.baseText('logs.aiPanel.promptLabel') }}
 			</label>
@@ -425,12 +525,49 @@ function formatTimestamp(timestamp: string) {
 				</N8nText>
 			</header>
 			<p :class="$style.summary">{{ latestSuggestion.summary }}</p>
+
+			<ul v-if="latestSteps.length" :class="$style.steps">
+				<li v-for="step in latestSteps" :key="step">{{ step }}</li>
+			</ul>
+
 			<div v-if="latestSuggestion.notes.length" :class="$style.notes">
 				<ul>
 					<li v-for="note in latestSuggestion.notes" :key="note">{{ note }}</li>
 				</ul>
 			</div>
-			<div :class="$style.jsonPreview">
+
+			<N8nCallout
+				v-if="latestSuggestion.disconnectedNodes.length"
+				icon="alert-circle"
+				theme="danger"
+			>
+				<p>
+					Some nodes are not connected: {{ latestSuggestion.disconnectedNodes.join(', ') }}
+				</p>
+				<N8nButton
+					size="small"
+					type="tertiary"
+					@click="handleRegenerateConnections(latestSuggestion)"
+				>
+					Regenerate with all nodes connected
+				</N8nButton>
+			</N8nCallout>
+
+			<div :class="$style.jsonControls">
+				<N8nButton
+					size="small"
+					type="secondary"
+					@click="toggleJsonVisibility(latestSuggestion.id)"
+				>
+					{{ isJsonExpanded(latestSuggestion.id) ? 'Hide JSON' : 'View JSON' }}
+				</N8nButton>
+				<N8nButton size="small" type="tertiary" @click="copyJson(latestSuggestion.workflowJson)">
+					Copy JSON
+				</N8nButton>
+			</div>
+			<p v-if="copyFeedback" :class="$style.copyFeedback">{{ copyFeedback }}</p>
+
+			<div v-if="isJsonExpanded(latestSuggestion.id)" :class="$style.jsonPreview">
 				<pre><code>{{ latestSuggestion.workflowJson }}</code></pre>
 			</div>
 		</section>
@@ -440,12 +577,9 @@ function formatTimestamp(timestamp: string) {
 				{{ locale.baseText('logs.aiPanel.historyTitle') }}
 			</N8nText>
 			<ul>
-				<li
-					v-for="suggestion in suggestions.slice(1)"
-					:key="suggestion.id"
-				>
+				<li v-for="suggestion in suggestions.slice(1)" :key="suggestion.id">
 					<strong>{{ formatTimestamp(suggestion.createdAt) }}:</strong>
-					<span>{{ suggestion.prompt }}</span>
+					<span>{{ suggestion.summary }}</span>
 				</li>
 			</ul>
 		</section>
@@ -521,15 +655,6 @@ function formatTimestamp(timestamp: string) {
 	box-shadow: 0 0 0 1px var(--color-primary);
 }
 
-.sampleChip strong {
-	font-size: var(--font-size-s);
-}
-
-.sampleChip span {
-	font-size: var(--font-size-2xs);
-	color: var(--color--text-light);
-}
-
 .sampleDetails {
 	display: flex;
 	flex-direction: column;
@@ -584,12 +709,6 @@ function formatTimestamp(timestamp: string) {
 	color: var(--color--text-base);
 }
 
-.textarea:focus {
-	outline: none;
-	border-color: var(--color-primary);
-	box-shadow: 0 0 0 1px var(--color-primary);
-}
-
 .actions {
 	display: flex;
 	flex-wrap: wrap;
@@ -603,9 +722,17 @@ function formatTimestamp(timestamp: string) {
 }
 
 .summary {
-	font-size: var(--font-size-s);
+	font-size: var(--font-size-base);
 	color: var(--color--text-base);
 	margin: 0;
+}
+
+.steps {
+	list-style: decimal;
+	margin: 0;
+	padding-left: var(--spacing-m);
+	color: var(--color--text-light);
+	font-size: var(--font-size-2xs);
 }
 
 .notes {
@@ -619,13 +746,25 @@ function formatTimestamp(timestamp: string) {
 	}
 }
 
+.jsonControls {
+	display: flex;
+	gap: var(--spacing-xs);
+	align-items: center;
+}
+
+.copyFeedback {
+	font-size: var(--font-size-2xs);
+	color: var(--color--text-light);
+	margin: 0;
+}
+
 .jsonPreview {
 	flex: 1;
 	background-color: var(--color--background--dark);
 	border-radius: var(--border-radius-base);
 	padding: var(--spacing-xs);
-	overflow: auto;
 	border: 1px solid var(--color--foreground-dark);
+	overflow: auto;
 
 	pre {
 		margin: 0;
