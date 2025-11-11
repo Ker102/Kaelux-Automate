@@ -1164,6 +1164,7 @@
 	"logs.aiPanel.defaultSummary": "AI-generated workflow",
 	"logs.aiPanel.error.generic": "Unable to reach the AI workflow service. Check the endpoint and try again.",
 	"logs.aiPanel.error.invalidWorkflow": "The AI response did not contain a valid workflow.",
+	"logs.aiPanel.error.emptyWorkflow": "The AI response did not include any nodes to insert.",
 	"logs.aiPanel.error.importFailed": "Unable to insert the generated workflow into the canvas.",
 	"logs.aiPanel.toast.title": "Workflow inserted",
 	"logs.aiPanel.toast.message": "Added {count} AI-generated nodes to the canvas.",

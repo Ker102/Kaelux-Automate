@@ -434,6 +434,9 @@ const latestDisconnectedNodes = computed(() => latestSuggestion.value?.disconnec
 const hasDisconnectedNodes = computed(() => latestDisconnectedNodes.value.length > 0);
 const latestActions = computed(() => latestSuggestion.value?.actions ?? []);
 const hasActions = computed(() => latestActions.value.length > 0);
+const isLatestUnparsed = computed(
+	() => latestSuggestion.value?.summary === 'AI response (unparsed)',
+);
 
 onMounted(() => {
 	void loadPromptExamples();
@@ -726,6 +729,10 @@ async function handleInsert() {
 
 	if (!isWorkflowPayload(workflowPayload)) {
 		errorMessage.value = locale.baseText('logs.aiPanel.error.invalidWorkflow');
+		return;
+	}
+	if (!Array.isArray(workflowPayload.nodes) || workflowPayload.nodes.length === 0) {
+		errorMessage.value = locale.baseText('logs.aiPanel.error.emptyWorkflow');
 		return;
 	}
 
@@ -1035,7 +1042,7 @@ function formatActionType(type: WorkflowAction['type']) {
 				<N8nButton
 					type="tertiary"
 					size="medium"
-					:disabled="!latestSuggestion || isGenerating"
+					:disabled="!latestSuggestion || isGenerating || isLatestUnparsed"
 					@click.prevent="handleInsert"
 				>
 					{{ locale.baseText('logs.aiPanel.insertButton') }}
