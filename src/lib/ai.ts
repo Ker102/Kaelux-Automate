@@ -2,6 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 import { QdrantVectorStore } from "@langchain/community/vectorstores/qdrant";
 import { QdrantClient } from "@qdrant/js-client-rest";
+import { sanitizeWorkflowPayload } from "@/lib/workflow-sanitizer";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = process.env.GEMINI_MODEL ?? "gemini-2.5-pro";
@@ -531,9 +532,11 @@ export async function generateWorkflowSuggestion(
       notes?: string[];
     };
 
+    const sanitizedWorkflow = sanitizeWorkflowPayload(parsed.workflow);
+
     return {
       summary: parsed.summary ?? "Suggested workflow",
-      workflow: parsed.workflow ?? {},
+      workflow: sanitizedWorkflow ?? parsed.workflow ?? {},
       notes: parsed.notes,
       rawText,
     };

@@ -60,6 +60,92 @@ let copyTimer: ReturnType<typeof setTimeout> | undefined;
 const STORAGE_KEY = 'ai-workflow-builder:suggestions';
 const STORAGE_LIMIT = 8;
 const JSON_FEEDBACK_DURATION = 3000;
+const IF_CONDITION_DEFAULTS = {
+	caseSensitive: true,
+	leftValue: '',
+	typeValidation: 'strict' as const,
+	version: 2,
+};
+const BOOLEAN_TRUE_OPERATOR = {
+	type: 'boolean',
+	operation: 'true',
+	singleValue: true,
+};
+type NormalizedIfCondition = {
+	id: string;
+	leftValue: string;
+	rightValue: string;
+	operator: typeof BOOLEAN_TRUE_OPERATOR;
+};
+
+function makeConditionId() {
+	if (typeof globalThis.crypto?.randomUUID === 'function') {
+		return globalThis.crypto.randomUUID();
+	}
+	return `cond-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function normalizeLegacyIfConditions(value: unknown) {
+	if (!Array.isArray(value)) return undefined;
+
+	const conditions = value
+		.map((entry) => {
+			const expression =
+				typeof (entry as { value?: unknown }).value === 'string'
+					? ((entry as { value?: string }).value as string)
+					: '';
+			if (!expression) return null;
+			return {
+				id: (entry as { id?: string }).id ?? makeConditionId(),
+				leftValue: expression,
+				rightValue: '',
+				operator: { ...BOOLEAN_TRUE_OPERATOR },
+			};
+		})
+		.filter((item): item is NormalizedIfCondition => Boolean(item));
+
+	if (conditions.length === 0) return undefined;
+
+	return {
+		options: { ...IF_CONDITION_DEFAULTS },
+		combinator: 'and',
+		conditions,
+	};
+}
+
+function sanitizeWorkflowPayload(value: unknown): WorkflowDataUpdate {
+	if (!value || typeof value !== 'object') {
+		return { nodes: [], connections: {} };
+	}
+
+	const workflow = value as WorkflowDataUpdate;
+	const nodes = Array.isArray(workflow.nodes)
+		? (workflow.nodes.map((node) => {
+				if (!node || typeof node !== 'object') return node;
+				if (node.type !== 'n8n-nodes-base.if') return node;
+				const params =
+					node.parameters && typeof node.parameters === 'object'
+						? (node.parameters as Record<string, unknown>)
+						: null;
+				if (!params) return node;
+				const legacy = (params.conditions as { value?: unknown })?.value;
+				const normalized = legacy ? normalizeLegacyIfConditions(legacy) : undefined;
+				if (!normalized) return node;
+				return {
+					...node,
+					parameters: {
+						...node.parameters,
+						conditions: normalized,
+					},
+				};
+		  }) as WorkflowDataUpdate['nodes'])
+		: workflow.nodes;
+
+	return {
+		...workflow,
+		nodes,
+	};
+}
 
 const activeWorkflowSnapshot = computed(() => {
 	const workflow = workflowsStore.workflow;
@@ -114,7 +200,7 @@ if (typeof window !== 'undefined') {
 }
 
 function normalizeSuggestion(raw: Partial<WorkflowSuggestion>): WorkflowSuggestion {
-	const workflowPayload = raw.workflow ?? {};
+	const workflowPayload = sanitizeWorkflowPayload(raw.workflow ?? {});
 
 	return {
 		id: typeof raw.id === 'string' ? raw.id : makeSuggestionId(),
@@ -275,7 +361,7 @@ async function generateSuggestion(request: string) {
 		throw new Error(payload.error ?? locale.baseText('logs.aiPanel.error.generic'));
 	}
 
-	const workflowPayload = payload.suggestion.workflow;
+	const workflowPayload = sanitizeWorkflowPayload(payload.suggestion.workflow ?? {});
 	const disconnectedNodes = isWorkflowPayload(workflowPayload)
 		? findDisconnectedNodes(workflowPayload)
 		: [];
@@ -310,7 +396,9 @@ async function handleInsert() {
 		return;
 	}
 
-	if (!isWorkflowPayload(suggestion.workflow)) {
+	const workflowToImport = sanitizeWorkflowPayload(suggestion.workflow);
+
+	if (!isWorkflowPayload(workflowToImport)) {
 		errorMessage.value = locale.baseText('logs.aiPanel.error.invalidWorkflow');
 		return;
 	}
@@ -334,11 +422,11 @@ async function handleInsert() {
 	}
 
 	try {
-		const nodeCount = Array.isArray(suggestion.workflow.nodes)
-			? suggestion.workflow.nodes.length
+		const nodeCount = Array.isArray(workflowToImport.nodes)
+			? workflowToImport.nodes.length
 			: 0;
 
-		await importWorkflowData(suggestion.workflow, 'ai-builder', {
+		await importWorkflowData(workflowToImport, 'ai-builder', {
 			regenerateIds: true,
 			trackEvents: false,
 		});
