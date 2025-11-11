@@ -22,6 +22,21 @@ interface WorkflowSuggestion {
 	steps: string[];
 	disconnectedNodes: string[];
 	replacesWorkflow: boolean;
+	actions: WorkflowAction[];
+}
+
+interface WorkflowAction {
+	type:
+		| 'replace_workflow'
+		| 'add_node'
+		| 'remove_node'
+		| 'update_node'
+		| 'reconnect_nodes'
+		| 'custom';
+	summary: string;
+	targetNode?: string;
+	details?: Record<string, unknown>;
+	metadata?: Record<string, unknown>;
 }
 
 interface PromptExample {
@@ -147,6 +162,46 @@ function sanitizeWorkflowPayload(value: unknown): WorkflowDataUpdate {
 	};
 }
 
+function sanitizeActions(value: unknown): WorkflowAction[] {
+	if (!Array.isArray(value)) {
+		return [];
+	}
+
+	return value
+		.map((entry) => {
+			if (!entry || typeof entry !== 'object') {
+				return null;
+			}
+
+			const raw = entry as Record<string, unknown>;
+			const summary =
+				typeof raw.summary === 'string' && raw.summary.trim().length > 0
+					? raw.summary.trim()
+					: null;
+			if (!summary) return null;
+
+			const type =
+				typeof raw.type === 'string'
+					? (raw.type as WorkflowAction['type'])
+					: 'custom';
+
+			return {
+				type,
+				summary,
+				...(typeof raw.targetNode === 'string' && { targetNode: raw.targetNode }),
+				...(raw.details && typeof raw.details === 'object' && !Array.isArray(raw.details)
+					? { details: raw.details as Record<string, unknown> }
+					: {}),
+				...(raw.metadata &&
+				typeof raw.metadata === 'object' &&
+				!Array.isArray(raw.metadata)
+					? { metadata: raw.metadata as Record<string, unknown> }
+					: {}),
+			};
+		})
+		.filter((action): action is WorkflowAction => Boolean(action));
+}
+
 const activeWorkflowSnapshot = computed(() => {
 	const workflow = workflowsStore.workflow;
 	if (!workflow || !workflow.nodes?.length) {
@@ -201,6 +256,7 @@ if (typeof window !== 'undefined') {
 
 function normalizeSuggestion(raw: Partial<WorkflowSuggestion>): WorkflowSuggestion {
 	const workflowPayload = sanitizeWorkflowPayload(raw.workflow ?? {});
+	const actions = sanitizeActions((raw as { actions?: unknown }).actions);
 
 	return {
 		id: typeof raw.id === 'string' ? raw.id : makeSuggestionId(),
@@ -217,6 +273,7 @@ function normalizeSuggestion(raw: Partial<WorkflowSuggestion>): WorkflowSuggesti
 		steps: Array.isArray(raw.steps) ? raw.steps : [],
 		disconnectedNodes: Array.isArray(raw.disconnectedNodes) ? raw.disconnectedNodes : [],
 		replacesWorkflow: Boolean(raw.replacesWorkflow),
+		actions,
 	};
 }
 
@@ -238,6 +295,8 @@ const hasExistingWorkflow = computed(
 );
 const latestDisconnectedNodes = computed(() => latestSuggestion.value?.disconnectedNodes ?? []);
 const hasDisconnectedNodes = computed(() => latestDisconnectedNodes.value.length > 0);
+const latestActions = computed(() => latestSuggestion.value?.actions ?? []);
+const hasActions = computed(() => latestActions.value.length > 0);
 
 onMounted(() => {
 	void loadPromptExamples();
@@ -353,6 +412,7 @@ async function generateSuggestion(request: string) {
 			workflow?: WorkflowDataUpdate | unknown;
 			notes?: string[];
 			rawText?: string;
+			actions?: unknown;
 		};
 		error?: string;
 	};
@@ -381,6 +441,7 @@ async function generateSuggestion(request: string) {
 		steps,
 		disconnectedNodes,
 		replacesWorkflow,
+		actions: sanitizeActions(payload.suggestion.actions),
 	};
 
 	suggestions.value.unshift(suggestion);
@@ -560,6 +621,23 @@ function describeWorkflowSteps(workflow: unknown): string[] {
 			return `${index + 1}. ${label} (${node.type ?? 'unknown'})`;
 		});
 }
+
+function formatActionType(type: WorkflowAction['type']) {
+	switch (type) {
+		case 'replace_workflow':
+			return 'Replace workflow';
+		case 'add_node':
+			return 'Add node';
+		case 'remove_node':
+			return 'Remove node';
+		case 'update_node':
+			return 'Update node';
+		case 'reconnect_nodes':
+			return 'Reconnect nodes';
+		default:
+			return 'Custom change';
+	}
+}
 </script>
 
 <template>
@@ -710,6 +788,21 @@ function describeWorkflowSteps(workflow: unknown): string[] {
 			</header>
 
 			<div :class="$style.resultGrid">
+				<div v-if="hasActions" :class="$style.resultCard">
+					<N8nText tag="p" size="small" color="text-light" bold>
+						Proposed changes
+					</N8nText>
+					<ol :class="$style.actionsList">
+						<li v-for="action in latestActions" :key="`${action.type}-${action.summary}`">
+							<strong>{{ formatActionType(action.type) }}</strong>
+							<span>{{ action.summary }}</span>
+							<small v-if="action.targetNode" :class="$style.actionMeta">
+								Target: {{ action.targetNode }}
+							</small>
+						</li>
+					</ol>
+				</div>
+
 				<div :class="$style.resultCard">
 					<N8nText tag="p" size="small" color="text-light" bold>
 						Summary
@@ -967,6 +1060,25 @@ function describeWorkflowSteps(workflow: unknown): string[] {
 	gap: var(--spacing-4xs);
 	color: var(--color--text-base);
 	font-size: var(--font-size-2xs);
+}
+
+.actionsList {
+	margin: 0;
+	padding-left: var(--spacing-m);
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-4xs);
+	font-size: var(--font-size-2xs);
+
+	li {
+		display: flex;
+		flex-direction: column;
+		gap: var(--spacing-7xs);
+	}
+}
+
+.actionMeta {
+	color: var(--color--text-light);
 }
 
 .warningText {

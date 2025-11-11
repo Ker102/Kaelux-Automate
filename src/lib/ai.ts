@@ -61,11 +61,18 @@ Behavioural rules:
    - Optional enhancements or monitoring tips.
    - References to retrieved examples you drew inspiration from (e.g., "Inspired by Shopify → D365 Sales Doc Sync").
 7. If information is missing, make reasonable assumptions and mention them in notes.
-8. Never wrap the response in markdown fences; respond strictly with JSON matching:
+8. Describe the intended changes as discrete actions (e.g., add node, update parameters, remove node, reconnect nodes). Each action must include a short summary and optionally identify the target node.
+9. Never wrap the response in markdown fences; respond strictly with JSON matching:
 {
   "summary": string,
   "workflow": object,
   "notes": string[],
+  "actions": Array<{
+    "type": "replace_workflow" | "add_node" | "remove_node" | "update_node" | "reconnect_nodes" | "custom",
+    "summary": string,
+    "targetNode"?: string,
+    "details"?: object
+  }>,
   "rawText": string
 }
 `;
@@ -75,7 +82,68 @@ export type AiWorkflowSuggestion = {
   workflow: unknown;
   notes?: string[];
   rawText: string;
+  actions?: WorkflowAction[];
 };
+
+export type WorkflowAction = {
+  type:
+    | "replace_workflow"
+    | "add_node"
+    | "remove_node"
+    | "update_node"
+    | "reconnect_nodes"
+    | "custom";
+  summary: string;
+  targetNode?: string;
+  details?: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
+};
+
+function normalizeActions(value: unknown): WorkflowAction[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .map((entry) => {
+      if (!entry || typeof entry !== "object") {
+        return null;
+      }
+
+      const raw = entry as Record<string, unknown>;
+      const summary =
+        typeof raw.summary === "string" && raw.summary.trim().length > 0
+          ? raw.summary.trim()
+          : null;
+      const type =
+        typeof raw.type === "string"
+          ? (raw.type as WorkflowAction["type"])
+          : "custom";
+
+      if (!summary) {
+        return null;
+      }
+
+      return {
+        type,
+        summary,
+        ...(typeof raw.targetNode === "string" && {
+          targetNode: raw.targetNode,
+        }),
+        ...(raw.details &&
+        typeof raw.details === "object" &&
+        !Array.isArray(raw.details)
+          ? { details: raw.details as Record<string, unknown> }
+          : {}),
+        ...(raw.metadata &&
+        typeof raw.metadata === "object" &&
+        !Array.isArray(raw.metadata)
+          ? { metadata: raw.metadata as Record<string, unknown> }
+          : {}),
+      };
+    })
+    .filter((action): action is WorkflowAction => Boolean(action));
+}
 
 type ExistingWorkflowContext = {
   id?: string;
@@ -527,18 +595,21 @@ export async function generateWorkflowSuggestion(
 
   try {
     const parsed = JSON.parse(extractJsonPayload(rawText)) as {
-      summary: string;
-      workflow: unknown;
+      summary?: string;
+      workflow?: unknown;
       notes?: string[];
+      actions?: unknown;
     };
 
     const sanitizedWorkflow = sanitizeWorkflowPayload(parsed.workflow);
+    const actions = normalizeActions(parsed.actions);
 
     return {
       summary: parsed.summary ?? "Suggested workflow",
       workflow: sanitizedWorkflow ?? parsed.workflow ?? {},
       notes: parsed.notes,
       rawText,
+      actions,
     };
   } catch {
     return {
@@ -548,6 +619,7 @@ export async function generateWorkflowSuggestion(
       notes: [
         "Unable to parse Gemini response. Please review the rawText payload.",
       ],
+      actions: [],
     };
   }
 }
