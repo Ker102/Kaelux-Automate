@@ -5,7 +5,10 @@ import { N8nButton, N8nCallout, N8nText } from '@n8n/design-system';
 import { AI_WORKFLOW_ENDPOINT, AI_SAMPLE_PROMPTS_ENDPOINT } from '@/app/constants';
 import { useCanvasOperations } from '@/app/composables/useCanvasOperations';
 import { useWorkflowsStore } from '@/app/stores/workflows.store';
-import type { WorkflowDataUpdate, INodeUi } from '@/Interface';
+import { useWorkflowHelpers } from '@/app/composables/useWorkflowHelpers';
+import { useToast } from '@/app/composables/useToast';
+import type { INodeUi } from '@/Interface';
+import type { WorkflowDataUpdate } from '@n8n/rest-api-client/api/workflows';
 
 interface WorkflowSuggestion {
 	id: string;
@@ -18,6 +21,7 @@ interface WorkflowSuggestion {
 	createdAt: string;
 	steps: string[];
 	disconnectedNodes: string[];
+	replacesWorkflow: boolean;
 }
 
 interface PromptExample {
@@ -45,7 +49,9 @@ const promptExamples = ref<PromptExample[]>([]);
 const promptExamplesError = ref<string | null>(null);
 const isLoadingPromptExamples = ref(true);
 const highlightedExampleId = ref<string | null>(null);
-const canvasOperations = useCanvasOperations();
+const { importWorkflowData, deleteNodes } = useCanvasOperations();
+const workflowHelpers = useWorkflowHelpers();
+const toast = useToast();
 const workflowsStore = useWorkflowsStore();
 const expandedJsonIds = ref<Record<string, boolean>>({});
 const copyFeedback = ref<string | null>(null);
@@ -84,7 +90,7 @@ if (typeof window !== 'undefined') {
 		if (stored) {
 			const parsed = JSON.parse(stored);
 			if (Array.isArray(parsed)) {
-				suggestions.value = parsed;
+				suggestions.value = parsed.map((entry) => normalizeSuggestion(entry));
 			}
 		}
 	} catch (error) {
@@ -107,20 +113,42 @@ if (typeof window !== 'undefined') {
 	);
 }
 
+function normalizeSuggestion(raw: Partial<WorkflowSuggestion>): WorkflowSuggestion {
+	const workflowPayload = raw.workflow ?? {};
+
+	return {
+		id: typeof raw.id === 'string' ? raw.id : makeSuggestionId(),
+		prompt: typeof raw.prompt === 'string' ? raw.prompt : '',
+		summary: typeof raw.summary === 'string' ? raw.summary : locale.baseText('logs.aiPanel.defaultSummary'),
+		workflow: workflowPayload,
+		workflowJson:
+			typeof raw.workflowJson === 'string'
+				? raw.workflowJson
+				: JSON.stringify(workflowPayload, null, 2),
+		notes: Array.isArray(raw.notes) ? raw.notes : [],
+		rawText: typeof raw.rawText === 'string' ? raw.rawText : '',
+		createdAt: typeof raw.createdAt === 'string' ? raw.createdAt : new Date().toISOString(),
+		steps: Array.isArray(raw.steps) ? raw.steps : [],
+		disconnectedNodes: Array.isArray(raw.disconnectedNodes) ? raw.disconnectedNodes : [],
+		replacesWorkflow: Boolean(raw.replacesWorkflow),
+	};
+}
+
 const emit = defineEmits<{
 	generate: [string];
 	insert: [WorkflowSuggestion];
 }>();
 
-const latestSuggestion = computed(() => suggestions.value[0]);
+const latestSuggestion = computed(() => suggestions.value[0] ?? null);
 const hasHistory = computed(() => suggestions.value.length > 1);
 const highlightedExample = computed(() =>
 	promptExamples.value.find((example) => example.id === highlightedExampleId.value) ??
 	promptExamples.value[0] ??
 	null
 );
-const latestSteps = computed(() =>
-	latestSuggestion.value ? describeWorkflowSteps(latestSuggestion.value.workflow) : []
+const latestSteps = computed(() => latestSuggestion.value?.steps ?? []);
+const hasExistingWorkflow = computed(
+	() => Array.isArray(workflowsStore.workflow?.nodes) && workflowsStore.workflow.nodes.length > 0,
 );
 
 onMounted(() => {
@@ -250,6 +278,7 @@ async function generateSuggestion(request: string) {
 		? findDisconnectedNodes(workflowPayload)
 		: [];
 	const steps = describeWorkflowSteps(workflowPayload ?? {});
+	const replacesWorkflow = Boolean(activeWorkflowSnapshot.value?.nodes?.length);
 
 	const suggestion: WorkflowSuggestion = {
 		id: makeSuggestionId(),
@@ -263,6 +292,7 @@ async function generateSuggestion(request: string) {
 		createdAt: new Date().toISOString(),
 		steps,
 		disconnectedNodes,
+		replacesWorkflow,
 	};
 
 	suggestions.value.unshift(suggestion);
@@ -283,24 +313,56 @@ async function handleInsert() {
 		return;
 	}
 
+	const shouldReplaceExisting = suggestion.replacesWorkflow && hasExistingWorkflow.value;
+	let rollbackSnapshot: WorkflowDataUpdate | null = null;
+
+	if (shouldReplaceExisting) {
+		try {
+			rollbackSnapshot = await workflowHelpers.getWorkflowDataToSave();
+			const nodeIdsToDelete = (workflowsStore.workflow?.nodes ?? [])
+				.map((node) => node.id)
+				.filter((id): id is string => typeof id === 'string');
+
+			if (nodeIdsToDelete.length) {
+				deleteNodes(nodeIdsToDelete, { trackHistory: false, trackBulk: true });
+			}
+		} catch (error) {
+			console.warn('[AI builder] Unable to snapshot workflow before replace', error);
+		}
+	}
+
 	try {
 		const nodeCount = Array.isArray(suggestion.workflow.nodes)
 			? suggestion.workflow.nodes.length
 			: 0;
 
-		await canvasOperations.importWorkflowData(suggestion.workflow, 'ai-builder', {
-			tidyUp: true,
+		await importWorkflowData(suggestion.workflow, 'ai-builder', {
 			regenerateIds: true,
 			trackEvents: false,
-			toast: {
-				title: locale.baseText('logs.aiPanel.toast.title'),
-				message: locale.baseText('logs.aiPanel.toast.message', {
-					interpolate: { count: nodeCount },
-				}),
-			},
+		});
+
+		toast.showToast({
+			title: locale.baseText('logs.aiPanel.toast.title'),
+			message: locale.baseText('logs.aiPanel.toast.message', {
+				interpolate: { count: nodeCount },
+			}),
+			type: 'success',
 		});
 		emit('insert', suggestion);
 	} catch (error) {
+		if (shouldReplaceExisting && rollbackSnapshot) {
+			try {
+				await importWorkflowData(rollbackSnapshot, 'ai-rollback', {
+					regenerateIds: false,
+					trackEvents: false,
+					trackHistory: false,
+					importTags: false,
+				});
+			} catch (restoreError) {
+				console.error('[AI builder] Unable to restore workflow after failed insert', restoreError);
+			}
+		}
+
 		errorMessage.value =
 			error instanceof Error
 				? error.message
@@ -325,7 +387,7 @@ function isJsonExpanded(id: string) {
 async function copyJson(json: string) {
 	try {
 		await navigator.clipboard.writeText(json);
-		copyFeedback.value = locale.baseText('logs.aiPanel.copyJsonSuccess', 'JSON copied');
+		copyFeedback.value = locale.baseText('logs.aiPanel.copyJsonSuccess');
 		if (copyTimer) {
 			clearTimeout(copyTimer);
 		}
@@ -334,7 +396,7 @@ async function copyJson(json: string) {
 		}, JSON_FEEDBACK_DURATION);
 	} catch (error) {
 		console.warn('Unable to copy JSON', error);
-		copyFeedback.value = locale.baseText('logs.aiPanel.copyJsonError', 'Unable to copy');
+		copyFeedback.value = locale.baseText('logs.aiPanel.copyJsonError');
 	}
 }
 
@@ -355,13 +417,26 @@ function findDisconnectedNodes(workflow: WorkflowDataUpdate): string[] {
 		incomingCount.set(name, (incomingCount.get(name) ?? 0) + 1);
 	};
 
-	const connections = workflow.connections ?? {};
+	const connections = (workflow.connections ?? {}) as Record<
+		string,
+		Record<string, Array<Array<{ node?: string }>> | undefined> | undefined
+	>;
+
 	Object.entries(connections).forEach(([sourceNode, connectionByType]) => {
+		if (!connectionByType) return;
+
 		Object.values(connectionByType).forEach((connectionBranches) => {
+			if (!Array.isArray(connectionBranches)) return;
+
 			connectionBranches.forEach((branch) => {
+				if (!Array.isArray(branch)) return;
+
 				branch.forEach((connection) => {
+					const targetNode = connection?.node;
+					if (!targetNode) return;
+
 					markOutgoing(sourceNode);
-					markIncoming(connection.node);
+					markIncoming(targetNode);
 				});
 			});
 		});
@@ -418,7 +493,7 @@ function describeWorkflowSteps(workflow: unknown): string[] {
 					Loading curated prompts...
 				</N8nText>
 			</div>
-			<N8nCallout v-else-if="promptExamplesError" icon="alert-triangle" theme="danger">
+			<N8nCallout v-else-if="promptExamplesError" icon="triangle-alert" theme="danger">
 				{{ promptExamplesError }}
 			</N8nCallout>
 			<template v-else>
@@ -507,7 +582,7 @@ function describeWorkflowSteps(workflow: unknown): string[] {
 			</div>
 		</form>
 
-		<N8nCallout v-if="errorMessage" icon="alert-triangle" theme="danger">
+		<N8nCallout v-if="errorMessage" icon="triangle-alert" theme="danger">
 			{{ errorMessage }}
 		</N8nCallout>
 
@@ -538,7 +613,7 @@ function describeWorkflowSteps(workflow: unknown): string[] {
 
 			<N8nCallout
 				v-if="latestSuggestion.disconnectedNodes.length"
-				icon="alert-circle"
+				icon="circle-alert"
 				theme="danger"
 			>
 				<p>
