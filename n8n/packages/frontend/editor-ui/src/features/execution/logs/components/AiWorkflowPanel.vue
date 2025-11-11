@@ -150,6 +150,8 @@ const latestSteps = computed(() => latestSuggestion.value?.steps ?? []);
 const hasExistingWorkflow = computed(
 	() => Array.isArray(workflowsStore.workflow?.nodes) && workflowsStore.workflow.nodes.length > 0,
 );
+const latestDisconnectedNodes = computed(() => latestSuggestion.value?.disconnectedNodes ?? []);
+const hasDisconnectedNodes = computed(() => latestDisconnectedNodes.value.length > 0);
 
 onMounted(() => {
 	void loadPromptExamples();
@@ -451,7 +453,8 @@ function findDisconnectedNodes(workflow: WorkflowDataUpdate): string[] {
 		.map((node) => node.name ?? node.id ?? node.type ?? 'Unnamed node');
 }
 
-async function handleRegenerateConnections(issue: WorkflowSuggestion) {
+async function handleRegenerateConnections(issue?: WorkflowSuggestion | null) {
+	if (!issue) return;
 	const missing = issue.disconnectedNodes.join(', ');
 	const promptWithFix = `${issue.prompt}\n\nEnsure these nodes are connected in the regenerated workflow: ${missing}. All nodes must participate in the flow.`;
 	await submitPrompt(promptWithFix);
@@ -611,13 +614,9 @@ function describeWorkflowSteps(workflow: unknown): string[] {
 				</ul>
 			</div>
 
-			<N8nCallout
-				v-if="latestSuggestion.disconnectedNodes.length"
-				icon="circle-alert"
-				theme="danger"
-			>
+			<N8nCallout v-if="hasDisconnectedNodes" icon="circle-alert" theme="danger">
 				<p>
-					Some nodes are not connected: {{ latestSuggestion.disconnectedNodes.join(', ') }}
+					Some nodes are not connected: {{ latestDisconnectedNodes.join(', ') }}
 				</p>
 				<N8nButton
 					size="small"
