@@ -7,17 +7,73 @@
 	--header--height: 65;
 	--content-container--width: 1280px;
 	--banner--height: 48px;
+	--color--primary: #ff3bff;
+	--kaelux-gradient-primary: linear-gradient(90deg, #ff3bff 0%, #ecbfbf 38.02%, #5c24ff 75.83%, #d94fd5 100%);
+	--kaelux-gradient-primary-glow: rgba(255, 59, 255, 0.35);
 }
 
 .clickable {
 	cursor: pointer !important;
 }
 .primary-color {
-	color: var(--color--primary);
+	@extend .gradient-accent;
 }
 .text-light {
 	color: var(--color--text--tint-2);
 	font-weight: var(--font-weight--regular);
+}
+
+.gradient-accent {
+	background: var(--kaelux-gradient-primary);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	text-fill-color: transparent;
+}
+
+.el-button--primary,
+.el-button--primary:focus,
+.el-button--primary:active,
+.n8n-button--primary,
+.n8n-button.primary {
+	background-image: var(--kaelux-gradient-primary);
+	background-size: 200% auto;
+	color: var(--color--background) !important;
+	border: none;
+	box-shadow: 0 12px 30px var(--kaelux-gradient-primary-glow);
+	transition: background-position 0.3s ease, box-shadow 0.3s ease;
+}
+
+.el-button--primary:hover,
+.n8n-button--primary:hover,
+.n8n-button.primary:hover {
+	background-position: 100% 0;
+	box-shadow: 0 16px 32px var(--kaelux-gradient-primary-glow);
+}
+
+.el-button--primary.is-disabled,
+.n8n-button--primary.is-disabled,
+.n8n-button.primary.is-disabled {
+	background-image: none;
+	background-color: color-mix(in srgb, var(--color--primary) 30%, transparent);
+	box-shadow: none;
+}
+
+.el-switch.is-checked .el-switch__core,
+.el-checkbox__input.is-checked .el-checkbox__inner,
+.el-radio__input.is-checked .el-radio__inner {
+	background-image: var(--kaelux-gradient-primary);
+	border-color: transparent;
+	box-shadow: 0 4px 12px var(--kaelux-gradient-primary-glow);
+}
+
+.el-tabs__item.is-active,
+.el-tabs__item:hover {
+	color: #fff;
+	background-image: var(--kaelux-gradient-primary);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
 }
 
 // Dialog
