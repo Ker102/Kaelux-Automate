@@ -565,7 +565,9 @@ export async function generateWorkflowSuggestion(
 
   async function invokeWithFallbackChain() {
     try {
-      return await invokeModel(GEMINI_MODEL);
+      const payload = await invokeModel(GEMINI_MODEL);
+      if (!payload) throw new Error("Empty response from primary model");
+      return payload;
     } catch (primaryError) {
       if (
         GEMINI_FALLBACK_MODEL &&
@@ -575,7 +577,9 @@ export async function generateWorkflowSuggestion(
           `[AI] Primary model ${GEMINI_MODEL} failed, falling back to ${GEMINI_FALLBACK_MODEL}`
         );
         try {
-          return await invokeModel(GEMINI_FALLBACK_MODEL);
+          const payload = await invokeModel(GEMINI_FALLBACK_MODEL);
+          if (!payload) throw new Error("Empty response from fallback model");
+          return payload;
         } catch (secondaryError) {
           if (
             GEMINI_SECONDARY_FALLBACK_MODEL &&
@@ -585,7 +589,9 @@ export async function generateWorkflowSuggestion(
             console.warn(
               `[AI] Secondary model ${GEMINI_FALLBACK_MODEL} failed, falling back to ${GEMINI_SECONDARY_FALLBACK_MODEL}`
             );
-            return await invokeModel(GEMINI_SECONDARY_FALLBACK_MODEL);
+            const payload = await invokeModel(GEMINI_SECONDARY_FALLBACK_MODEL);
+            if (!payload) throw new Error("Empty response from secondary fallback model");
+            return payload;
           }
           throw secondaryError;
         }
@@ -606,6 +612,11 @@ export async function generateWorkflowSuggestion(
 
     const sanitizedWorkflow = sanitizeWorkflowPayload(parsed.workflow);
     const actions = normalizeActions(parsed.actions);
+    const hasNodes = Array.isArray(sanitizedWorkflow?.nodes) && sanitizedWorkflow.nodes.length > 0;
+    const hasActions = actions.length > 0;
+    if (!hasNodes && !hasActions) {
+      throw new Error("AI response did not include workflow nodes or actions");
+    }
 
     return {
       summary: parsed.summary ?? "Suggested workflow",
