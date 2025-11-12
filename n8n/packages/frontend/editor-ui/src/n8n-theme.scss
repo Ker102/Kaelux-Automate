@@ -10,6 +10,25 @@
 	--color--primary: #ff3bff;
 	--kaelux-gradient-primary: linear-gradient(90deg, #ff3bff 0%, #ecbfbf 38.02%, #5c24ff 75.83%, #d94fd5 100%);
 	--kaelux-gradient-primary-glow: rgba(255, 59, 255, 0.35);
+	--color--text--shade-1: #fdfdff;
+	--color--text: #ecefff;
+	--color--text--tint-1: #cfd3f1;
+	--color--text--tint-2: #a3a7cb;
+	--color--text--tint-3: #74769a;
+	--color--foreground--shade-2: #050507;
+	--color--foreground--shade-1: #080811;
+	--color--foreground: #121224;
+	--color--foreground--tint-1: #1b1b32;
+	--color--foreground--tint-2: #252545;
+	--color--background--shade-2: #010103;
+	--color--background--shade-1: #020206;
+	--color--background: #04040a;
+	--color--background--light-1: #070713;
+	--color--background--light-2: #0b0b1a;
+	--color--background--light-3: #101024;
+	--canvas--color--background: #f2f4fb;
+	--canvas--dot--color: #d9ddea;
+	--canvas--read-only-line--color: #ccd1e3;
 }
 
 .clickable {
@@ -128,7 +147,7 @@
 
 body,
 #app {
-	background-color: #050508;
+	background-color: var(--color--background--shade-2);
 	color: var(--color--text);
 }
 

@@ -109,6 +109,31 @@ const classes = computed(() => {
 	@include Button.n8n-button;
 }
 
+.primary:not(.outline):not(.text) {
+	background-image: var(--kaelux-gradient-primary);
+	background-size: 200% auto;
+	color: var(--color--text--tint-3);
+	border: none;
+	box-shadow: 0 12px 30px var(--kaelux-gradient-primary-glow, rgba(255, 59, 255, 0.35));
+	transition: background-position 0.3s ease, box-shadow 0.3s ease;
+}
+
+.primary:not(.outline):not(.text):hover:not(.disabled):not(.loading),
+.primary:not(.outline):not(.text):focus-visible:not(.disabled):not(.loading),
+.primary:not(.outline):not(.text):active:not(.disabled):not(.loading) {
+	background-position: 100% 0;
+	box-shadow: 0 16px 32px var(--kaelux-gradient-primary-glow, rgba(255, 59, 255, 0.45));
+	color: var(--color--text--tint-3);
+}
+
+.primary:not(.outline):not(.text).disabled,
+.primary:not(.outline):not(.text).loading {
+	background-image: none;
+	background-color: color-mix(in srgb, var(--color--primary) 30%, transparent);
+	box-shadow: none;
+	color: var(--color--text--tint-2);
+}
+
 $loading-overlay-background-color: rgba(255, 255, 255, 0);
 
 /**

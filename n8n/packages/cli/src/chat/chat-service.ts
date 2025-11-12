@@ -2,7 +2,7 @@ import { Logger } from '@n8n/backend-common';
 import { Service } from '@n8n/di';
 import { OnShutdown } from '@n8n/decorators';
 import { jsonParse, UnexpectedError, ensureError } from 'n8n-workflow';
-import { type RawData, WebSocket } from 'ws';
+import WebSocket, { type RawData } from 'ws';
 import { z } from 'zod';
 
 import { ChatExecutionManager } from './chat-execution-manager';
@@ -14,6 +14,7 @@ import {
 } from './chat-service.types';
 import { getLastNodeExecuted, getMessage, shouldResumeImmediately } from './utils';
 import { ErrorReporter } from 'n8n-core';
+import type { HeartbeatWebSocket } from '@/utils/heartbeat-websocket';
 import { IExecutionResponse } from '@n8n/db';
 
 const CHECK_FOR_RESPONSE_INTERVAL = 3000;
@@ -34,7 +35,7 @@ const N8N_HEARTBEAT = 'n8n|heartbeat';
  */
 const N8N_HEARTBEAT_ACK = 'n8n|heartbeat-ack';
 
-function closeConnection(ws: WebSocket) {
+function closeConnection(ws: HeartbeatWebSocket) {
 	if (ws.readyState !== WebSocket.OPEN) return;
 
 	ws.once('drain', () => {

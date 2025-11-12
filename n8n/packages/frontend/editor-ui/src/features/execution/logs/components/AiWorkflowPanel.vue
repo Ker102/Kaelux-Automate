@@ -197,6 +197,10 @@ type NormalizedIfCondition = {
 	operator: typeof BOOLEAN_TRUE_OPERATOR;
 };
 
+function isSuggestionUnparsed(value?: WorkflowSuggestion | null) {
+	return value?.summary === 'AI response (unparsed)';
+}
+
 function makeConditionId() {
 	if (typeof globalThis.crypto?.randomUUID === 'function') {
 		return globalThis.crypto.randomUUID();
@@ -515,18 +519,10 @@ const emit = defineEmits<{
 }>();
 
 const latestSuggestion = computed(() => suggestions.value[0] ?? null);
-const hasHistory = computed(() => suggestions.value.length > 1);
-const latestSteps = computed(() => latestSuggestion.value?.steps ?? []);
 const hasExistingWorkflow = computed(
 	() => Array.isArray(workflowsStore.workflow?.nodes) && workflowsStore.workflow.nodes.length > 0,
 );
-const latestDisconnectedNodes = computed(() => latestSuggestion.value?.disconnectedNodes ?? []);
-const hasDisconnectedNodes = computed(() => latestDisconnectedNodes.value.length > 0);
-const latestActions = computed(() => latestSuggestion.value?.actions ?? []);
-const hasActions = computed(() => latestActions.value.length > 0);
-const isLatestUnparsed = computed(
-	() => latestSuggestion.value?.summary === 'AI response (unparsed)',
-);
+const copiedSuggestionId = ref<string | null>(null);
 
 const groupedPromptExamples = computed(() => {
 	if (!promptExamples.value.length) return [];
@@ -824,8 +820,8 @@ async function applyWorkflowActions(
 	return { applied, errors };
 }
 
-async function handleInsert() {
-	const suggestion = latestSuggestion.value;
+async function handleInsert(targetSuggestion?: WorkflowSuggestion | null) {
+	const suggestion = targetSuggestion ?? latestSuggestion.value;
 
 	if (!suggestion) {
 		return;
@@ -940,19 +936,29 @@ function isJsonExpanded(id: string) {
 	return !!expandedJsonIds.value[id];
 }
 
-async function copyJson(json: string) {
+async function copyJson(json: string, suggestionId?: string) {
 	try {
 		await navigator.clipboard.writeText(json);
 		copyFeedback.value = locale.baseText('logs.aiPanel.copyJsonSuccess');
+		copiedSuggestionId.value = suggestionId ?? null;
 		if (copyTimer) {
 			clearTimeout(copyTimer);
 		}
 		copyTimer = setTimeout(() => {
 			copyFeedback.value = null;
+			copiedSuggestionId.value = null;
 		}, JSON_FEEDBACK_DURATION);
 	} catch (error) {
 		console.warn('Unable to copy JSON', error);
 		copyFeedback.value = locale.baseText('logs.aiPanel.copyJsonError');
+		copiedSuggestionId.value = suggestionId ?? null;
+		if (copyTimer) {
+			clearTimeout(copyTimer);
+		}
+		copyTimer = setTimeout(() => {
+			copyFeedback.value = null;
+			copiedSuggestionId.value = null;
+		}, JSON_FEEDBACK_DURATION);
 	}
 }
 
@@ -1121,154 +1127,144 @@ function formatActionType(type: WorkflowAction['type']) {
 			</div>
 		</section>
 
-		<form :class="$style.form" @submit.prevent="handleGenerate">
-			<label :class="$style.label" for="ai-workflow-prompt">
-				{{ locale.baseText('logs.aiPanel.promptLabel') }}
-			</label>
-			<textarea
-				id="ai-workflow-prompt"
-				v-model="prompt"
-				:placeholder="locale.baseText('logs.aiPanel.promptPlaceholder')"
-				:class="$style.textarea"
-				rows="4"
-			/>
-			<div :class="$style.actions">
-				<N8nButton
-					type="primary"
-					size="medium"
-					:loading="isGenerating"
-					:disabled="prompt.trim().length === 0"
-					@click="handleGenerate"
-				>
-					{{ locale.baseText('logs.aiPanel.generateButton') }}
-				</N8nButton>
-				<N8nButton
-					type="tertiary"
-					size="medium"
-					:disabled="!latestSuggestion || isGenerating || isLatestUnparsed"
-					@click.prevent="handleInsert"
-				>
-					{{ locale.baseText('logs.aiPanel.insertButton') }}
-				</N8nButton>
-			</div>
-		</form>
-
-		<N8nCallout v-if="errorMessage" icon="triangle-alert" theme="danger">
-			{{ errorMessage }}
-		</N8nCallout>
-
-		<N8nCallout v-else icon="sparkles" theme="info">
-			{{ locale.baseText('logs.aiPanel.infoCallout') }}
-		</N8nCallout>
-
-		<section v-if="latestSuggestion" :class="$style.result">
-			<header>
-				<div>
-					<N8nText tag="p" size="medium" color="text-base" bold>
-						{{ locale.baseText('logs.aiPanel.latestSuggestion') }}
-					</N8nText>
-					<N8nText tag="span" size="small" color="text-light">
-						{{ formatTimestamp(latestSuggestion.createdAt) }}
-					</N8nText>
-				</div>
-				<div :class="$style.resultActions">
-					<N8nButton
-						size="small"
-						type="secondary"
-						@click="toggleJsonVisibility(latestSuggestion.id)"
-					>
-						{{ isJsonExpanded(latestSuggestion.id) ? 'Hide JSON' : 'View JSON' }}
-					</N8nButton>
-					<N8nButton
-						size="small"
-						type="tertiary"
-						@click="copyJson(latestSuggestion.workflowJson)"
-					>
-						Copy JSON
-					</N8nButton>
-				</div>
-			</header>
-
-			<div :class="$style.resultGrid">
-				<div v-if="hasActions" :class="$style.resultCard">
-					<N8nText tag="p" size="small" color="text-light" bold>
-						Proposed changes
-					</N8nText>
-					<ol :class="$style.actionsList">
-						<li v-for="action in latestActions" :key="`${action.type}-${action.summary}`">
-							<strong>{{ formatActionType(action.type) }}</strong>
-							<span>{{ action.summary }}</span>
-							<small v-if="action.targetNode" :class="$style.actionMeta">
-								Target: {{ action.targetNode }}
-							</small>
-						</li>
-					</ol>
-				</div>
-
-				<div :class="$style.resultCard">
-					<N8nText tag="p" size="small" color="text-light" bold>
-						Summary
-					</N8nText>
-					<p :class="$style.summary">{{ latestSuggestion.summary }}</p>
-				</div>
-
-				<div v-if="latestSteps.length" :class="$style.resultCard">
-					<N8nText tag="p" size="small" color="text-light" bold>
-						Workflow blueprint
-					</N8nText>
-					<ol :class="$style.steps">
-						<li v-for="step in latestSteps" :key="step">{{ step }}</li>
-					</ol>
-				</div>
-
-				<div v-if="latestSuggestion.notes.length" :class="$style.resultCard">
-					<N8nText tag="p" size="small" color="text-light" bold>
-						Implementation notes
-					</N8nText>
-					<ul :class="$style.notesList">
-						<li v-for="note in latestSuggestion.notes" :key="note">{{ note }}</li>
+		<section :class="$style.chatShell">
+			<div :class="$style.chatStream">
+				<div v-if="suggestions.length === 0" :class="$style.emptyState">
+					<N8nText tag="p" size="medium" color="text-base" bold>Start a new automation brief</N8nText>
+					<p>
+						Share what you need automated or pick a template above. Each prompt stays in this timeline so you can review the
+						history, iterate, and insert the best response into your workflow.
+					</p>
+					<ul>
+						<li>Describe the trigger, data sources, and desired outputs.</li>
+						<li>Mention important tools or constraints to guide the assistant.</li>
+						<li>Adjust and resend your prompt until the blueprint feels right.</li>
 					</ul>
 				</div>
-
-				<div v-if="hasDisconnectedNodes" :class="$style.resultCardWarning">
-					<N8nText tag="p" size="small" color="text-light" bold>
-						Connection check
-					</N8nText>
-					<p :class="$style.warningText">
-						Some nodes are not connected: {{ latestDisconnectedNodes.join(', ') }}
-					</p>
-					<N8nButton
-						size="small"
-						type="tertiary"
-						@click="handleRegenerateConnections(latestSuggestion)"
-					>
-						Regenerate with all nodes connected
-					</N8nButton>
+				<div v-else v-for="suggestion in suggestions" :key="suggestion.id" :class="$style.exchange">
+					<article :class="[$style.message, $style.userMessage]">
+						<div :class="$style.messageMeta">
+							<span>You</span>
+							<span>{{ formatTimestamp(suggestion.createdAt) }}</span>
+						</div>
+						<p>{{ suggestion.prompt }}</p>
+					</article>
+					<article :class="[$style.message, $style.aiMessage]">
+						<div :class="$style.messageMeta">
+							<span>Kaelux Automate</span>
+							<span>{{ formatTimestamp(suggestion.createdAt) }}</span>
+						</div>
+						<p :class="$style.aiSummary">{{ suggestion.summary }}</p>
+						<div
+							v-if="suggestion.steps.length || suggestion.notes.length || suggestion.actions.length"
+							:class="$style.aiGrid"
+						>
+							<div v-if="suggestion.steps.length" :class="$style.aiCard">
+								<N8nText tag="span" size="small" color="text-light">Workflow blueprint</N8nText>
+								<ul>
+									<li v-for="step in suggestion.steps" :key="step">{{ step }}</li>
+								</ul>
+							</div>
+							<div v-if="suggestion.notes.length" :class="$style.aiCard">
+								<N8nText tag="span" size="small" color="text-light">Implementation notes</N8nText>
+								<ul>
+									<li v-for="note in suggestion.notes" :key="note">{{ note }}</li>
+								</ul>
+							</div>
+							<div v-if="suggestion.actions.length" :class="$style.aiCard">
+								<N8nText tag="span" size="small" color="text-light">Proposed actions</N8nText>
+								<ul>
+									<li v-for="action in suggestion.actions" :key="`${suggestion.id}-${action.type}-${action.summary}`">
+										<strong>{{ formatActionType(action.type) }}</strong>
+										<span>{{ action.summary }}</span>
+										<span v-if="action.targetNode" :class="$style.actionMeta">Node: {{ action.targetNode }}</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div v-if="suggestion.disconnectedNodes.length" :class="$style.aiWarning">
+							<N8nText tag="span" size="small" color="danger">Disconnected nodes</N8nText>
+							<p>
+								Some nodes are not connected: {{ suggestion.disconnectedNodes.join(', ') }}
+							</p>
+							<N8nButton size="mini" type="secondary" @click="handleRegenerateConnections(suggestion)">
+								Ask AI to reconnect them
+							</N8nButton>
+						</div>
+						<div :class="$style.aiActions">
+							<N8nButton
+								size="small"
+								type="primary"
+								:disabled="isGenerating || isSuggestionUnparsed(suggestion)"
+								@click="handleInsert(suggestion)"
+							>
+								Insert into canvas
+							</N8nButton>
+							<N8nButton
+								size="small"
+								type="secondary"
+								@click="toggleJsonVisibility(suggestion.id)"
+							>
+								{{ isJsonExpanded(suggestion.id) ? 'Hide JSON' : 'View JSON' }}
+							</N8nButton>
+							<N8nButton
+								size="small"
+								type="tertiary"
+								@click="copyJson(suggestion.workflowJson, suggestion.id)"
+							>
+								Copy JSON
+							</N8nButton>
+							<p v-if="copyFeedback && copiedSuggestionId === suggestion.id" :class="$style.copyFeedback">
+								{{ copyFeedback }}
+							</p>
+						</div>
+						<div v-if="isJsonExpanded(suggestion.id)" :class="$style.codePreview">
+							<pre>{{ suggestion.workflowJson }}</pre>
+						</div>
+					</article>
 				</div>
 			</div>
-
-			<p v-if="copyFeedback" :class="$style.copyFeedback">{{ copyFeedback }}</p>
-			<div v-if="isJsonExpanded(latestSuggestion.id)" :class="$style.codePreview">
-				<div :class="$style.codePreviewHeader">
-					<span>Workflow JSON</span>
-					<N8nButton size="small" type="tertiary" @click="toggleJsonVisibility(latestSuggestion.id)">
-						Close
-					</N8nButton>
+			<div :class="$style.composerShell">
+				<div :class="$style.composerAlerts">
+					<N8nCallout v-if="errorMessage" icon="triangle-alert" theme="danger">
+						{{ errorMessage }}
+					</N8nCallout>
+					<N8nCallout v-else icon="sparkles" theme="info">
+						{{ locale.baseText('logs.aiPanel.infoCallout') }}
+					</N8nCallout>
 				</div>
-				<pre :class="$style.codeBlock">{{ latestSuggestion.workflowJson }}</pre>
+				<form :class="$style.form" @submit.prevent="handleGenerate">
+					<label :class="$style.label" for="ai-workflow-prompt">
+						{{ locale.baseText('logs.aiPanel.promptLabel') }}
+					</label>
+					<textarea
+						id="ai-workflow-prompt"
+						v-model="prompt"
+						:placeholder="locale.baseText('logs.aiPanel.promptPlaceholder')"
+						:class="$style.textarea"
+						rows="4"
+					/>
+					<div :class="$style.actions">
+						<N8nButton
+							type="primary"
+							size="medium"
+							:loading="isGenerating"
+							:disabled="prompt.trim().length === 0"
+							@click="handleGenerate"
+						>
+							{{ locale.baseText('logs.aiPanel.generateButton') }}
+						</N8nButton>
+						<N8nButton
+							type="tertiary"
+							size="medium"
+							:disabled="!latestSuggestion || isGenerating || isSuggestionUnparsed(latestSuggestion)"
+							@click.prevent="handleInsert()"
+						>
+							{{ locale.baseText('logs.aiPanel.insertButton') }}
+						</N8nButton>
+					</div>
+				</form>
 			</div>
-		</section>
-
-		<section v-if="hasHistory" :class="$style.history">
-			<N8nText tag="p" size="small" color="text-light">
-				{{ locale.baseText('logs.aiPanel.historyTitle') }}
-			</N8nText>
-			<ul>
-				<li v-for="suggestion in suggestions.slice(1)" :key="suggestion.id">
-					<strong>{{ formatTimestamp(suggestion.createdAt) }}:</strong>
-					<span>{{ suggestion.summary }}</span>
-				</li>
-			</ul>
 		</section>
 	</div>
 </template>
@@ -1277,12 +1273,12 @@ function formatActionType(type: WorkflowAction['type']) {
 .container {
 	display: flex;
 	flex-direction: column;
-	gap: var(--spacing-m);
+	gap: var(--spacing-l);
 	height: 100%;
-	padding: var(--spacing-m);
-	background-color: var(--color--foreground);
-	border-radius: var(--border-radius-large);
-	border: var(--border);
+	padding: var(--spacing-l);
+	background-color: var(--color--background--shade-1);
+	border-radius: 32px;
+	border: 1px solid var(--color--foreground);
 	overflow: auto;
 }
 
@@ -1292,19 +1288,15 @@ function formatActionType(type: WorkflowAction['type']) {
 	gap: var(--spacing-4xs);
 }
 
-.form {
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-xs);
-}
-
 .samples {
 	display: flex;
 	flex-direction: column;
 	gap: var(--spacing-xs);
-	background-color: var(--color--background--light-2);
-	border-radius: var(--border-radius-large);
-	padding: var(--spacing-s);
+	background: linear-gradient(135deg, rgba(12, 12, 26, 0.9), rgba(26, 26, 42, 0.85));
+	border-radius: 28px;
+	padding: var(--spacing-m);
+	border: 1px solid var(--color--foreground);
+	box-shadow: 0 30px 55px rgba(0, 0, 0, 0.4);
 }
 
 .samplesLoading {
@@ -1339,28 +1331,28 @@ function formatActionType(type: WorkflowAction['type']) {
 	flex-direction: column;
 	gap: var(--spacing-xs);
 	background: var(--color--background);
-	border-radius: var(--border-radius-large);
-	border: 1px solid var(--color--foreground-dark);
-	padding: var(--spacing-s);
-	box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2);
+	border-radius: 20px;
+	border: 1px solid var(--color--foreground);
+	padding: var(--spacing-m);
+	box-shadow: 0 18px 30px rgba(0, 0, 0, 0.35);
 	cursor: pointer;
 	transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .sampleCard:hover {
-	transform: translateY(-2px);
+	transform: translateY(-3px);
 	border-color: var(--color--primary);
-	box-shadow: 0 25px 40px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 25px 45px rgba(0, 0, 0, 0.45);
 }
 
 .sampleCardActive {
 	border-color: var(--color--primary);
-	box-shadow: 0 25px 50px rgba(255, 59, 255, 0.25);
+	box-shadow: 0 30px 55px rgba(255, 59, 255, 0.25);
 }
 
 .sampleDescription {
 	font-size: var(--font-size-2xs);
-	color: var(--color--text-light);
+	color: var(--color--text--tint-1);
 	margin: 0;
 	min-height: 48px;
 }
@@ -1370,7 +1362,7 @@ function formatActionType(type: WorkflowAction['type']) {
 	justify-content: space-between;
 	font-size: var(--font-size-3xs);
 	text-transform: uppercase;
-	color: var(--color--text--tint-1);
+	color: var(--color--text--tint-2);
 	gap: var(--spacing-3xs);
 }
 
@@ -1379,161 +1371,216 @@ function formatActionType(type: WorkflowAction['type']) {
 	gap: var(--spacing-2xs);
 }
 
+.chatShell {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-l);
+	flex: 1;
+	min-height: 0;
+}
+
+.chatStream {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-l);
+	flex: 1;
+	overflow-y: auto;
+	padding-right: var(--spacing-2xs);
+}
+
+.exchange {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-xs);
+}
+
+.message {
+	max-width: 960px;
+	width: 100%;
+	margin: 0 auto;
+	border-radius: 32px;
+	padding: var(--spacing-m);
+	line-height: 1.6;
+	box-shadow: 0 30px 55px rgba(0, 0, 0, 0.45);
+	border: 1px solid var(--color--foreground);
+}
+
+.userMessage {
+	background: var(--color--background--light-2);
+	color: var(--color--text);
+}
+
+.userMessage p {
+	margin: 0;
+	font-size: var(--font-size-base);
+}
+
+.aiMessage {
+	background: var(--color--background);
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-m);
+}
+
+.messageMeta {
+	display: flex;
+	justify-content: space-between;
+	font-size: var(--font-size-3xs);
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--color--text--tint-2);
+}
+
+.aiSummary {
+	margin: 0;
+	font-size: var(--font-size-base);
+	color: var(--color--text);
+}
+
+.aiGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: var(--spacing-m);
+}
+
+.aiCard {
+	border-radius: 22px;
+	padding: var(--spacing-m);
+	background: var(--color--background--light-2);
+	border: 1px solid var(--color--foreground);
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-3xs);
+}
+
+.aiCard ul {
+	margin: 0;
+	padding-left: var(--spacing-m);
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-4xs);
+	font-size: var(--font-size-2xs);
+	color: var(--color--text);
+}
+
+.actionMeta {
+	color: var(--color--text--tint-1);
+	font-size: var(--font-size-3xs);
+}
+
+.aiWarning {
+	border-radius: 22px;
+	background: color-mix(in srgb, var(--color--danger) 18%, transparent);
+	border: 1px solid var(--color--danger);
+	padding: var(--spacing-m);
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-3xs);
+}
+
+.aiActions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--spacing-2xs);
+	align-items: center;
+}
+
+.copyFeedback {
+	font-size: var(--font-size-2xs);
+	color: var(--color--text--tint-1);
+	margin: 0;
+}
+
+.codePreview {
+	background: #05050b;
+	border-radius: 20px;
+	border: 1px solid var(--color--foreground);
+	padding: var(--spacing-s);
+	font-size: var(--font-size-xs);
+	line-height: 1.4;
+	max-height: 320px;
+	overflow: auto;
+}
+
+.codePreview pre {
+	margin: 0;
+}
+
+.emptyState {
+	max-width: 720px;
+	margin: 0 auto;
+	text-align: center;
+	background: var(--color--background--light-2);
+	border-radius: 28px;
+	border: 1px dashed var(--color--foreground);
+	padding: var(--spacing-l);
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-s);
+	box-shadow: 0 20px 35px rgba(0, 0, 0, 0.35);
+}
+
+.emptyState ul {
+	margin: 0;
+	padding-left: var(--spacing-l);
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-4xs);
+	color: var(--color--text);
+}
+
+.composerShell {
+	position: sticky;
+	bottom: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-s);
+	background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.55));
+	padding-bottom: var(--spacing-xs);
+}
+
+.composerAlerts {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-2xs);
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-xs);
+	background: var(--color--background);
+	border-radius: 30px;
+	border: 1px solid var(--color--foreground);
+	box-shadow: 0 35px 65px rgba(0, 0, 0, 0.55);
+	padding: var(--spacing-m);
+}
+
 .label {
 	font-size: var(--font-size-xs);
-	font-weight: var(--font-weight-bold);
-	color: var(--color--text-base);
+	color: var(--color--text--tint-1);
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
 }
 
 .textarea {
 	width: 100%;
-	resize: vertical;
-	padding: var(--spacing-s);
-	font-size: var(--font-size-s);
-	border-radius: var(--border-radius-base);
-	border: 1px solid var(--color--foreground-dark);
-	background-color: var(--color--background);
-	color: var(--color--text-base);
+	min-height: 120px;
+	resize: none;
+	padding: var(--spacing-m);
+	font-size: var(--font-size-base);
+	border-radius: 22px;
+	border: 1px solid var(--color--foreground);
+	background-color: var(--color--background--shade-1);
+	color: var(--color--text);
 }
 
 .actions {
 	display: flex;
 	flex-wrap: wrap;
 	gap: var(--spacing-2xs);
-}
-
-.result {
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-s);
-
-	header {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		gap: var(--spacing-s);
-		flex-wrap: wrap;
-	}
-}
-
-.resultActions {
-	display: flex;
-	gap: var(--spacing-2xs);
-	flex-wrap: wrap;
-}
-
-.resultGrid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-	gap: var(--spacing-s);
-}
-
-.resultCard,
-.resultCardWarning {
-	background-color: var(--color--background--light-2);
-	border-radius: var(--border-radius-base);
-	border: 1px solid var(--color--foreground-dark);
-	padding: var(--spacing-s);
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-3xs);
-}
-
-.resultCardWarning {
-	border-color: var(--color-danger);
-	background-color: color-mix(in srgb, var(--color-danger) 8%, var(--color--background--light-2));
-}
-
-.summary {
-	font-size: var(--font-size-base);
-	color: var(--color--text-base);
-	margin: 0;
-}
-
-.steps {
-	margin: 0;
-	padding-left: var(--spacing-m);
-	color: var(--color--text-base);
-	font-size: var(--font-size-2xs);
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-4xs);
-}
-
-.notesList {
-	margin: 0;
-	padding-left: var(--spacing-m);
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-4xs);
-	color: var(--color--text-base);
-	font-size: var(--font-size-2xs);
-}
-
-.actionsList {
-	margin: 0;
-	padding-left: var(--spacing-m);
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-4xs);
-	font-size: var(--font-size-2xs);
-
-	li {
-		display: flex;
-		flex-direction: column;
-		gap: var(--spacing-7xs);
-	}
-}
-
-.actionMeta {
-	color: var(--color--text-light);
-}
-
-.warningText {
-	margin: 0;
-	color: var(--color-danger);
-	font-size: var(--font-size-2xs);
-}
-
-.jsonControls {
-	display: flex;
-	gap: var(--spacing-xs);
-	align-items: center;
-}
-
-.copyFeedback {
-	font-size: var(--font-size-2xs);
-	color: var(--color--text-light);
-	margin: 0;
-}
-
-.jsonPreview {
-	flex: 1;
-	background-color: var(--color--background--dark);
-	border-radius: var(--border-radius-base);
-	padding: var(--spacing-xs);
-	border: 1px solid var(--color--foreground-dark);
-	overflow: auto;
-
-	pre {
-		margin: 0;
-		font-size: var(--font-size-xs);
-		line-height: 1.4;
-		white-space: pre-wrap;
-		word-break: break-word;
-	}
-}
-
-.history {
-	border-top: 1px solid var(--color--foreground-dark);
-	padding-top: var(--spacing-xs);
-
-	ul {
-		margin: 0;
-		padding-left: var(--spacing-m);
-		display: flex;
-		flex-direction: column;
-		gap: var(--spacing-4xs);
-	}
+	justify-content: flex-end;
 }
 </style>
+

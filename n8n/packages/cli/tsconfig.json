@@ -8,6 +8,7 @@
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		"baseUrl": "src",
+		"types": ["node", "jest", "./src/types/ws"],
 		"paths": {
 			"@/*": ["./*"],
 			"@test/*": ["../test/shared/*"],

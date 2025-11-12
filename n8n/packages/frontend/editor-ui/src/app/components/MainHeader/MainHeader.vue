@@ -9,7 +9,6 @@ import {
 	PLACEHOLDER_EMPTY_WORKFLOW_ID,
 	STICKY_NODE_TYPE,
 	VIEWS,
-	N8N_MAIN_GITHUB_REPO_URL,
 } from '@/app/constants';
 import { useExecutionsStore } from '@/features/execution/executions/executions.store';
 import { useNDVStore } from '@/features/ndv/shared/ndv.store';
@@ -38,6 +37,8 @@ const sourceControlStore = useSourceControlStore();
 const workflowsStore = useWorkflowsStore();
 const executionsStore = useExecutionsStore();
 const settingsStore = useSettingsStore();
+const KAELUX_GITHUB_URL = 'https://github.com/Ker102/Kaelux-Automate';
+const KAELUX_SITE_URL = 'https://Kaelux.dev';
 
 const activeHeaderTab = ref(MAIN_HEADER_TABS.WORKFLOW);
 const workflowToReturnTo = ref('');
@@ -287,14 +288,25 @@ async function onWorkflowDeactivated() {
 				<div v-if="showGitHubButton" :class="[$style['github-button'], 'hidden-sm-and-down']">
 					<div :class="$style['github-button-container']">
 						<GithubButton
-							:href="N8N_MAIN_GITHUB_REPO_URL"
+							:href="KAELUX_GITHUB_URL"
 							:data-color-scheme="uiStore.appliedTheme"
 							data-size="large"
-							data-show-count="true"
+							data-show-count="false"
+							target="_blank"
+							rel="noopener noreferrer"
 							:aria-label="locale.baseText('editor.mainHeader.githubButton.label')"
 						>
 							{{ locale.baseText('generic.star') }}
 						</GithubButton>
+						<a
+							:href="KAELUX_SITE_URL"
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label="Open Kaelux.dev"
+							:class="$style['kaelux-site-link']"
+						>
+							<N8nIcon icon="globe" size="medium" />
+						</a>
 						<N8nIcon
 							:class="$style['close-github-button']"
 							icon="circle-x"
@@ -367,6 +379,29 @@ async function onWorkflowDeactivated() {
 }
 .github-button-container {
 	position: relative;
+	display: flex;
+	align-items: center;
+	gap: var(--spacing--xs);
+}
+
+.kaelux-site-link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	border-radius: 999px;
+	background-image: var(--kaelux-gradient-primary);
+	color: var(--color--text--tint-3);
+	text-decoration: none;
+	box-shadow: 0 12px 30px var(--kaelux-gradient-primary-glow, rgba(255, 59, 255, 0.35));
+	transition: background-position 0.3s ease, box-shadow 0.3s ease;
+	background-size: 200% auto;
+}
+
+.kaelux-site-link:hover {
+	background-position: 100% 0;
+	box-shadow: 0 16px 32px var(--kaelux-gradient-primary-glow, rgba(255, 59, 255, 0.45));
 }
 
 .github-button:hover .close-github-button {

@@ -37,7 +37,7 @@
     "typecheck": "vue-tsc --noEmit",
     "build:backend": "tsdown",
     "build:frontend": "vite build",
-    "build": "pnpm cleanup && pnpm run \"/^build:.*/\"",
+    "build": "pnpm cleanup && pnpm run build:backend && pnpm run build:frontend",
     "preview": "vite preview"
   },
   "peerDependencies": {
@@ -53,6 +53,7 @@
     "@vitejs/plugin-vue": "catalog:frontend",
     "@vue/tsconfig": "catalog:frontend",
     "tsdown": "catalog:",
+    "vite-plugin-dts": "catalog:",
     "rimraf": "catalog:",
     "vite": "catalog:",
     "vue": "catalog:frontend",

@@ -1,5 +1,5 @@
 import type { IncomingMessage } from 'http';
-import type { WebSocket } from 'ws';
+import type { HeartbeatWebSocket } from '@/utils/heartbeat-websocket';
 import { z } from 'zod';
 
 export interface ChatRequest extends IncomingMessage {
@@ -9,11 +9,11 @@ export interface ChatRequest extends IncomingMessage {
 		executionId: string;
 		isPublic?: boolean;
 	};
-	ws: WebSocket;
+	ws: HeartbeatWebSocket;
 }
 
 export type Session = {
-	connection: WebSocket;
+	connection: HeartbeatWebSocket;
 	executionId: string;
 	sessionId: string;
 	intervalId: NodeJS.Timeout;
