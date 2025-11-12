@@ -34,25 +34,25 @@
 .el-button--primary,
 .el-button--primary:focus,
 .el-button--primary:active,
-.n8n-button--primary,
+.n8n-button.n8n-button--primary,
 .n8n-button.primary {
-	background-image: var(--kaelux-gradient-primary);
+	background-image: var(--kaelux-gradient-primary) !important;
 	background-size: 200% auto;
 	color: var(--color--background) !important;
-	border: none;
+	border: none !important;
 	box-shadow: 0 12px 30px var(--kaelux-gradient-primary-glow);
 	transition: background-position 0.3s ease, box-shadow 0.3s ease;
 }
 
 .el-button--primary:hover,
-.n8n-button--primary:hover,
+.n8n-button.n8n-button--primary:hover,
 .n8n-button.primary:hover {
 	background-position: 100% 0;
 	box-shadow: 0 16px 32px var(--kaelux-gradient-primary-glow);
 }
 
 .el-button--primary.is-disabled,
-.n8n-button--primary.is-disabled,
+.n8n-button.n8n-button--primary.is-disabled,
 .n8n-button.primary.is-disabled {
 	background-image: none;
 	background-color: color-mix(in srgb, var(--color--primary) 30%, transparent);
@@ -124,6 +124,12 @@
 			color: var(--color--text--shade-1);
 		}
 	}
+}
+
+body,
+#app {
+	background-color: #050508;
+	color: var(--color--text);
 }
 
 .el-message-box {

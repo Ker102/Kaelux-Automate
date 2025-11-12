@@ -53,6 +53,7 @@ interface PromptExample {
 	complexity?: string;
 	integrations: string[];
 	tags: string[];
+	category?: string;
 }
 
 const locale = useI18n();
@@ -63,6 +64,100 @@ const suggestions = ref<WorkflowSuggestion[]>([]);
 const endpoint = AI_WORKFLOW_ENDPOINT;
 const promptsEndpoint = AI_SAMPLE_PROMPTS_ENDPOINT;
 const promptExamples = ref<PromptExample[]>([]);
+const defaultTemplates: PromptExample[] = [
+	{
+		id: 'sales-digest',
+		category: 'Sales & CRM',
+		title: 'Daily Sales Follow-up Digest',
+		description: 'Summarize new CRM leads, highlight stale deals, and send reminders to account owners.',
+		prompt:
+			"Every weekday morning summarize CRM leads added in the last 24h, list stale opportunities, and DM owners in Slack with follow-up reminders.",
+		industries: ['sales'],
+		domains: ['summaries'],
+		channels: ['slack'],
+		trigger: 'scheduled',
+		complexity: 'medium',
+		integrations: ['HubSpot', 'Salesforce', 'Slack'],
+		tags: ['sales', 'crm'],
+	},
+	{
+		id: 'finance-triage',
+		category: 'Finance & Ops',
+		title: 'Invoice Auto-Triage',
+		description: 'Monitor inbox for invoices, extract totals, sync to sheets, and alert finance when thresholds are exceeded.',
+		prompt:
+			"Watch a finance inbox for new invoices, extract supplier, total, due date, log to Google Sheets, and alert the finance channel when totals exceed $5,000.",
+		industries: ['finance'],
+		domains: ['payments'],
+		channels: ['slack'],
+		trigger: 'email',
+		complexity: 'medium',
+		integrations: ['Gmail', 'Google Sheets', 'Slack'],
+		tags: ['finance', 'ops'],
+	},
+	{
+		id: 'marketing-launch',
+		category: 'Marketing',
+		title: 'Product Launch Amplifier',
+		description: 'Repurpose a launch brief into scheduled posts across social channels with approval steps.',
+		prompt:
+			"Given a product brief, create social posts for LinkedIn, Twitter, and Instagram, queue them for approval, and schedule across the week.",
+		industries: ['marketing'],
+		domains: ['content-scheduling'],
+		channels: ['linkedin', 'twitter', 'instagram'],
+		trigger: 'manual',
+		complexity: 'high',
+		integrations: ['Notion', 'Buffer'],
+		tags: ['marketing'],
+	},
+	{
+		id: 'ops-heartbeat',
+		category: 'Operations',
+		title: 'Daily Ops Heartbeat',
+		description: 'Collect metrics from multiple services, compile a dashboard snapshot, and email the team.',
+		prompt:
+			"Every morning pull key metrics (support tickets, uptime, revenue) from their APIs, render a summary, and email operations leadership.",
+		industries: ['operations'],
+		domains: ['reporting'],
+		channels: ['email'],
+		trigger: 'scheduled',
+		complexity: 'medium',
+		integrations: ['Zendesk', 'Postgres', 'SendGrid'],
+		tags: ['ops'],
+	},
+	{
+		id: 'support-escalation',
+		category: 'Customer Support',
+		title: 'Smart Escalations',
+		description:
+			'Listen for high-severity tickets, translate summaries, create Jira issues, and notify on-call responders.',
+		prompt:
+			"Monitor support tickets for severity=high, summarize them, create Jira issues, and page the on-call responder via Slack.",
+		industries: ['support'],
+		domains: ['ticket-routing'],
+		channels: ['slack'],
+		trigger: 'webhook',
+		complexity: 'medium',
+		integrations: ['Zendesk', 'Jira', 'Slack'],
+		tags: ['support'],
+	},
+	{
+		id: 'customer-onboarding',
+		category: 'Customer Success',
+		title: 'Customer Onboarding Checklist',
+		description:
+			'When a deal closes, generate onboarding tasks, welcome emails, and schedule the kickoff meeting automatically.',
+		prompt:
+			"When a CRM opportunity moves to Closed Won, kick off an onboarding checklist: create task list, send welcome email, and schedule kickoff.",
+		industries: ['customer success'],
+		domains: ['project-management'],
+		channels: ['email'],
+		trigger: 'crm-event',
+		complexity: 'medium',
+		integrations: ['Salesforce', 'Asana', 'Calendly'],
+		tags: ['success'],
+	},
+];
 const promptExamplesError = ref<string | null>(null);
 const isLoadingPromptExamples = ref(true);
 const highlightedExampleId = ref<string | null>(null);
@@ -473,8 +568,8 @@ async function loadPromptExamples() {
 			throw new Error(payload.error ?? locale.baseText('logs.aiPanel.error.generic'));
 		}
 
-		promptExamples.value = payload.prompts;
-		highlightedExampleId.value = payload.prompts[0]?.id ?? null;
+		promptExamples.value = defaultTemplates;
+		highlightedExampleId.value = promptExamples.value[0]?.id ?? null;
 	} catch (error) {
 		const message =
 			error instanceof Error
