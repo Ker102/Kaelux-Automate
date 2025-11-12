@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@codemirror/text": "^0.19.6",
-    "@lezer/generator": "^1.7.0",
+    "@lezer/generator": "^1.8.0",
     "@n8n/typescript-config": "workspace:*"
   }
 }
