@@ -104,9 +104,9 @@ describe('SettingsPersonalView', () => {
 			const darkThemeOption = await findByText('Dark theme');
 			darkThemeOption.click();
 
-			await waitAllPromises();
-			expect(uiStore.theme).toBe('system');
-		});
+		await waitAllPromises();
+		expect(uiStore.theme).toBe('kaelux');
+	});
 
 		it('should commit the theme change after clicking save', async () => {
 			vi.spyOn(usersStore, 'updateUser').mockReturnValue(

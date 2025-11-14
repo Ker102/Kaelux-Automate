@@ -79,6 +79,10 @@ const themeOptions = ref<Array<{ name: ThemeOption; label: BaseTextKey }>>([
 		name: 'dark',
 		label: 'settings.personal.theme.dark',
 	},
+	{
+		name: 'kaelux',
+		label: 'settings.personal.theme.kaelux',
+	},
 ]);
 
 const uiStore = useUIStore();

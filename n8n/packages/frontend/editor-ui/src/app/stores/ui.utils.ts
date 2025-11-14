@@ -10,7 +10,7 @@ export function applyThemeToBody(theme: ThemeOption, window_?: Window) {
 }
 
 export function isValidTheme(theme: string | null): theme is AppliedThemeOption {
-	return !!theme && ['light', 'dark'].includes(theme);
+	return !!theme && ['light', 'dark', 'kaelux'].includes(theme);
 }
 
 // query param allows overriding theme for demo view in preview iframe without flickering

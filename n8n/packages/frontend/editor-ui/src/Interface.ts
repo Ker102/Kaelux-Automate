@@ -891,7 +891,7 @@ export type ToggleNodeCreatorOptions = {
 	connectionType?: NodeConnectionType;
 };
 
-export type AppliedThemeOption = 'light' | 'dark';
+export type AppliedThemeOption = 'light' | 'dark' | 'kaelux';
 export type ThemeOption = AppliedThemeOption | 'system';
 
 export type EnterpriseEditionFeatureKey =

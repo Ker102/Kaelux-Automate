@@ -488,5 +488,9 @@ export const getThemedValue = <T extends string>(
 		return value;
 	}
 
-	return value[theme];
+	if (value[theme]) {
+		return value[theme];
+	}
+
+	return value.dark ?? value.light ?? null;
 };

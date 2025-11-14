@@ -3,32 +3,13 @@
 @use '@/app/styles';
 
 :root {
-	// Using native css variable enables us to use this value in JS
+	// Using native css variables enables us to use these values in JS
 	--header--height: 65;
 	--content-container--width: 1280px;
 	--banner--height: 48px;
 	--color--primary: #ff3bff;
 	--kaelux-gradient-primary: linear-gradient(90deg, #ff3bff 0%, #ecbfbf 38.02%, #5c24ff 75.83%, #d94fd5 100%);
 	--kaelux-gradient-primary-glow: rgba(255, 59, 255, 0.35);
-	--color--text--shade-1: #fdfdff;
-	--color--text: #ecefff;
-	--color--text--tint-1: #cfd3f1;
-	--color--text--tint-2: #a3a7cb;
-	--color--text--tint-3: #74769a;
-	--color--foreground--shade-2: #050507;
-	--color--foreground--shade-1: #080811;
-	--color--foreground: #121224;
-	--color--foreground--tint-1: #1b1b32;
-	--color--foreground--tint-2: #252545;
-	--color--background--shade-2: #010103;
-	--color--background--shade-1: #020206;
-	--color--background: #04040a;
-	--color--background--light-1: #070713;
-	--color--background--light-2: #0b0b1a;
-	--color--background--light-3: #101024;
-	--canvas--color--background: #f2f4fb;
-	--canvas--dot--color: #d9ddea;
-	--canvas--read-only-line--color: #ccd1e3;
 }
 
 .clickable {
@@ -147,7 +128,7 @@
 
 body,
 #app {
-	background-color: var(--color--background--shade-2);
+	background-color: var(--color--background);
 	color: var(--color--text);
 }
 
@@ -210,6 +191,58 @@ body,
 .el-tabs__content {
 	border: 1px solid var(--color--foreground);
 	border-radius: 0 var(--radius) var(--radius);
+}
+
+body[data-theme='kaelux'] {
+	--color--text--shade-1: #fdfdff;
+	--color--text: #ecefff;
+	--color--text--tint-1: #cfd3f1;
+	--color--text--tint-2: #a3a7cb;
+	--color--text--tint-3: #74769a;
+	--color--foreground--shade-2: #050507;
+	--color--foreground--shade-1: #080811;
+	--color--foreground: #121224;
+	--color--foreground--tint-1: #1b1b32;
+	--color--foreground--tint-2: #252545;
+	--color--background--shade-2: #010103;
+	--color--background--shade-1: #020206;
+	--color--background: #04040a;
+	--color--background--light-1: #070713;
+	--color--background--light-2: #0b0b1a;
+	--color--background--light-3: #101024;
+	--canvas--color--background: #f2f4fb;
+	--canvas--dot--color: #d9ddea;
+	--canvas--read-only-line--color: #ccd1e3;
+	--menu--color--background: #121224;
+	--menu--color--background--hover: #1b1b32;
+	--menu--color--background--active: #1b1b32;
+}
+
+body[data-theme='kaelux'],
+body[data-theme='kaelux'] #app {
+	background-color: var(--color--background--shade-2);
+	color: var(--color--text);
+}
+
+body[data-theme='kaelux'] .sideMenu {
+	background-color: var(--menu--color--background);
+	color: var(--color--text);
+	border-right: var(--border-width) var(--border-style) var(--color--foreground);
+
+	:global(.n8n-menu-item) {
+		color: inherit;
+		border-radius: var(--border-radius-large);
+
+		&:hover,
+		&.is-active {
+			background-color: var(--menu--color--background--hover);
+			color: var(--color--text--shade-1);
+		}
+
+		:global(.n8n-menu-item__label) {
+			color: inherit;
+		}
+	}
 }
 .el-tabs__header {
 	border-bottom: 0 !important;

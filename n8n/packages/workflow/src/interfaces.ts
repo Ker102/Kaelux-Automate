@@ -1958,7 +1958,7 @@ export type ThemeIconColor =
 	| 'azure'
 	| 'purple'
 	| 'crimson';
-export type Themed<T> = T | { light: T; dark: T };
+export type Themed<T> = T | { light: T; dark: T; kaelux?: T };
 export type IconRef = `fa:${string}` | `node:${string}.${string}`;
 export type IconFile = `file:${string}.png` | `file:${string}.svg` | ExpressionString;
 export type Icon = IconRef | Themed<IconFile> | IconFile;

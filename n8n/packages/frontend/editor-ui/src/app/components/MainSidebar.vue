@@ -611,6 +611,7 @@ onClickOutside(createBtn as Ref<VueInstance>, () => {
 	border-right: var(--border-width) var(--border-style) var(--color--foreground);
 	width: $sidebar-expanded-width;
 	background-color: var(--menu--color--background, var(--color--background--light-3));
+	color: var(--color--text);
 
 	.logo {
 		display: flex;
@@ -633,6 +634,21 @@ onClickOutside(createBtn as Ref<VueInstance>, () => {
 			flex-direction: column;
 			gap: 12px;
 		}
+	}
+}
+
+.sideMenu :global(.n8n-menu-item) {
+	color: inherit;
+	border-radius: var(--border-radius-large);
+
+	&:hover,
+	&.is-active {
+		background-color: var(--menu--color--background--hover, var(--color--background--light-2));
+		color: var(--color--text--shade-1);
+	}
+
+	:global(.n8n-menu-item__label) {
+		color: inherit;
 	}
 }
 

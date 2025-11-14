@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
 import { useI18n } from '@n8n/i18n';
-import { N8nButton, N8nCallout, N8nText } from '@n8n/design-system';
+import { N8nButton, N8nCallout, N8nScrollArea, N8nText } from '@n8n/design-system';
 import { AI_WORKFLOW_ENDPOINT, AI_SAMPLE_PROMPTS_ENDPOINT } from '@/app/constants';
 import { useCanvasOperations } from '@/app/composables/useCanvasOperations';
 import { useWorkflowsStore } from '@/app/stores/workflows.store';
@@ -1052,85 +1052,88 @@ function formatActionType(type: WorkflowAction['type']) {
 </script>
 
 <template>
-	<div :class="$style.container">
-		<section :class="$style.header">
-			<N8nText tag="p" size="medium" color="text-base" bold>
-				{{ locale.baseText('logs.aiPanel.title') }}
-			</N8nText>
-			<N8nText tag="p" size="small" color="text-light">
-				{{ locale.baseText('logs.aiPanel.subtitle') }}
-			</N8nText>
-		</section>
-
-		<section :class="$style.samples">
-			<header>
+	<N8nScrollArea class="$style.scrollRoot" :enable-vertical-scroll="true" :enable-horizontal-scroll="false">
+		<div :class="$style.container">
+			<section :class="$style.header">
+				<N8nText tag="p" size="medium" color="text-base" bold>
+					{{ locale.baseText('logs.aiPanel.title') }}
+				</N8nText>
 				<N8nText tag="p" size="small" color="text-light">
-					Start from a curated template and let the assistant adapt it to your workflow.
+					{{ locale.baseText('logs.aiPanel.subtitle') }}
 				</N8nText>
-			</header>
-			<div v-if="isLoadingPromptExamples" :class="$style.samplesLoading">
-				<N8nText tag="span" size="small" color="text-light">
-					Loading curated templates...
-				</N8nText>
-			</div>
-			<N8nCallout v-else-if="promptExamplesError" icon="triangle-alert" theme="danger">
-				{{ promptExamplesError }}
-			</N8nCallout>
-			<div v-else :class="$style.sampleGroups">
-				<div v-for="group in groupedPromptExamples" :key="group.category" :class="$style.sampleGroup">
-					<div :class="$style.sampleGroupHeader">
-						<N8nText tag="span" size="small" color="text-light">Category</N8nText>
-						<N8nText tag="p" size="medium" color="text-base" bold>
-							{{ group.category }}
+			</section>
+
+			<div :class="$style.bodyScroll">
+				<div :class="$style.workspace">
+					<section :class="$style.samples">
+					<header>
+						<N8nText tag="p" size="small" color="text-light">
+							Start from a curated template and let the assistant adapt it to your workflow.
+						</N8nText>
+					</header>
+					<div v-if="isLoadingPromptExamples" :class="$style.samplesLoading">
+						<N8nText tag="span" size="small" color="text-light">
+							Loading curated templates...
 						</N8nText>
 					</div>
-					<div :class="$style.sampleCardGrid">
-						<div
-							v-for="example in group.items"
-							:key="example.id"
-							:class="[$style.sampleCard, highlightedExampleId === example.id ? $style.sampleCardActive : '']"
-							@click="handleUsePromptExample(example)"
-							@mouseenter="handleHoverPromptExample(example)"
-						>
-							<div>
-								<N8nText tag="p" size="small" color="text-light">
-									{{ formatMeta(example.tags) }}
-								</N8nText>
+					<N8nCallout v-else-if="promptExamplesError" icon="triangle-alert" theme="danger">
+						{{ promptExamplesError }}
+					</N8nCallout>
+					<div v-else :class="$style.sampleGroups">
+						<div v-for="group in groupedPromptExamples" :key="group.category" :class="$style.sampleGroup">
+							<div :class="$style.sampleGroupHeader">
+								<N8nText tag="span" size="small" color="text-light">Category</N8nText>
 								<N8nText tag="p" size="medium" color="text-base" bold>
-									{{ example.title }}
+									{{ group.category }}
 								</N8nText>
-								<p :class="$style.sampleDescription">{{ example.description }}</p>
 							</div>
-							<div :class="$style.sampleMetaRow">
-								<span>{{ formatMeta(example.industries) }}</span>
-								<span>{{ formatMeta(example.channels) }}</span>
-							</div>
-							<div :class="$style.sampleActions">
-								<N8nButton
-									size="small"
-									type="secondary"
-									@click.stop="handleUsePromptExample(example)"
+							<div :class="$style.sampleCardGrid">
+								<div
+									v-for="example in group.items"
+									:key="example.id"
+									:class="[$style.sampleCard, highlightedExampleId === example.id ? $style.sampleCardActive : '']"
+									@click="handleUsePromptExample(example)"
+									@mouseenter="handleHoverPromptExample(example)"
 								>
-									Fill prompt
-								</N8nButton>
-								<N8nButton
-									size="small"
-									type="tertiary"
-									@click.stop="handleApplyPromptExample(example)"
-								>
-									Use template
-								</N8nButton>
+									<div>
+										<N8nText tag="p" size="small" color="text-light">
+											{{ formatMeta(example.tags) }}
+										</N8nText>
+										<N8nText tag="p" size="medium" color="text-base" bold>
+											{{ example.title }}
+										</N8nText>
+										<p :class="$style.sampleDescription">{{ example.description }}</p>
+									</div>
+									<div :class="$style.sampleMetaRow">
+										<span>{{ formatMeta(example.industries) }}</span>
+										<span>{{ formatMeta(example.channels) }}</span>
+									</div>
+									<div :class="$style.sampleActions">
+										<N8nButton
+											size="small"
+											type="secondary"
+											@click.stop="handleUsePromptExample(example)"
+										>
+											Fill prompt
+										</N8nButton>
+										<N8nButton
+											size="small"
+											type="tertiary"
+											@click.stop="handleApplyPromptExample(example)"
+										>
+											Use template
+										</N8nButton>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</section>
+				</section>
 
-		<section :class="$style.chatShell">
-			<div :class="$style.chatStream">
-				<div v-if="suggestions.length === 0" :class="$style.emptyState">
-					<N8nText tag="p" size="medium" color="text-base" bold>Start a new automation brief</N8nText>
+				<section :class="$style.chatShell">
+				<div :class="$style.chatStream">
+					<div v-if="suggestions.length === 0" :class="$style.emptyState">
+						<N8nText tag="p" size="medium" color="text-base" bold>Start a new automation brief</N8nText>
 					<p>
 						Share what you need automated or pick a template above. Each prompt stays in this timeline so you can review the
 						history, iterate, and insert the best response into your workflow.
@@ -1207,19 +1210,34 @@ function formatActionType(type: WorkflowAction['type']) {
 							>
 								{{ isJsonExpanded(suggestion.id) ? 'Hide JSON' : 'View JSON' }}
 							</N8nButton>
-							<N8nButton
-								size="small"
-								type="tertiary"
-								@click="copyJson(suggestion.workflowJson, suggestion.id)"
-							>
-								Copy JSON
-							</N8nButton>
-							<p v-if="copyFeedback && copiedSuggestionId === suggestion.id" :class="$style.copyFeedback">
-								{{ copyFeedback }}
-							</p>
 						</div>
 						<div v-if="isJsonExpanded(suggestion.id)" :class="$style.codePreview">
+							<div :class="$style.codePreviewHeader">
+								<span>Workflow JSON</span>
+								<div :class="$style.codePreviewActions">
+									<N8nButton
+										size="mini"
+										type="tertiary"
+										@click="copyJson(suggestion.workflowJson, suggestion.id)"
+									>
+										Copy JSON
+									</N8nButton>
+									<N8nButton
+										size="mini"
+										type="secondary"
+										@click="toggleJsonVisibility(suggestion.id)"
+									>
+										Close
+									</N8nButton>
+								</div>
+							</div>
 							<pre>{{ suggestion.workflowJson }}</pre>
+							<p
+								v-if="copyFeedback && copiedSuggestionId === suggestion.id"
+								:class="$style.copyFeedback"
+							>
+								{{ copyFeedback }}
+							</p>
 						</div>
 					</article>
 				</div>
@@ -1265,11 +1283,22 @@ function formatActionType(type: WorkflowAction['type']) {
 					</div>
 				</form>
 			</div>
-		</section>
+			</section>
+		</div>
 	</div>
+</N8nScrollArea>
 </template>
 
 <style lang="scss" module>
+.scrollRoot {
+	height: 100%;
+	width: 100%;
+}
+
+.scrollRoot :global(.n8n-scroll-area__viewport) {
+	height: 100%;
+}
+
 .container {
 	display: flex;
 	flex-direction: column;
@@ -1282,10 +1311,39 @@ function formatActionType(type: WorkflowAction['type']) {
 	overflow: auto;
 }
 
+.workspace {
+	display: grid;
+	grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+	gap: var(--spacing-xl);
+	flex: 1;
+	min-height: 0;
+}
+
+@media (max-width: 1480px) {
+	.workspace {
+		grid-template-columns: 1fr;
+	}
+}
+
 .header {
 	display: flex;
 	flex-direction: column;
 	gap: var(--spacing-4xs);
+}
+
+.bodyScroll {
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
+}
+
+.bodyScroll::-webkit-scrollbar {
+	width: 8px;
+}
+
+.bodyScroll::-webkit-scrollbar-thumb {
+	background: color-mix(in srgb, var(--color--foreground) 60%, transparent);
+	border-radius: 4px;
 }
 
 .samples {
@@ -1297,6 +1355,12 @@ function formatActionType(type: WorkflowAction['type']) {
 	padding: var(--spacing-m);
 	border: 1px solid var(--color--foreground);
 	box-shadow: 0 30px 55px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 1480px) {
+	.samples {
+		position: static;
+	}
 }
 
 .samplesLoading {
@@ -1500,10 +1564,34 @@ function formatActionType(type: WorkflowAction['type']) {
 	line-height: 1.4;
 	max-height: 320px;
 	overflow: auto;
+	font-family: var(--font-family--monospace, 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace);
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+	background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent);
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-3xs);
 }
 
 .codePreview pre {
 	margin: 0;
+	color: var(--color--text--shade-1);
+}
+
+.codePreviewHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-size: var(--font-size-3xs);
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	color: var(--color--text--tint-2);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+	padding-bottom: var(--spacing-3xs);
+}
+
+.codePreviewActions {
+	display: flex;
+	gap: var(--spacing-4xs);
 }
 
 .emptyState {
@@ -1583,4 +1671,3 @@ function formatActionType(type: WorkflowAction['type']) {
 	justify-content: flex-end;
 }
 </style>
-

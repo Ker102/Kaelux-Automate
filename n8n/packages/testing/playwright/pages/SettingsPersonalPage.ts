@@ -137,7 +137,7 @@ export class SettingsPersonalPage extends BasePage {
 		return this.page.getByTestId('public-api-upgrade-cta');
 	}
 
-	async changeTheme(theme: 'System default' | 'Light theme' | 'Dark theme') {
+	async changeTheme(theme: 'System default' | 'Light theme' | 'Dark theme' | 'Kaelux theme') {
 		await this.page.getByTestId('theme-select').click();
 		await this.page.getByRole('option', { name: theme }).click();
 		await this.getSaveSettingsButton().click();

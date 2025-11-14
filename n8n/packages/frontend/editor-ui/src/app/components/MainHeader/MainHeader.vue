@@ -21,7 +21,6 @@ import type { RouteLocation, RouteLocationRaw } from 'vue-router';
 import { useRoute, useRouter } from 'vue-router';
 
 import { useLocalStorage } from '@vueuse/core';
-import GithubButton from 'vue-github-button';
 import type { FolderShortInfo } from '@/features/core/folders/folders.types';
 
 import { N8nIcon } from '@n8n/design-system';
@@ -287,17 +286,16 @@ async function onWorkflowDeactivated() {
 				/>
 				<div v-if="showGitHubButton" :class="[$style['github-button'], 'hidden-sm-and-down']">
 					<div :class="$style['github-button-container']">
-						<GithubButton
+						<a
 							:href="KAELUX_GITHUB_URL"
-							:data-color-scheme="uiStore.appliedTheme"
-							data-size="large"
-							data-show-count="false"
 							target="_blank"
 							rel="noopener noreferrer"
-							:aria-label="locale.baseText('editor.mainHeader.githubButton.label')"
+							aria-label="Open Kaelux Automate on GitHub"
+							:class="$style['github-cta']"
 						>
-							{{ locale.baseText('generic.star') }}
-						</GithubButton>
+							<N8nIcon icon="github" size="medium" />
+							<span>View on GitHub</span>
+						</a>
 						<a
 							:href="KAELUX_SITE_URL"
 							target="_blank"
@@ -382,6 +380,30 @@ async function onWorkflowDeactivated() {
 	display: flex;
 	align-items: center;
 	gap: var(--spacing--xs);
+}
+
+.github-cta {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--spacing--3xs);
+	height: 38px;
+	padding: 0 var(--spacing--md);
+	border-radius: 999px;
+	background-image: var(--kaelux-gradient-primary);
+	background-size: 200% auto;
+	color: var(--color--background);
+	font-weight: var(--font-weight--semibold);
+	text-decoration: none;
+	box-shadow: 0 16px 32px var(--kaelux-gradient-primary-glow);
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	font-size: 0.78rem;
+	transition: background-position 0.3s ease, box-shadow 0.3s ease;
+}
+
+.github-cta:hover {
+	background-position: 100% 0;
+	box-shadow: 0 24px 38px var(--kaelux-gradient-primary-glow);
 }
 
 .kaelux-site-link {
