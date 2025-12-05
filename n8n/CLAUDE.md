@@ -1,158 +1,168 @@
-# CLAUDE.md
+# CLAUDE.md - n8n Embedded Instance (Kaelux Fork)
 
-This file provides guidance to Claude Code (claude.ai/code) when working with
-code in the n8n repository.
+This file provides guidance to AI assistants when working with the embedded n8n instance in the Kaelux Automate project.
 
-## Project Overview
+## Overview
 
-n8n is a workflow automation platform written in TypeScript, using a monorepo
-structure managed by pnpm workspaces. It consists of a Node.js backend, Vue.js
-frontend, and extensible node-based workflow engine.
+This is a **modified fork** of the n8n workflow automation platform, embedded within Kaelux Automate. Key customizations include:
+- AI Builder panel with multi-model support (Gemini integration)
+- Kaelux theme framework
+- Custom dev scripts for resource-constrained environments
 
-## General Guidelines
+## Monorepo Structure
 
-- Always use pnpm
-- We use Linear as a ticket tracking system
-- We use Posthog for feature flags
-- When starting to work on a new ticket – create a new branch from fresh
-  master with the name specified in Linear ticket
-- When creating a new branch for a ticket in Linear - use the branch name
-  suggested by linear
-- Use mermaid diagrams in MD files when you need to visualise something
+n8n uses pnpm workspaces with Turbo build orchestration.
 
-## Essential Commands
+### Key Packages
 
-### Building
-Use `pnpm build` to build all packages. ALWAYS redirect the output of the
-build command to a file:
+| Package | Purpose |
+|---------|---------|
+| `packages/cli` | Express server, REST API, CLI commands |
+| `packages/frontend/editor-ui` | Vue 3 frontend application |
+| `packages/@n8n/ai-workflow-builder.ee` | AI Builder backend service |
+| `packages/@n8n/api-types` | Shared TypeScript interfaces (FE/BE) |
+| `packages/@n8n/design-system` | Vue component library |
+| `packages/workflow` | Core workflow interfaces |
+| `packages/core` | Workflow execution engine |
+| `packages/nodes-base` | Built-in integrations |
 
-```bash
-pnpm build > build.log 2>&1
+## Kaelux-Specific Modifications
+
+### AI Builder (Model Switching)
+- **Frontend**: `packages/frontend/editor-ui/src/features/execution/logs/components/AiWorkflowPanel.vue`
+  - Three model modes: Fast, Thinking, Thinking-Pro
+  - Perplexity-style centered layout
+  - Custom empty state with "Kaelux-Agent" branding
+
+- **Backend**: `packages/@n8n/ai-workflow-builder.ee/`
+  - `ai-workflow-builder-agent.service.ts` - Model switching based on `modelMode`
+  - `llm-config.ts` - Gemini model configurations
+  - Uses `N8N_AI_GEMINI_KEY` environment variable
+
+- **API Types**: `packages/@n8n/api-types/src/dto/ai/ai-build-request.dto.ts`
+  - `modelMode` field: `'fast' | 'thinking' | 'thinking-pro'`
+
+### Theme Framework
+- `packages/frontend/@n8n/design-system/src/css/_tokens.dark.scss` - Kaelux theme tokens
+- Styles scoped to `[data-theme="kaelux"]` selector
+
+### Dev Scripts (Resource-Safe)
+Added to root `package.json`:
+- `dev:be:safe` - Backend with concurrency=10 (prevents system crashes)
+- `dev:safe` - Full stack with concurrency=10
+- `dev:be:quiet` / `dev:quiet` - Redirects logs to files
+
+## Current Issues
+
+### 1. Native Binding Conflicts
+The project uses platform-specific binaries (rollup, rolldown) that differ between:
+- **Host (glibc)**: `@rollup/rollup-linux-x64-gnu`
+- **Docker (musl)**: `@rolldown/binding-linux-x64-musl`
+
+**Fix applied**: `.npmrc` includes:
+```ini
+supported-architectures=os=linux;cpu=x64;libc=glibc,musl
 ```
 
-You can inspect the last few lines of the build log file to check for errors:
+**If errors persist**: Run fresh `pnpm install` after switching environments.
+
+### 2. Docker Dev Container Setup
+The `.devcontainer/` configuration is functional but requires:
 ```bash
-tail -n 20 build.log
+docker compose -f .devcontainer/docker-compose.yml exec -w /workspaces n8n pnpm install --ignore-scripts
+```
+Note: `--ignore-scripts` is needed because the `prepare` script (lefthook) fails in container context.
+
+### 3. Verification Pending
+Model switching logic compiled but has not been manually tested in a running application.
+
+## Development Commands
+
+### Building
+```bash
+pnpm build > build.log 2>&1  # ALWAYS redirect output
+tail -n 20 build.log         # Check for errors
 ```
 
 ### Testing
-- `pnpm test` - Run all tests
-- `pnpm test:affected` - Runs tests based on what has changed since the last
-  commit
-
-Running a particular test file requires going to the directory of that test
-and running: `pnpm test <test-file>`.
-
-When changing directories, use `pushd` to navigate into the directory and
-`popd` to return to the previous directory. When in doubt, use `pwd` to check
-your current directory.
+```bash
+pnpm test              # All tests
+pnpm test:affected     # Tests for changed files
+```
 
 ### Code Quality
-- `pnpm lint` - Lint code
-- `pnpm typecheck` - Run type checks
+```bash
+pnpm lint              # ESLint
+pnpm typecheck         # TypeScript checks
+```
 
-Always run lint and typecheck before committing code to ensure quality.
-Execute these commands from within the specific package directory you're
-working on (e.g., `cd packages/cli && pnpm lint`). Run the full repository
-check only when preparing the final PR. When your changes affect type
-definitions, interfaces in `@n8n/api-types`, or cross-package dependencies,
-build the system before running lint and typecheck.
+### Development (Recommended: Hybrid Mode)
+```bash
+# Terminal 1: Docker containers
+docker compose -f .devcontainer/docker-compose.yml up -d
 
-## Architecture Overview
+# Terminal 2: Backend in Docker
+docker compose -f .devcontainer/docker-compose.yml exec -w /workspaces n8n pnpm dev:be:safe
 
-**Monorepo Structure:** pnpm workspaces with Turbo build orchestration
+# Terminal 3: Frontend on host (from n8n/ directory)
+pnpm dev:fe
+```
 
-### Package Structure
-
-The monorepo is organized into these key packages:
-
-- **`packages/@n8n/api-types`**: Shared TypeScript interfaces between frontend and backend
-- **`packages/workflow`**: Core workflow interfaces and types
-- **`packages/core`**: Workflow execution engine
-- **`packages/cli`**: Express server, REST API, and CLI commands
-- **`packages/editor-ui`**: Vue 3 frontend application
-- **`packages/@n8n/i18n`**: Internationalization for UI text
-- **`packages/nodes-base`**: Built-in nodes for integrations
-- **`packages/@n8n/nodes-langchain`**: AI/LangChain nodes
-- **`@n8n/design-system`**: Vue component library for UI consistency
-- **`@n8n/config`**: Centralized configuration management
+### Docker Image Build
+```bash
+pnpm build:docker > docker.log 2>&1
+```
 
 ## Technology Stack
 
-- **Frontend:** Vue 3 + TypeScript + Vite + Pinia + Storybook UI Library
-- **Backend:** Node.js + TypeScript + Express + TypeORM
-- **Testing:** Jest (unit) + Playwright (E2E)
-- **Database:** TypeORM with SQLite/PostgreSQL/MySQL support
-- **Code Quality:** Biome (for formatting) + ESLint + lefthook git hooks
+- **Frontend**: Vue 3 + TypeScript + Vite + Pinia
+- **Backend**: Node.js + TypeScript + Express + TypeORM
+- **Testing**: Jest (unit) + Playwright (E2E)
+- **Code Quality**: Biome (formatting) + ESLint + lefthook
 
-### Key Architectural Patterns
+## Best Practices
 
-1. **Dependency Injection**: Uses `@n8n/di` for IoC container
-2. **Controller-Service-Repository**: Backend follows MVC-like pattern
-3. **Event-Driven**: Internal event bus for decoupled communication
-4. **Context-Based Execution**: Different contexts for different node types
-5. **State Management**: Frontend uses Pinia stores
-6. **Design System**: Reusable components and design tokens are centralized in
-   `@n8n/design-system`, where all pure Vue components should be placed to
-   ensure consistency and reusability
+### TypeScript
+- **NEVER use `any`** - use proper types or `unknown`
+- **Avoid `as` casting** - use type guards instead
+- **Shared interfaces** go in `@n8n/api-types`
 
-## Key Development Patterns
-
-- Each package has isolated build configuration and can be developed independently
-- Hot reload works across the full stack during development
-- Node development uses dedicated `node-dev` CLI tool
-- Workflow tests are JSON-based for integration testing
-- AI features have dedicated development workflow (`pnpm dev:ai`)
-
-### TypeScript Best Practices
-- **NEVER use `any` type** - use proper types or `unknown`
-- **Avoid type casting with `as`** - use type guards or type predicates instead
-- **Define shared interfaces in `@n8n/api-types`** package for FE/BE communication
+### Frontend
+- **All UI text must use i18n** - add translations to `@n8n/i18n`
+- **Use CSS variables** - never hardcode px values
+- **data-test-id** must be single value (no spaces)
 
 ### Error Handling
-- Don't use `ApplicationError` class in CLI and nodes for throwing errors,
-  because it's deprecated. Use `UnexpectedError`, `OperationalError` or
-  `UserError` instead.
-- Import from appropriate error classes in each package
+- Don't use `ApplicationError` (deprecated)
+- Use `UnexpectedError`, `OperationalError`, or `UserError`
 
-### Frontend Development
-- **All UI text must use i18n** - add translations to `@n8n/i18n` package
-- **Use CSS variables directly** - never hardcode spacing as px values
-- **data-test-id must be a single value** (no spaces or multiple values)
+### Testing
+- Work from within package directory
+- Mock all external dependencies
+- Run `pnpm typecheck` before committing
 
-When implementing CSS, refer to @packages/frontend/CLAUDE.md for guidelines on
-CSS variables and styling conventions.
+## Environment Variables
 
-### Testing Guidelines
-- **Always work from within the package directory** when running tests
-- **Mock all external dependencies** in unit tests
-- **Confirm test cases with user** before writing unit tests
-- **Typecheck is critical before committing** - always run `pnpm typecheck`
-- **When modifying pinia stores**, check for unused computed properties
+| Variable | Purpose |
+|----------|---------|
+| `N8N_AI_GEMINI_KEY` | Gemini API key for AI Builder |
+| `GEMINI_API_KEY` | Fallback for Gemini API key |
+| `N8N_PORT` | Port for n8n server (default: 5678) |
 
-What we use for testing and writing tests:
-- For testing nodes and other backend components, we use Jest for unit tests. Examples can be found in `packages/nodes-base/nodes/**/*test*`.
-- We use `nock` for server mocking
-- For frontend we use `vitest`
-- For E2E tests we use Playwright. Run with `pnpm --filter=n8n-playwright test:local`.
-  See `packages/testing/playwright/README.md` for details.
+## Key File Locations
 
-### Common Development Tasks
+For AI Builder modifications:
+1. **API DTO**: `packages/@n8n/api-types/src/dto/ai/ai-build-request.dto.ts`
+2. **Controller**: `packages/cli/src/controllers/ai.controller.ts`
+3. **Service**: `packages/@n8n/ai-workflow-builder.ee/src/ai-workflow-builder-agent.service.ts`
+4. **Frontend Panel**: `packages/frontend/editor-ui/src/features/execution/logs/components/AiWorkflowPanel.vue`
 
-When implementing features:
-1. Define API types in `packages/@n8n/api-types`
-2. Implement backend logic in `packages/cli` module, follow
-   `@packages/cli/scripts/backend-module/backend-module.guide.md`
-3. Add API endpoints via controllers
-4. Update frontend in `packages/editor-ui` with i18n support
-5. Write tests with proper mocks
-6. Run `pnpm typecheck` to verify types
+For Theme modifications:
+1. **Theme Tokens**: `packages/frontend/@n8n/design-system/src/css/_tokens.dark.scss`
+2. **Global Styles**: `packages/frontend/@n8n/design-system/src/css/n8n-theme.scss`
 
-## Github Guidelines
-- When creating a PR, use the conventions in
-  `.github/pull_request_template.md` and
-  `.github/pull_request_title_conventions.md`.
-- Use `gh pr create --draft` to create draft PRs.
-- Always reference the Linear ticket in the PR description,
-  use `https://linear.app/n8n/issue/[TICKET-ID]`
-- always link to the github issue if mentioned in the linear ticket.
+## Related Documentation
+
+- [Parent CLAUDE.md](../CLAUDE.md) - Project-wide context
+- [packages/frontend/CLAUDE.md](./packages/frontend/CLAUDE.md) - Frontend-specific guidelines (if exists)
+- `.github/pull_request_template.md` - PR conventions
