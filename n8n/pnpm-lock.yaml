@@ -73,8 +73,8 @@ catalogs:
       specifier: 7.0.6
       version: 7.0.6
     iconv-lite:
-      specifier: 0.6.3
-      version: 0.6.3
+      specifier: 0.7.0
+      version: 0.7.0
     js-base64:
       specifier: 3.7.2
       version: 3.7.2
@@ -893,7 +893,7 @@ importers:
     dependencies:
       iconv-lite:
         specifier: 'catalog:'
-        version: 0.6.3
+        version: 0.7.0
       imap:
         specifier: 0.8.19
         version: 0.8.19
@@ -1886,7 +1886,7 @@ importers:
         version: 7.0.6
       iconv-lite:
         specifier: 'catalog:'
-        version: 0.6.3
+        version: 0.7.0
       jsonwebtoken:
         specifier: 'catalog:'
         version: 9.0.2
@@ -2792,7 +2792,7 @@ importers:
         version: 9.0.5
       iconv-lite:
         specifier: 'catalog:'
-        version: 0.6.3
+        version: 0.7.0
       ics:
         specifier: 2.40.0
         version: 2.40.0
