@@ -1,0 +1,386 @@
+turbo 2.5.4
+
+• Packages in scope: @n8n/ai-workflow-builder, @n8n/api-types, @n8n/backend-common, @n8n/backend-test-utils, @n8n/client-oauth2, @n8n/codemirror-lang, @n8n/codemirror-lang-sql, @n8n/composables, @n8n/config, @n8n/constants, @n8n/create-node, @n8n/db, @n8n/decorators, @n8n/di, @n8n/errors, @n8n/eslint-config, @n8n/eslint-plugin-community-nodes, @n8n/extension-sdk, @n8n/i18n, @n8n/imap, @n8n/json-schema-to-zod, @n8n/n8n-benchmark, @n8n/n8n-extension-insights, @n8n/n8n-nodes-langchain, @n8n/node-cli, @n8n/permissions, @n8n/rest-api-client, @n8n/scan-community-package, @n8n/stores, @n8n/storybook, @n8n/stylelint-config, @n8n/typescript-config, @n8n/utils, @n8n/vitest-config, n8n, n8n-containers, n8n-core, n8n-node-dev, n8n-nodes-base, n8n-playwright, n8n-workflow
+• Running dev in 41 packages
+• Remote caching disabled
+@n8n/api-types:dev: cache bypass, force executing 445ae7c36ebf40d0
+n8n-nodes-base:dev: cache bypass, force executing 3d45724499f837c3
+@n8n/errors:dev: cache bypass, force executing fbcd9a9363fd3d50
+n8n-core:dev: cache bypass, force executing 7238060028f761a4
+@n8n/rest-api-client:dev: cache bypass, force executing ecb1bab3325b818a
+@n8n/n8n-nodes-langchain:dev: cache bypass, force executing 8151e1aeeb54a652
+@n8n/eslint-config:dev: cache bypass, force executing fef7122599c2f84a
+@n8n/vitest-config:dev: cache bypass, force executing 21e5eaf91d56067c
+@n8n/node-cli:dev: cache bypass, force executing 58b30ada3a2305db
+@n8n/extension-sdk:dev: cache bypass, force executing 3130b86b0bec5211
+@n8n/n8n-extension-insights:dev: cache bypass, force executing 9282dab917630d37
+@n8n/client-oauth2:dev: cache bypass, force executing 823b0648e8c475fd
+@n8n/composables:dev: cache bypass, force executing 890553deb333b1b5
+@n8n/permissions:dev: cache bypass, force executing 39322c851abc072c
+n8n:dev: cache bypass, force executing aa5d7ce29960ae32
+@n8n/backend-common:dev: cache bypass, force executing 8bef5a6144251751
+@n8n/config:dev: cache bypass, force executing 8a0175378a0ae136
+@n8n/utils:dev: cache bypass, force executing 3380a252a506b68e
+@n8n/i18n:dev: cache bypass, force executing b939e4d97d1dead5
+@n8n/stylelint-config:dev: cache bypass, force executing 57624fdae4597096
+n8n-node-dev:dev: cache bypass, force executing cac657fee422c8e3
+@n8n/stores:dev: cache bypass, force executing 246596a8e8162be0
+@n8n/decorators:dev: cache bypass, force executing 866379c68016ae69
+@n8n/backend-test-utils:dev: cache bypass, force executing 4041fab5ec1d3b08
+@n8n/di:dev: cache bypass, force executing a106e38ebaa4a1a0
+@n8n/json-schema-to-zod:dev: cache bypass, force executing d96f8d17884f85a5
+@n8n/db:dev: cache bypass, force executing 05c223a66b5452fc
+@n8n/imap:dev: cache bypass, force executing 61c7b4c97d3e0eab
+@n8n/eslint-plugin-community-nodes:dev: cache bypass, force executing cfee9cec26b20fc5
+@n8n/constants:dev: cache bypass, force executing 9b1a9dfaec30df43
+n8n-workflow:dev: cache bypass, force executing 0b4b8a3b4cdde71a
+@n8n/eslint-config:dev: 
+@n8n/eslint-config:dev: > @n8n/eslint-config@0.0.1 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/eslint-config
+@n8n/eslint-config:dev: > pnpm watch
+@n8n/eslint-config:dev: 
+@n8n/permissions:dev: 
+@n8n/permissions:dev: > @n8n/permissions@0.41.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/permissions
+@n8n/permissions:dev: > pnpm watch
+@n8n/permissions:dev: 
+@n8n/api-types:dev: 
+@n8n/api-types:dev: > @n8n/api-types@0.53.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/api-types
+@n8n/api-types:dev: > pnpm watch
+@n8n/api-types:dev: 
+@n8n/backend-test-utils:dev: 
+@n8n/backend-test-utils:dev: > @n8n/backend-test-utils@0.22.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/backend-test-utils
+@n8n/backend-test-utils:dev: > pnpm watch
+@n8n/backend-test-utils:dev: 
+@n8n/db:dev: 
+@n8n/db:dev: > @n8n/db@0.30.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/db
+@n8n/db:dev: > pnpm watch
+@n8n/db:dev: 
+@n8n/extension-sdk:dev: 
+@n8n/extension-sdk:dev: > @n8n/extension-sdk@0.8.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/extension-sdk
+@n8n/extension-sdk:dev: > tsdown --watch
+@n8n/extension-sdk:dev: 
+@n8n/vitest-config:dev: 
+@n8n/vitest-config:dev: > @n8n/vitest-config@1.5.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/vitest-config
+@n8n/vitest-config:dev: > pnpm watch
+@n8n/vitest-config:dev: 
+@n8n/rest-api-client:dev: 
+@n8n/rest-api-client:dev: > @n8n/rest-api-client@1.22.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/frontend/@n8n/rest-api-client
+@n8n/rest-api-client:dev: > tsdown --watch
+@n8n/rest-api-client:dev: 
+@n8n/errors:dev: 
+@n8n/errors:dev: > @n8n/errors@0.5.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/errors
+@n8n/errors:dev: > pnpm watch
+@n8n/errors:dev: 
+n8n:dev: 
+n8n:dev: > n8n@1.119.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/cli
+n8n:dev: > concurrently -k -n "TypeScript,Node" -c "yellow.bold,cyan.bold" "npm run watch" "nodemon --delay 1"
+n8n:dev: 
+@n8n/decorators:dev: 
+@n8n/decorators:dev: > @n8n/decorators@0.29.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/decorators
+@n8n/decorators:dev: > pnpm watch
+@n8n/decorators:dev: 
+@n8n/utils:dev: 
+@n8n/utils:dev: > @n8n/utils@1.18.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/utils
+@n8n/utils:dev: > tsdown --watch
+@n8n/utils:dev: 
+@n8n/json-schema-to-zod:dev: 
+@n8n/json-schema-to-zod:dev: > @n8n/json-schema-to-zod@1.5.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/json-schema-to-zod
+@n8n/json-schema-to-zod:dev: > tsc -w
+@n8n/json-schema-to-zod:dev: 
+n8n-core:dev: 
+n8n-core:dev: > n8n-core@1.118.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/core
+n8n-core:dev: > pnpm watch
+n8n-core:dev: 
+@n8n/i18n:dev: 
+@n8n/i18n:dev: > @n8n/i18n@1.23.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/frontend/@n8n/i18n
+@n8n/i18n:dev: > tsdown --watch
+@n8n/i18n:dev: 
+@n8n/di:dev: 
+@n8n/di:dev: > @n8n/di@0.9.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/di
+@n8n/di:dev: > pnpm watch
+@n8n/di:dev: 
+@n8n/eslint-plugin-community-nodes:dev: 
+@n8n/eslint-plugin-community-nodes:dev: > @n8n/eslint-plugin-community-nodes@0.6.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/eslint-plugin-community-nodes
+@n8n/eslint-plugin-community-nodes:dev: > pnpm watch
+@n8n/eslint-plugin-community-nodes:dev: 
+@n8n/node-cli:dev: 
+@n8n/node-cli:dev: > @n8n/node-cli@0.14.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/node-cli
+@n8n/node-cli:dev: > tsc-watch -p tsconfig.build.json -w --onCompilationComplete "pnpm copy-templates"
+@n8n/node-cli:dev: 
+@n8n/stylelint-config:dev: 
+@n8n/stylelint-config:dev: > @n8n/stylelint-config@0.0.1 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/stylelint-config
+@n8n/stylelint-config:dev: > pnpm watch
+@n8n/stylelint-config:dev: 
+@n8n/imap:dev: 
+@n8n/imap:dev: > @n8n/imap@0.15.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/imap
+@n8n/imap:dev: > pnpm watch
+@n8n/imap:dev: 
+@n8n/n8n-nodes-langchain:dev: 
+@n8n/n8n-nodes-langchain:dev: > @n8n/n8n-nodes-langchain@1.118.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/nodes-langchain
+@n8n/n8n-nodes-langchain:dev: > pnpm run watch
+@n8n/n8n-nodes-langchain:dev: 
+@n8n/composables:dev: 
+@n8n/composables:dev: > @n8n/composables@1.12.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/frontend/@n8n/composables
+@n8n/composables:dev: > tsdown --watch
+@n8n/composables:dev: 
+@n8n/client-oauth2:dev: 
+@n8n/client-oauth2:dev: > @n8n/client-oauth2@0.31.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/client-oauth2
+@n8n/client-oauth2:dev: > pnpm watch
+@n8n/client-oauth2:dev: 
+n8n-node-dev:dev: 
+n8n-node-dev:dev: > n8n-node-dev@1.117.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/node-dev
+n8n-node-dev:dev: > pnpm watch
+n8n-node-dev:dev: 
+n8n-nodes-base:dev: 
+n8n-nodes-base:dev: > n8n-nodes-base@1.117.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/nodes-base
+n8n-nodes-base:dev: > pnpm watch
+n8n-nodes-base:dev: 
+@n8n/permissions:dev: 
+@n8n/permissions:dev: > @n8n/permissions@0.41.0 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/permissions
+@n8n/permissions:dev: > tsc -p tsconfig.build.json --watch
+@n8n/permissions:dev: 
+@n8n/constants:dev: 
+@n8n/constants:dev: > @n8n/constants@0.13.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/constants
+@n8n/constants:dev: > pnpm watch
+@n8n/constants:dev: 
+@n8n/n8n-extension-insights:dev: 
+@n8n/n8n-extension-insights:dev: > @n8n/n8n-extension-insights@0.10.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/extensions/insights
+@n8n/n8n-extension-insights:dev: > tsdown --watch
+@n8n/n8n-extension-insights:dev: 
+@n8n/config:dev: 
+@n8n/config:dev: > @n8n/config@1.61.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/config
+@n8n/config:dev: > pnpm watch
+@n8n/config:dev: 
+@n8n/backend-common:dev: 
+@n8n/backend-common:dev: > @n8n/backend-common@0.29.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/backend-common
+@n8n/backend-common:dev: > pnpm watch
+@n8n/backend-common:dev: 
+@n8n/stores:dev: 
+@n8n/stores:dev: > @n8n/stores@1.26.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/frontend/@n8n/stores
+@n8n/stores:dev: > tsdown --watch
+@n8n/stores:dev: 
+n8n-workflow:dev: 
+n8n-workflow:dev: > n8n-workflow@1.116.0 dev /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/workflow
+n8n-workflow:dev: > pnpm watch
+n8n-workflow:dev: 
+@n8n/json-schema-to-zod:dev: [2J[3J[H9:03:42 PM - Starting compilation in watch mode...
+@n8n/json-schema-to-zod:dev: 
+@n8n/extension-sdk:dev: [34mℹ[39m tsdown [2mv0.15.6[22m powered by rolldown [2mv1.0.0-beta.51[22m
+@n8n/rest-api-client:dev: [34mℹ[39m tsdown [2mv0.15.6[22m powered by rolldown [2mv1.0.0-beta.51[22m
+@n8n/utils:dev: [34mℹ[39m tsdown [2mv0.15.6[22m powered by rolldown [2mv1.0.0-beta.51[22m
+@n8n/i18n:dev: [34mℹ[39m tsdown [2mv0.15.6[22m powered by rolldown [2mv1.0.0-beta.51[22m
+@n8n/n8n-extension-insights:dev: [34mℹ[39m tsdown [2mv0.15.6[22m powered by rolldown [2mv1.0.0-beta.51[22m
+@n8n/stores:dev: [34mℹ[39m tsdown [2mv0.15.6[22m powered by rolldown [2mv1.0.0-beta.51[22m
+@n8n/rest-api-client:dev: [34mℹ[39m Using tsdown config: [4m/media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/frontend/@n8n/rest-api-client/tsdown.config.ts[24m
+@n8n/extension-sdk:dev: [34mℹ[39m Using tsdown config: [4m/media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/extension-sdk/tsdown.config.ts[24m
+@n8n/i18n:dev: [34mℹ[39m Using tsdown config: [4m/media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/frontend/@n8n/i18n/tsdown.config.ts[24m
+@n8n/utils:dev: [34mℹ[39m Using tsdown config: [4m/media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/utils/tsdown.config.ts[24m
+@n8n/rest-api-client:dev: [34mℹ[39m entry: [34msrc/index.ts, src/types.ts, src/utils.ts, src/api/api-keys.ts, src/api/cloudPlans.ts, src/api/communityNodes.ts, src/api/consent.ts, src/api/ctas.ts, src/api/dynamic-banners.ts, src/api/eventbus.ee.ts, src/api/events.ts, src/api/execution.ts, src/api/externalSecrets.ee.ts, src/api/index.ts, src/api/ldap.ts, src/api/mfa.ts, src/api/module-settings.ts, src/api/nodeTypes.ts, src/api/npsSurvey.ts, src/api/orchestration.ts, src/api/prompts.ts, src/api/provisioning.ts, src/api/roles.ts, src/api/settings.ts, src/api/sso.ts, src/api/tags.ts, src/api/templates.ts, src/api/third-party-licenses.ts, src/api/ui.ts, src/api/usage.ts, src/api/users.ts, src/api/versions.ts, src/api/webhooks.ts, src/api/workflowHistory.ts, src/api/workflows.ts[39m
+@n8n/rest-api-client:dev: [34mℹ[39m tsconfig: [34mtsconfig.json[39m
+@n8n/rest-api-client:dev: [34mℹ[39m Build start
+@n8n/extension-sdk:dev: [34mℹ[39m entry: [34msrc/index.ts, src/schema.ts[39m
+@n8n/i18n:dev: [34mℹ[39m entry: [34msrc/index.ts, src/types.ts, src/utils.ts[39m
+@n8n/i18n:dev: [34mℹ[39m tsconfig: [34mtsconfig.json[39m
+@n8n/i18n:dev: [34mℹ[39m Build start
+@n8n/utils:dev: [34mℹ[39m entry: [34msrc/assert.ts, src/event-bus.ts, src/event-queue.ts, src/retry.ts, src/number/smartDecimal.ts, src/search/reRankSearchResults.ts, src/search/sublimeSearch.ts, src/sort/sortByProperty.ts, src/string/truncate.ts[39m
+@n8n/extension-sdk:dev: [34mℹ[39m entry: [34msrc/frontend/define.ts, src/frontend/index.ts, src/frontend/types.ts[39m
+@n8n/rest-api-client:dev: [34mℹ[39m Cleaning 201 files
+@n8n/utils:dev: [34mℹ[39m tsconfig: [34mtsconfig.json[39m
+@n8n/extension-sdk:dev: [34mℹ[39m entry: [34msrc/backend/define.ts, src/backend/index.ts, src/backend/types.ts[39m
+@n8n/extension-sdk:dev: [34mℹ[39m tsconfig: [34mtsconfig.common.json[39m
+@n8n/extension-sdk:dev: [34mℹ[39m tsconfig: [34mtsconfig.frontend.json[39m
+@n8n/extension-sdk:dev: [34mℹ[39m tsconfig: [34mtsconfig.backend.json[39m
+@n8n/utils:dev: [34mℹ[39m Build start
+@n8n/extension-sdk:dev: [34mℹ[39m Build start
+@n8n/i18n:dev: [34mℹ[39m Cleaning 23 files
+@n8n/composables:dev: [34mℹ[39m tsdown [2mv0.15.6[22m powered by rolldown [2mv1.0.0-beta.51[22m
+@n8n/utils:dev: [34mℹ[39m Cleaning 58 files
+@n8n/api-types:dev: 
+@n8n/api-types:dev: > @n8n/api-types@0.53.0 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/api-types
+@n8n/api-types:dev: > tsc -p tsconfig.build.json --watch
+@n8n/api-types:dev: 
+@n8n/eslint-config:dev: 
+@n8n/eslint-config:dev: > @n8n/eslint-config@0.0.1 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/eslint-config
+@n8n/eslint-config:dev: > tsc --watch
+@n8n/eslint-config:dev: 
+@n8n/db:dev: 
+@n8n/db:dev: > @n8n/db@0.30.0 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/db
+@n8n/db:dev: > tsc -p tsconfig.build.json --watch
+@n8n/db:dev: 
+@n8n/permissions:dev: [2J[3J[H9:04:11 PM - Starting compilation in watch mode...
+@n8n/permissions:dev: 
+n8n-core:dev: 
+n8n-core:dev: > n8n-core@1.118.0 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/core
+n8n-core:dev: > tsc-watch -p tsconfig.build.json --onCompilationComplete "tsc-alias -p tsconfig.build.json"
+n8n-core:dev: 
+@n8n/decorators:dev: 
+@n8n/decorators:dev: > @n8n/decorators@0.29.0 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/decorators
+@n8n/decorators:dev: > tsc -p tsconfig.build.json --watch
+@n8n/decorators:dev: 
+@n8n/backend-test-utils:dev: 
+@n8n/backend-test-utils:dev: > @n8n/backend-test-utils@0.22.0 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/backend-test-utils
+@n8n/backend-test-utils:dev: > tsc -p tsconfig.build.json --watch
+@n8n/backend-test-utils:dev: 
+@n8n/errors:dev: 
+@n8n/errors:dev: > @n8n/errors@0.5.0 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/errors
+@n8n/errors:dev: > tsc -p tsconfig.build.json --watch
+@n8n/errors:dev: 
+@n8n/composables:dev: [34mℹ[39m Using tsdown config: [4m/media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/frontend/@n8n/composables/tsdown.config.ts[24m
+@n8n/composables:dev: [34mℹ[39m entry: [34msrc/useDeviceSupport.ts, src/useShortKeyPress.ts, src/useThrottleWithReactiveDelay.ts[39m
+@n8n/composables:dev: [34mℹ[39m tsconfig: [34mtsconfig.json[39m
+@n8n/composables:dev: [34mℹ[39m Build start
+@n8n/n8n-extension-insights:dev: [34mℹ[39m Using tsdown config: [4m/media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/extensions/insights/tsdown.config.ts[24m
+@n8n/composables:dev: [34mℹ[39m Cleaning 18 files
+@n8n/stores:dev: [34mℹ[39m Using tsdown config: [4m/media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/frontend/@n8n/stores/tsdown.config.ts[24m
+@n8n/vitest-config:dev: 
+@n8n/vitest-config:dev: > @n8n/vitest-config@1.5.0 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/vitest-config
+@n8n/vitest-config:dev: > tsc -p tsconfig.build.json --watch
+@n8n/vitest-config:dev: 
+@n8n/n8n-extension-insights:dev: [34mℹ[39m entry: [34msrc/backend/index.ts[39m
+@n8n/n8n-extension-insights:dev: [34mℹ[39m tsconfig: [34mtsconfig.backend.json[39m
+@n8n/n8n-extension-insights:dev: [34mℹ[39m Build start
+@n8n/client-oauth2:dev: 
+@n8n/client-oauth2:dev: > @n8n/client-oauth2@0.31.0 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/client-oauth2
+@n8n/client-oauth2:dev: > tsc -p tsconfig.build.json --watch
+@n8n/client-oauth2:dev: 
+@n8n/n8n-extension-insights:dev: [34mℹ[39m Cleaning 6 files
+@n8n/eslint-plugin-community-nodes:dev: 
+@n8n/eslint-plugin-community-nodes:dev: > @n8n/eslint-plugin-community-nodes@0.6.0 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/eslint-plugin-community-nodes
+@n8n/eslint-plugin-community-nodes:dev: > tsc --watch --project tsconfig.build.json
+@n8n/eslint-plugin-community-nodes:dev: 
+@n8n/stores:dev: [34mℹ[39m entry: [34msrc/constants.ts, src/index.ts, src/metaTagConfig.ts, src/useAgentRequestStore.ts, src/useRootStore.ts[39m
+@n8n/stores:dev: [34mℹ[39m tsconfig: [34mtsconfig.json[39m
+@n8n/stores:dev: [34mℹ[39m Build start
+@n8n/stores:dev: [34mℹ[39m Cleaning 28 files
+@n8n/imap:dev: 
+@n8n/imap:dev: > @n8n/imap@0.15.0 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/imap
+@n8n/imap:dev: > tsc -p tsconfig.build.json --watch
+@n8n/imap:dev: 
+@n8n/decorators:dev: [2J[3J[H9:05:30 PM - Starting compilation in watch mode...
+@n8n/decorators:dev: 
+@n8n/db:dev: [2J[3J[H9:05:30 PM - Starting compilation in watch mode...
+@n8n/db:dev: 
+@n8n/backend-test-utils:dev: [2J[3J[H9:05:30 PM - Starting compilation in watch mode...
+@n8n/backend-test-utils:dev: 
+@n8n/eslint-config:dev: [2J[3J[H9:05:30 PM - Starting compilation in watch mode...
+@n8n/eslint-config:dev: 
+@n8n/errors:dev: [2J[3J[H9:05:30 PM - Starting compilation in watch mode...
+@n8n/errors:dev: 
+@n8n/node-cli:dev: [2J[3J[H9:04:12 PM - Starting compilation in watch mode...
+@n8n/node-cli:dev: 
+@n8n/stylelint-config:dev: 
+@n8n/stylelint-config:dev: > @n8n/stylelint-config@0.0.1 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/stylelint-config
+@n8n/stylelint-config:dev: > tsc --watch
+@n8n/stylelint-config:dev: 
+n8n-node-dev:dev: 
+n8n-node-dev:dev: > n8n-node-dev@1.117.0 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/node-dev
+n8n-node-dev:dev: > tsc --watch
+n8n-node-dev:dev: 
+@n8n/config:dev: 
+@n8n/config:dev: > @n8n/config@1.61.0 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/config
+@n8n/config:dev: > tsc -p tsconfig.build.json --watch
+@n8n/config:dev: 
+n8n-workflow:dev: 
+n8n-workflow:dev: > n8n-workflow@1.116.0 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/workflow
+n8n-workflow:dev: > tsc --build tsconfig.build.esm.json tsconfig.build.cjs.json --watch
+n8n-workflow:dev: 
+@n8n/di:dev: 
+@n8n/di:dev: > @n8n/di@0.9.0 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/di
+@n8n/di:dev: > tsc -p tsconfig.build.json --watch
+@n8n/di:dev: 
+@n8n/constants:dev: 
+@n8n/constants:dev: > @n8n/constants@0.13.0 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/constants
+@n8n/constants:dev: > tsc -p tsconfig.build.json --watch
+@n8n/constants:dev: 
+@n8n/backend-common:dev: 
+@n8n/backend-common:dev: > @n8n/backend-common@0.29.0 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/backend-common
+@n8n/backend-common:dev: > tsc -p tsconfig.build.json --watch
+@n8n/backend-common:dev: 
+@n8n/n8n-nodes-langchain:dev: 
+@n8n/n8n-nodes-langchain:dev: > @n8n/n8n-nodes-langchain@1.118.0 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/@n8n/nodes-langchain
+@n8n/n8n-nodes-langchain:dev: > tsup --watch nodes --watch credentials --watch utils --watch types --tsconfig tsconfig.build.json --onSuccess "node ./scripts/post-build.js"
+@n8n/n8n-nodes-langchain:dev: 
+@n8n/eslint-plugin-community-nodes:dev: [2J[3J[H9:05:31 PM - Starting compilation in watch mode...
+@n8n/eslint-plugin-community-nodes:dev: 
+n8n-nodes-base:dev: 
+n8n-nodes-base:dev: > n8n-nodes-base@1.117.0 watch /media/krist/CrucialX9/cursor-projects/projects/Project05/n8n/packages/nodes-base
+n8n-nodes-base:dev: > tsc-watch -p tsconfig.build.cjs.json --onSuccess "pnpm post-build"
+n8n-nodes-base:dev: 
+@n8n/api-types:dev: [2J[3J[H9:05:31 PM - Starting compilation in watch mode...
+@n8n/api-types:dev: 
+@n8n/utils:dev: [33mWarning: Invalid input options (1 issue found)
+@n8n/utils:dev: - For the "define". Invalid key: Expected never but received "define". [0m
+@n8n/utils:dev: [33mWarning: Invalid input options (1 issue found)
+@n8n/utils:dev: - For the "define". Invalid key: Expected never but received "define". [0m
+@n8n/extension-sdk:dev: [33mWarning: Invalid input options (1 issue found)
+@n8n/extension-sdk:dev: - For the "define". Invalid key: Expected never but received "define". [0m
+@n8n/extension-sdk:dev: [33mWarning: Invalid input options (1 issue found)
+@n8n/extension-sdk:dev: - For the "define". Invalid key: Expected never but received "define". [0m
+@n8n/extension-sdk:dev: [33mWarning: Invalid input options (1 issue found)
+@n8n/extension-sdk:dev: - For the "define". Invalid key: Expected never but received "define". [0m
+@n8n/extension-sdk:dev: [33mWarning: Invalid input options (1 issue found)
+@n8n/extension-sdk:dev: - For the "define". Invalid key: Expected never but received "define". [0m
+@n8n/extension-sdk:dev: [33mWarning: Invalid input options (1 issue found)
+@n8n/extension-sdk:dev: - For the "define". Invalid key: Expected never but received "define". [0m
+@n8n/extension-sdk:dev: [33mWarning: Invalid input options (1 issue found)
+@n8n/extension-sdk:dev: - For the "define". Invalid key: Expected never but received "define". [0m
+@n8n/stylelint-config:dev: [2J[3J[H9:05:31 PM - Starting compilation in watch mode...
+@n8n/stylelint-config:dev: 
+@n8n/rest-api-client:dev: [33mWarning: Invalid input options (1 issue found)
+@n8n/rest-api-client:dev: - For the "define". Invalid key: Expected never but received "define". [0m
+@n8n/rest-api-client:dev: [33mWarning: Invalid input options (1 issue found)
+@n8n/rest-api-client:dev: - For the "define". Invalid key: Expected never but received "define". [0m
+@n8n/i18n:dev: [33mWarning: Invalid input options (1 issue found)
+@n8n/i18n:dev: - For the "define". Invalid key: Expected never but received "define". [0m
+@n8n/i18n:dev: [33mWarning: Invalid input options (1 issue found)
+@n8n/i18n:dev: - For the "define". Invalid key: Expected never but received "define". [0m
+@n8n/di:dev: [2J[3J[H9:05:31 PM - Starting compilation in watch mode...
+@n8n/di:dev: 
+n8n-workflow:dev: [2J[3J[H9:05:31 PM - Starting compilation in watch mode...
+n8n-workflow:dev: 
+@n8n/vitest-config:dev: [2J[3J[H9:05:32 PM - Starting compilation in watch mode...
+@n8n/vitest-config:dev: 
+@n8n/backend-common:dev: [2J[3J[H9:05:32 PM - Starting compilation in watch mode...
+@n8n/backend-common:dev: 
+n8n-workflow:dev: 
+n8n-workflow:dev: 9:05:32 PM - Found 0 errors. Watching for file changes.
+n8n:dev: [TypeScript] 
+n8n:dev: [TypeScript] > n8n@1.119.0 watch
+n8n:dev: [TypeScript] > tsc-watch -p tsconfig.build.json --onCompilationComplete "tsc-alias -p tsconfig.build.json"
+n8n:dev: [TypeScript] 
+@n8n/imap:dev: [2J[3J[H9:05:32 PM - Starting compilation in watch mode...
+@n8n/imap:dev: 
+@n8n/client-oauth2:dev: [2J[3J[H9:05:32 PM - Starting compilation in watch mode...
+@n8n/client-oauth2:dev: 
+@n8n/config:dev: [2J[3J[H9:05:32 PM - Starting compilation in watch mode...
+@n8n/config:dev: 
+n8n-core:dev: [2J[3J[H9:05:32 PM - Starting compilation in watch mode...
+n8n-core:dev: 
+n8n-node-dev:dev: [2J[3J[H9:05:32 PM - Starting compilation in watch mode...
+n8n-node-dev:dev: 
+n8n:dev: [Node] [33m[nodemon] 3.0.1[39m
+n8n:dev: [Node] [33m[nodemon] to restart at any time, enter `rs`[39m
+n8n:dev: [Node] [33m[nodemon] watching path(s): dist/**/*[39m
+n8n:dev: [Node] [33m[nodemon] watching extensions: js[39m
+n8n:dev: [Node] [32m[nodemon] starting `npm start`[39m
+@n8n/composables:dev: [33mWarning: Invalid input options (1 issue found)
+@n8n/composables:dev: - For the "define". Invalid key: Expected never but received "define". [0m
+@n8n/composables:dev: [33mWarning: Invalid input options (1 issue found)
+@n8n/composables:dev: - For the "define". Invalid key: Expected never but received "define". [0m
+@n8n/constants:dev: [2J[3J[H9:05:33 PM - Starting compilation in watch mode...
+@n8n/constants:dev: 
+@n8n/stores:dev: [33mWarning: Invalid input options (1 issue found)
+@n8n/stores:dev: - For the "define". Invalid key: Expected never but received "define". [0m
+@n8n/stores:dev: [33mWarning: Invalid input options (1 issue found)
+@n8n/stores:dev: - For the "define". Invalid key: Expected never but received "define". [0m
+@n8n/n8n-extension-insights:dev: [33mWarning: Invalid input options (1 issue found)
+@n8n/n8n-extension-insights:dev: - For the "define". Invalid key: Expected never but received "define". [0m
+@n8n/n8n-extension-insights:dev: [33mWarning: Invalid input options (1 issue found)
+@n8n/n8n-extension-insights:dev: - For the "define". Invalid key: Expected never but received "define". [0m
+n8n:dev: [Node] 
+n8n:dev: [Node] > n8n@1.119.0 start
+n8n:dev: [Node] > run-script-os
+n8n:dev: [Node] 
+n8n:dev: [TypeScript] [2J[3J[H9:32:53 PM - Starting compilation in watch mode...
+n8n:dev: [TypeScript] 
+n8n-nodes-base:dev: [2J[3J[H9:32:55 PM - Starting compilation in watch mode...
+n8n-nodes-base:dev: 

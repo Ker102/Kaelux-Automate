@@ -145,6 +145,7 @@ export interface ChatPayload {
 		executionData?: IRunExecutionData['resultData'];
 		expressionValues?: Record<string, ExpressionValue[]>;
 	};
+	modelMode?: 'fast' | 'thinking' | 'thinking-pro';
 }
 
 export class WorkflowBuilderAgent {

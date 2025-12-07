@@ -66,24 +66,18 @@ const formInputs = ref<null | IFormInputs>(null);
 const formBus = createFormEventBus();
 const readyToSubmit = ref(false);
 const currentSelectedTheme = ref(useUIStore().theme);
-const themeOptions = ref<Array<{ name: ThemeOption; label: BaseTextKey }>>([
-	{
-		name: 'system',
-		label: 'settings.personal.theme.systemDefault',
-	},
-	{
-		name: 'light',
-		label: 'settings.personal.theme.light',
-	},
-	{
-		name: 'dark',
-		label: 'settings.personal.theme.dark',
-	},
-	{
-		name: 'kaelux',
-		label: 'settings.personal.theme.kaelux',
-	},
-]);
+const themeOptionLabels: Record<ThemeOption, BaseTextKey> = {
+	system: 'settings.personal.theme.systemDefault',
+	light: 'settings.personal.theme.light',
+	dark: 'settings.personal.theme.dark',
+	kaelux: 'settings.personal.theme.kaelux',
+};
+const themeOptions = ref<Array<{ name: ThemeOption; label: BaseTextKey }>>(
+	(['system', 'light', 'dark', 'kaelux'] satisfies ThemeOption[]).map((name) => ({
+		name,
+		label: themeOptionLabels[name],
+	})),
+);
 
 const uiStore = useUIStore();
 const usersStore = useUsersStore();

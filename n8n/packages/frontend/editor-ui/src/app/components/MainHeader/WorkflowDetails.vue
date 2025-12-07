@@ -867,6 +867,28 @@ const onWorkflowActiveToggle = async (value: { id: string; active: boolean }) =>
 					@update:workflow-active="onWorkflowActiveToggle"
 				/>
 			</span>
+			<div :class="$style.group">
+				<N8nButton
+					type="secondary"
+					icon="globe"
+					class="mr-2xs"
+					element="a"
+					href="https://Kaelux.dev/links"
+					target="_blank"
+				>
+					Links
+				</N8nButton>
+				<N8nButton
+					type="secondary"
+					icon="github"
+					class="mr-2xs"
+					element="a"
+					href="https://github.com/Ker102/Kaelux-Automate"
+					target="_blank"
+				>
+					Star
+				</N8nButton>
+			</div>
 			<EnterpriseEdition :features="[EnterpriseEditionFeature.Sharing]">
 				<div :class="$style.group">
 					<CollaborationPane v-if="!isNewWorkflow" />

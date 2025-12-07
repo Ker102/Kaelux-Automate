@@ -35,7 +35,7 @@ export class AiController {
 		private readonly workflowBuilderService: WorkflowBuilderService,
 		private readonly credentialsService: CredentialsService,
 		private readonly userService: UserService,
-	) {}
+	) { }
 
 	// Use usesTemplates flag to bypass the send() wrapper which would cause
 	// "Cannot set headers after they are sent" error for streaming responses.
@@ -56,6 +56,8 @@ export class AiController {
 			res.on('close', handleClose);
 
 			const { text, workflowContext } = payload.payload;
+			const modelMode = payload.modelMode;
+
 			const aiResponse = this.workflowBuilderService.chat(
 				{
 					message: text,
@@ -65,6 +67,7 @@ export class AiController {
 						executionSchema: workflowContext.executionSchema,
 						expressionValues: workflowContext.expressionValues,
 					},
+					modelMode,
 				},
 				req.user,
 				signal,

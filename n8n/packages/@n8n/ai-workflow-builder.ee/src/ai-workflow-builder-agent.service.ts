@@ -1,4 +1,5 @@
 import { ChatAnthropic } from '@langchain/anthropic';
+import type { BaseChatModel } from '@langchain/core/language_models/chat_models';
 import { LangChainTracer } from '@langchain/core/tracers/tracer_langchain';
 import { Logger } from '@n8n/backend-common';
 import { Service } from '@n8n/di';
@@ -8,7 +9,7 @@ import { Client as TracingClient } from 'langsmith';
 import type { IUser, INodeTypeDescription } from 'n8n-workflow';
 
 import { LLMServiceError } from '@/errors';
-import { anthropicClaudeSonnet45 } from '@/llm-config';
+import { anthropicClaudeSonnet45, googleGemini } from '@/llm-config';
 import { SessionManagerService } from '@/session-manager.service';
 import { WorkflowBuilderAgent, type ChatPayload } from '@/workflow-builder-agent';
 
@@ -60,12 +61,25 @@ export class AiWorkflowBuilderService {
 		return authHeaders;
 	}
 
-	private async setupModels(user: IUser): Promise<{
-		anthropicClaude: ChatAnthropic;
+	private async setupModels(
+		user: IUser,
+		modelMode?: 'fast' | 'thinking' | 'thinking-pro',
+	): Promise<{
+		llm: BaseChatModel;
 		tracingClient?: TracingClient;
 		authHeaders?: { Authorization: string };
 	}> {
 		try {
+			if (modelMode) {
+				const apiKey = process.env.N8N_AI_GEMINI_KEY ?? process.env.GEMINI_API_KEY ?? '';
+				let modelName = 'gemini-2.0-flash';
+				if (modelMode === 'thinking') modelName = 'gemini-2.5-pro';
+				if (modelMode === 'thinking-pro') modelName = 'gemini-3.0-pro';
+
+				const llm = await googleGemini({ apiKey }, modelName);
+				return { llm };
+			}
+
 			// If client is provided, use it for API proxy
 			if (this.client) {
 				const authHeaders = await this.getApiProxyAuthHeaders(user);
@@ -90,7 +104,7 @@ export class AiWorkflowBuilderService {
 					},
 				});
 
-				return { tracingClient, anthropicClaude, authHeaders };
+				return { tracingClient, llm: anthropicClaude, authHeaders };
 			}
 
 			// If base URL is not set, use environment variables
@@ -98,7 +112,7 @@ export class AiWorkflowBuilderService {
 				apiKey: process.env.N8N_AI_ANTHROPIC_KEY ?? '',
 			});
 
-			return { anthropicClaude };
+			return { llm: anthropicClaude };
 		} catch (error) {
 			const errorMessage = error instanceof Error ? `: ${error.message}` : '';
 			const llmError = new LLMServiceError(`Failed to connect to LLM Provider${errorMessage}`, {
@@ -144,14 +158,14 @@ export class AiWorkflowBuilderService {
 		});
 	}
 
-	private async getAgent(user: IUser) {
-		const { anthropicClaude, tracingClient, authHeaders } = await this.setupModels(user);
+	private async getAgent(user: IUser, modelMode?: 'fast' | 'thinking' | 'thinking-pro') {
+		const { llm, tracingClient, authHeaders } = await this.setupModels(user, modelMode);
 
 		const agent = new WorkflowBuilderAgent({
 			parsedNodeTypes: this.parsedNodeTypes,
 			// We use Sonnet both for simple and complex tasks
-			llmSimpleTask: anthropicClaude,
-			llmComplexTask: anthropicClaude,
+			llmSimpleTask: llm,
+			llmComplexTask: llm,
 			logger: this.logger,
 			checkpointer: this.sessionManager.getCheckpointer(),
 			tracer: tracingClient
@@ -189,7 +203,7 @@ export class AiWorkflowBuilderService {
 	}
 
 	async *chat(payload: ChatPayload, user: IUser, abortSignal?: AbortSignal) {
-		const agent = await this.getAgent(user);
+		const agent = await this.getAgent(user, payload.modelMode);
 
 		for await (const output of agent.chat(payload, user?.id?.toString(), abortSignal)) {
 			yield output;

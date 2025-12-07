@@ -79,3 +79,12 @@ export const anthropicClaudeSonnet45 = async (config: LLMProviderConfig) => {
 
 	return model;
 };
+
+export const googleGemini = async (config: LLMProviderConfig, modelName: string) => {
+	const { ChatGoogleGenerativeAI } = await import('@langchain/google-genai');
+	return new ChatGoogleGenerativeAI({
+		model: modelName,
+		apiKey: config.apiKey,
+		maxOutputTokens: MAX_OUTPUT_TOKENS,
+	});
+};

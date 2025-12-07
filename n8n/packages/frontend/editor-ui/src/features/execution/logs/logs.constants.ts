@@ -19,4 +19,5 @@ export const LOG_DETAILS_PANEL_STATE = {
 export const LOGS_FOOTER_TABS = {
 	LOGS: 'logs',
 	AI: 'ai',
+	AI_TEMPLATES: 'ai_templates',
 } as const;

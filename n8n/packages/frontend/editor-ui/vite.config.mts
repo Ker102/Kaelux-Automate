@@ -57,6 +57,10 @@ const alias = [
 		replacement: resolve(packagesDir, 'frontend', '@n8n', 'stores', 'src$1'),
 	},
 	{
+		find: 'v-code-diff',
+		replacement: resolve(__dirname, 'node_modules', 'v-code-diff', 'dist', 'v3', 'index.es.js'),
+	},
+	{
 		find: /^@n8n\/utils(.+)$/,
 		replacement: resolve(packagesDir, '@n8n', 'utils', 'src$1'),
 	},

@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from '@n8n/i18n';
-import { N8nButton, N8nCallout, N8nScrollArea, N8nText } from '@n8n/design-system';
-import { AI_WORKFLOW_ENDPOINT, AI_SAMPLE_PROMPTS_ENDPOINT } from '@/app/constants';
+import { N8nButton, N8nCallout, N8nText, N8nIcon } from '@n8n/design-system';
+import { AI_WORKFLOW_ENDPOINT } from '@/app/constants';
 import { useCanvasOperations } from '@/app/composables/useCanvasOperations';
 import { useWorkflowsStore } from '@/app/stores/workflows.store';
-import { useWorkflowHelpers } from '@/app/composables/useWorkflowHelpers';
 import { useToast } from '@/app/composables/useToast';
 import { mapLegacyConnectionToCanvasConnection } from '@/features/workflows/canvas/canvas.utils';
 import type { INodeUi } from '@/Interface';
@@ -41,129 +40,21 @@ interface WorkflowAction {
 	metadata?: Record<string, unknown>;
 }
 
-interface PromptExample {
-	id: string;
-	title: string;
-	prompt: string;
-	description: string;
-	industries: string[];
-	domains: string[];
-	channels: string[];
-	trigger?: string;
-	complexity?: string;
-	integrations: string[];
-	tags: string[];
-	category?: string;
-}
-
 const locale = useI18n();
 const prompt = ref('');
 const isGenerating = ref(false);
 const errorMessage = ref<string | null>(null);
 const suggestions = ref<WorkflowSuggestion[]>([]);
 const endpoint = AI_WORKFLOW_ENDPOINT;
-const promptsEndpoint = AI_SAMPLE_PROMPTS_ENDPOINT;
-const promptExamples = ref<PromptExample[]>([]);
-const defaultTemplates: PromptExample[] = [
-	{
-		id: 'sales-digest',
-		category: 'Sales & CRM',
-		title: 'Daily Sales Follow-up Digest',
-		description: 'Summarize new CRM leads, highlight stale deals, and send reminders to account owners.',
-		prompt:
-			"Every weekday morning summarize CRM leads added in the last 24h, list stale opportunities, and DM owners in Slack with follow-up reminders.",
-		industries: ['sales'],
-		domains: ['summaries'],
-		channels: ['slack'],
-		trigger: 'scheduled',
-		complexity: 'medium',
-		integrations: ['HubSpot', 'Salesforce', 'Slack'],
-		tags: ['sales', 'crm'],
-	},
-	{
-		id: 'finance-triage',
-		category: 'Finance & Ops',
-		title: 'Invoice Auto-Triage',
-		description: 'Monitor inbox for invoices, extract totals, sync to sheets, and alert finance when thresholds are exceeded.',
-		prompt:
-			"Watch a finance inbox for new invoices, extract supplier, total, due date, log to Google Sheets, and alert the finance channel when totals exceed $5,000.",
-		industries: ['finance'],
-		domains: ['payments'],
-		channels: ['slack'],
-		trigger: 'email',
-		complexity: 'medium',
-		integrations: ['Gmail', 'Google Sheets', 'Slack'],
-		tags: ['finance', 'ops'],
-	},
-	{
-		id: 'marketing-launch',
-		category: 'Marketing',
-		title: 'Product Launch Amplifier',
-		description: 'Repurpose a launch brief into scheduled posts across social channels with approval steps.',
-		prompt:
-			"Given a product brief, create social posts for LinkedIn, Twitter, and Instagram, queue them for approval, and schedule across the week.",
-		industries: ['marketing'],
-		domains: ['content-scheduling'],
-		channels: ['linkedin', 'twitter', 'instagram'],
-		trigger: 'manual',
-		complexity: 'high',
-		integrations: ['Notion', 'Buffer'],
-		tags: ['marketing'],
-	},
-	{
-		id: 'ops-heartbeat',
-		category: 'Operations',
-		title: 'Daily Ops Heartbeat',
-		description: 'Collect metrics from multiple services, compile a dashboard snapshot, and email the team.',
-		prompt:
-			"Every morning pull key metrics (support tickets, uptime, revenue) from their APIs, render a summary, and email operations leadership.",
-		industries: ['operations'],
-		domains: ['reporting'],
-		channels: ['email'],
-		trigger: 'scheduled',
-		complexity: 'medium',
-		integrations: ['Zendesk', 'Postgres', 'SendGrid'],
-		tags: ['ops'],
-	},
-	{
-		id: 'support-escalation',
-		category: 'Customer Support',
-		title: 'Smart Escalations',
-		description:
-			'Listen for high-severity tickets, translate summaries, create Jira issues, and notify on-call responders.',
-		prompt:
-			"Monitor support tickets for severity=high, summarize them, create Jira issues, and page the on-call responder via Slack.",
-		industries: ['support'],
-		domains: ['ticket-routing'],
-		channels: ['slack'],
-		trigger: 'webhook',
-		complexity: 'medium',
-		integrations: ['Zendesk', 'Jira', 'Slack'],
-		tags: ['support'],
-	},
-	{
-		id: 'customer-onboarding',
-		category: 'Customer Success',
-		title: 'Customer Onboarding Checklist',
-		description:
-			'When a deal closes, generate onboarding tasks, welcome emails, and schedule the kickoff meeting automatically.',
-		prompt:
-			"When a CRM opportunity moves to Closed Won, kick off an onboarding checklist: create task list, send welcome email, and schedule kickoff.",
-		industries: ['customer success'],
-		domains: ['project-management'],
-		channels: ['email'],
-		trigger: 'crm-event',
-		complexity: 'medium',
-		integrations: ['Salesforce', 'Asana', 'Calendly'],
-		tags: ['success'],
-	},
-];
-const promptExamplesError = ref<string | null>(null);
-const isLoadingPromptExamples = ref(true);
-const highlightedExampleId = ref<string | null>(null);
-const { importWorkflowData, deleteNodes, replaceNodeParameters, deleteConnectionsByNodeId, createConnection } =
+const modelMode = ref<'fast' | 'thinking' | 'thinking-pro'>('fast');
+
+
+
+
+
+
+const { importWorkflowData, deleteNodes, replaceNodeParameters, createConnection } =
 	useCanvasOperations();
-const workflowHelpers = useWorkflowHelpers();
 const toast = useToast();
 const workflowsStore = useWorkflowsStore();
 const expandedJsonIds = ref<Record<string, boolean>>({});
@@ -524,81 +415,6 @@ const hasExistingWorkflow = computed(
 );
 const copiedSuggestionId = ref<string | null>(null);
 
-const groupedPromptExamples = computed(() => {
-	if (!promptExamples.value.length) return [];
-
-	const map = new Map<string, PromptExample[]>();
-	promptExamples.value.forEach((example) => {
-		const category =
-			example.industries[0] ??
-			example.domains[0] ??
-			example.channels[0] ??
-			example.trigger ??
-			'General';
-		if (!map.has(category)) map.set(category, []);
-		map.get(category)?.push(example);
-	});
-
-	return Array.from(map.entries()).map(([category, items]) => ({
-		category,
-		items,
-	}));
-});
-
-onMounted(() => {
-	void loadPromptExamples();
-});
-
-async function loadPromptExamples() {
-	isLoadingPromptExamples.value = true;
-	promptExamplesError.value = null;
-
-	try {
-		const response = await fetch(promptsEndpoint, { method: 'GET' });
-		const payload = (await response.json().catch(() => ({}))) as {
-			prompts?: PromptExample[];
-			error?: string;
-		};
-
-		if (!response.ok || !payload.prompts) {
-			throw new Error(payload.error ?? locale.baseText('logs.aiPanel.error.generic'));
-		}
-
-		promptExamples.value = defaultTemplates;
-		highlightedExampleId.value = promptExamples.value[0]?.id ?? null;
-	} catch (error) {
-		const message =
-			error instanceof Error
-				? error.message
-				: locale.baseText('logs.aiPanel.error.generic');
-		promptExamplesError.value = message;
-	} finally {
-		isLoadingPromptExamples.value = false;
-	}
-}
-
-function handleUsePromptExample(example: PromptExample) {
-	prompt.value = example.prompt;
-	highlightedExampleId.value = example.id;
-}
-
-function handleApplyPromptExample(example: PromptExample) {
-	handleUsePromptExample(example);
-	void submitPrompt(example.prompt);
-}
-
-function handleHoverPromptExample(example: PromptExample) {
-	highlightedExampleId.value = example.id;
-}
-
-function formatMeta(values?: string[]) {
-	if (!values || values.length === 0) {
-		return '—';
-	}
-
-	return values.join(', ');
-}
-
 function makeSuggestionId() {
 	if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
 		return crypto.randomUUID();
@@ -643,8 +459,13 @@ async function generateSuggestion(request: string) {
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify({
-			prompt: request,
-			workflowContext: activeWorkflowSnapshot.value,
+			payload: {
+				role: 'user',
+				type: 'message',
+				text: request,
+				workflowContext: activeWorkflowSnapshot.value,
+			},
+			modelMode: modelMode.value,
 		}),
 	});
 
@@ -800,17 +621,9 @@ async function applyWorkflowActions(
 				}
 
 				const seenKeys = new Set<string>();
-				for (const nodeName of nodeNames) {
-					const node = workflowsStore.getNodeByName(nodeName);
-					if (!node?.id) {
-						errors.push(`Cannot reconnect node "${nodeName}" because it does not exist.`);
-						continue;
-					}
-
-					deleteConnectionsByNodeId(node.id, { trackHistory: true, trackBulk: true });
-					applyConnectionsForNode(nodeName, workflowPayload, seenKeys);
-				}
-
+				nodeNames.forEach((name) => {
+					applyConnectionsForNode(name, workflowPayload, seenKeys);
+				});
 				applied = true;
 				break;
 			}
@@ -820,112 +633,62 @@ async function applyWorkflowActions(
 	return { applied, errors };
 }
 
-async function handleInsert(targetSuggestion?: WorkflowSuggestion | null) {
-	const suggestion = targetSuggestion ?? latestSuggestion.value;
+async function handleInsert(suggestion?: WorkflowSuggestion) {
+	const target = suggestion ?? latestSuggestion.value;
+	if (!target) return;
 
-	if (!suggestion) {
-		return;
-	}
-
-	const workflowPayload = sanitizeWorkflowPayload(suggestion.workflow);
-
-	if (!isWorkflowPayload(workflowPayload)) {
-		errorMessage.value = locale.baseText('logs.aiPanel.error.invalidWorkflow');
-		return;
-	}
-	if (!Array.isArray(workflowPayload.nodes) || workflowPayload.nodes.length === 0) {
-		errorMessage.value = locale.baseText('logs.aiPanel.error.emptyWorkflow');
-		return;
-	}
-
-	const hasReplaceAction = suggestion.actions.some((action) => action.type === 'replace_workflow');
-	const shouldReplaceExisting =
-		(hasExistingWorkflow.value && suggestion.replacesWorkflow) || hasReplaceAction;
-	let rollbackSnapshot: WorkflowDataUpdate | null = null;
-
-	if (shouldReplaceExisting) {
-		try {
-			rollbackSnapshot = await workflowHelpers.getWorkflowDataToSave();
-			const nodeIdsToDelete = (workflowsStore.workflow?.nodes ?? [])
-				.map((node) => node.id)
-				.filter((id): id is string => typeof id === 'string');
-
-			if (nodeIdsToDelete.length) {
-				deleteNodes(nodeIdsToDelete, { trackHistory: false, trackBulk: true });
-			}
-		} catch (error) {
-			console.warn('[AI builder] Unable to snapshot workflow before replace', error);
-		}
-	}
-
-	const patchableActions = suggestion.actions.filter((action) =>
-		SUPPORTED_PATCH_ACTIONS.has(action.type),
-	);
-	const canApplyPatch =
-		!shouldReplaceExisting &&
-		suggestion.actions.length > 0 &&
-		patchableActions.length === suggestion.actions.length;
-
-	if (canApplyPatch) {
-		const result = await applyWorkflowActions(patchableActions, workflowPayload);
-		if (result.applied) {
+	if (target.actions.length > 0 && hasExistingWorkflow.value) {
+		const { applied, errors } = await applyWorkflowActions(target.actions, target.workflow as WorkflowDataUpdate);
+		if (errors.length > 0) {
 			toast.showToast({
-				title: locale.baseText('logs.aiPanel.toast.title'),
-				message: 'Applied AI-suggested changes.',
+				title: 'Partial update issues',
+				message: errors.join('\n'),
+				type: 'warning',
+			});
+		} else if (applied) {
+			toast.showToast({
+				title: 'Workflow updated',
+				message: 'AI suggestions applied successfully.',
 				type: 'success',
 			});
-			emit('insert', suggestion);
-			return;
 		}
-
-		if (result.errors.length) {
-			errorMessage.value = result.errors.join(' ');
-		}
+		emit('insert', target);
+		return;
 	}
 
-	try {
-		const nodeCount = Array.isArray(workflowPayload.nodes)
-			? workflowPayload.nodes.length
-			: 0;
-
-		await importWorkflowData(workflowPayload, 'ai-builder', {
-			regenerateIds: true,
-			trackEvents: false,
-		});
-
-		toast.showToast({
-			title: locale.baseText('logs.aiPanel.toast.title'),
-			message: locale.baseText('logs.aiPanel.toast.message', {
-				interpolate: { count: nodeCount },
-			}),
-			type: 'success',
-		});
-		emit('insert', suggestion);
-	} catch (error) {
-		if (shouldReplaceExisting && rollbackSnapshot) {
-			try {
-				await importWorkflowData(rollbackSnapshot, 'ai-rollback', {
-					regenerateIds: false,
-					trackEvents: false,
-					trackHistory: false,
-					importTags: false,
-				});
-			} catch (restoreError) {
-				console.error('[AI builder] Unable to restore workflow after failed insert', restoreError);
-			}
-		}
-
-		errorMessage.value =
-			error instanceof Error
-				? error.message
-				: locale.baseText('logs.aiPanel.error.importFailed');
-	}
+	const workflowData = target.workflow as WorkflowDataUpdate;
+	await importWorkflowData(workflowData, 'ai-builder', {
+		regenerateIds: true,
+	});
+	emit('insert', target);
 }
 
-function formatTimestamp(timestamp: string) {
-	const date = new Date(timestamp);
+function findDisconnectedNodes(workflow: WorkflowDataUpdate): string[] {
+	if (!workflow.nodes) return [];
+	const nodeNames = new Set(workflow.nodes.map((n) => n.name));
+	const connected = new Set<string>();
 
-	return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+	if (workflow.connections) {
+		Object.values(workflow.connections).forEach((conns) => {
+			Object.values(conns).forEach((outputs) => {
+				outputs.forEach((branch) => {
+					if (branch && Array.isArray(branch)) {
+						branch.forEach((conn) => {
+							if (conn && conn.node) connected.add(conn.node);
+						});
+					}
+				});
+			});
+		});
+		Object.keys(workflow.connections).forEach((source) => connected.add(source));
+	}
+
+	return Array.from(nodeNames).filter((name) => !connected.has(name));
+}
+
+function describeWorkflowSteps(workflow: WorkflowDataUpdate): string[] {
+	if (!workflow.nodes) return [];
+	return workflow.nodes.map((n) => `${n.name} (${n.type})`);
 }
 
 function toggleJsonVisibility(id: string) {
@@ -933,506 +696,219 @@ function toggleJsonVisibility(id: string) {
 }
 
 function isJsonExpanded(id: string) {
-	return !!expandedJsonIds.value[id];
+	return Boolean(expandedJsonIds.value[id]);
 }
 
-async function copyJson(json: string, suggestionId?: string) {
+async function copyJson(text: string, id: string) {
 	try {
-		await navigator.clipboard.writeText(json);
-		copyFeedback.value = locale.baseText('logs.aiPanel.copyJsonSuccess');
-		copiedSuggestionId.value = suggestionId ?? null;
-		if (copyTimer) {
-			clearTimeout(copyTimer);
-		}
+		await navigator.clipboard.writeText(text);
+		copiedSuggestionId.value = id;
+		copyFeedback.value = 'Copied!';
+		if (copyTimer) clearTimeout(copyTimer);
 		copyTimer = setTimeout(() => {
 			copyFeedback.value = null;
 			copiedSuggestionId.value = null;
 		}, JSON_FEEDBACK_DURATION);
-	} catch (error) {
-		console.warn('Unable to copy JSON', error);
-		copyFeedback.value = locale.baseText('logs.aiPanel.copyJsonError');
-		copiedSuggestionId.value = suggestionId ?? null;
-		if (copyTimer) {
-			clearTimeout(copyTimer);
-		}
-		copyTimer = setTimeout(() => {
-			copyFeedback.value = null;
-			copiedSuggestionId.value = null;
-		}, JSON_FEEDBACK_DURATION);
+	} catch (err) {
+		copyFeedback.value = 'Failed to copy';
 	}
 }
 
-function findDisconnectedNodes(workflow: WorkflowDataUpdate): string[] {
-	const nodes = workflow.nodes ?? [];
-	if (!nodes.length) {
-		return [];
-	}
-
-	const incomingCount = new Map<string, number>();
-	const outgoingCount = new Map<string, number>();
-
-	const markOutgoing = (name: string) => {
-		outgoingCount.set(name, (outgoingCount.get(name) ?? 0) + 1);
-	};
-
-	const markIncoming = (name: string) => {
-		incomingCount.set(name, (incomingCount.get(name) ?? 0) + 1);
-	};
-
-	const connections = (workflow.connections ?? {}) as Record<
-		string,
-		Record<string, Array<Array<{ node?: string }>> | undefined> | undefined
-	>;
-
-	Object.entries(connections).forEach(([sourceNode, connectionByType]) => {
-		if (!connectionByType) return;
-
-		Object.values(connectionByType).forEach((connectionBranches) => {
-			if (!Array.isArray(connectionBranches)) return;
-
-			connectionBranches.forEach((branch) => {
-				if (!Array.isArray(branch)) return;
-
-				branch.forEach((connection) => {
-					const targetNode = connection?.node;
-					if (!targetNode) return;
-
-					markOutgoing(sourceNode);
-					markIncoming(targetNode);
-				});
-			});
-		});
-	});
-
-	return nodes
-		.filter((node) => {
-			const incoming = incomingCount.get(node.name ?? node.id ?? 'unknown') ?? 0;
-			const outgoing = outgoingCount.get(node.name ?? node.id ?? 'unknown') ?? 0;
-			return incoming === 0 && outgoing === 0;
-		})
-		.map((node) => node.name ?? node.id ?? node.type ?? 'Unnamed node');
+function setPrompt(newPrompt: string) {
+	prompt.value = newPrompt;
 }
 
-async function handleRegenerateConnections(issue?: WorkflowSuggestion | null) {
-	if (!issue) return;
-	const missing = issue.disconnectedNodes.join(', ');
-	const promptWithFix = `${issue.prompt}\n\nEnsure these nodes are connected in the regenerated workflow: ${missing}. All nodes must participate in the flow.`;
-	await submitPrompt(promptWithFix);
-}
 
-function describeWorkflowSteps(workflow: unknown): string[] {
-	if (!isWorkflowPayload(workflow)) {
-		return [];
-	}
 
-	return (workflow.nodes ?? [])
-		.slice(0, 6)
-		.map((node, index) => {
-			const label = node.name ?? node.id ?? node.type ?? 'Node';
-			return `${index + 1}. ${label} (${node.type ?? 'unknown'})`;
-		});
-}
-
-function formatActionType(type: WorkflowAction['type']) {
-	switch (type) {
-		case 'replace_workflow':
-			return 'Replace workflow';
-		case 'add_node':
-			return 'Add node';
-		case 'remove_node':
-			return 'Remove node';
-		case 'update_node':
-			return 'Update node';
-		case 'reconnect_nodes':
-			return 'Reconnect nodes';
-		default:
-			return 'Custom change';
-	}
-}
+defineExpose({
+	setPrompt,
+});
 </script>
 
 <template>
-	<N8nScrollArea class="$style.scrollRoot" :enable-vertical-scroll="true" :enable-horizontal-scroll="false">
-		<div :class="$style.container">
-			<section :class="$style.header">
-				<N8nText tag="p" size="medium" color="text-base" bold>
-					{{ locale.baseText('logs.aiPanel.title') }}
-				</N8nText>
-				<N8nText tag="p" size="small" color="text-light">
-					{{ locale.baseText('logs.aiPanel.subtitle') }}
-				</N8nText>
-			</section>
-
-			<div :class="$style.bodyScroll">
-				<div :class="$style.workspace">
-					<section :class="$style.samples">
-					<header>
-						<N8nText tag="p" size="small" color="text-light">
-							Start from a curated template and let the assistant adapt it to your workflow.
-						</N8nText>
-					</header>
-					<div v-if="isLoadingPromptExamples" :class="$style.samplesLoading">
-						<N8nText tag="span" size="small" color="text-light">
-							Loading curated templates...
-						</N8nText>
-					</div>
-					<N8nCallout v-else-if="promptExamplesError" icon="triangle-alert" theme="danger">
-						{{ promptExamplesError }}
-					</N8nCallout>
-					<div v-else :class="$style.sampleGroups">
-						<div v-for="group in groupedPromptExamples" :key="group.category" :class="$style.sampleGroup">
-							<div :class="$style.sampleGroupHeader">
-								<N8nText tag="span" size="small" color="text-light">Category</N8nText>
-								<N8nText tag="p" size="medium" color="text-base" bold>
-									{{ group.category }}
-								</N8nText>
-							</div>
-							<div :class="$style.sampleCardGrid">
-								<div
-									v-for="example in group.items"
-									:key="example.id"
-									:class="[$style.sampleCard, highlightedExampleId === example.id ? $style.sampleCardActive : '']"
-									@click="handleUsePromptExample(example)"
-									@mouseenter="handleHoverPromptExample(example)"
-								>
-									<div>
-										<N8nText tag="p" size="small" color="text-light">
-											{{ formatMeta(example.tags) }}
-										</N8nText>
-										<N8nText tag="p" size="medium" color="text-base" bold>
-											{{ example.title }}
-										</N8nText>
-										<p :class="$style.sampleDescription">{{ example.description }}</p>
-									</div>
-									<div :class="$style.sampleMetaRow">
-										<span>{{ formatMeta(example.industries) }}</span>
-										<span>{{ formatMeta(example.channels) }}</span>
-									</div>
-									<div :class="$style.sampleActions">
-										<N8nButton
-											size="small"
-											type="secondary"
-											@click.stop="handleUsePromptExample(example)"
-										>
-											Fill prompt
-										</N8nButton>
-										<N8nButton
-											size="small"
-											type="tertiary"
-											@click.stop="handleApplyPromptExample(example)"
-										>
-											Use template
-										</N8nButton>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</section>
-
-				<section :class="$style.chatShell">
+	<div :class="$style.container">
+		<div :class="$style.workspace">
+			<div :class="$style.chatShell">
 				<div :class="$style.chatStream">
 					<div v-if="suggestions.length === 0" :class="$style.emptyState">
-						<N8nText tag="p" size="medium" color="text-base" bold>Start a new automation brief</N8nText>
-					<p>
-						Share what you need automated or pick a template above. Each prompt stays in this timeline so you can review the
-						history, iterate, and insert the best response into your workflow.
-					</p>
-					<ul>
-						<li>Describe the trigger, data sources, and desired outputs.</li>
-						<li>Mention important tools or constraints to guide the assistant.</li>
-						<li>Adjust and resend your prompt until the blueprint feels right.</li>
-					</ul>
-				</div>
-				<div v-else v-for="suggestion in suggestions" :key="suggestion.id" :class="$style.exchange">
-					<article :class="[$style.message, $style.userMessage]">
-						<div :class="$style.messageMeta">
-							<span>You</span>
-							<span>{{ formatTimestamp(suggestion.createdAt) }}</span>
-						</div>
-						<p>{{ suggestion.prompt }}</p>
-					</article>
-					<article :class="[$style.message, $style.aiMessage]">
-						<div :class="$style.messageMeta">
-							<span>Kaelux Automate</span>
-							<span>{{ formatTimestamp(suggestion.createdAt) }}</span>
-						</div>
-						<p :class="$style.aiSummary">{{ suggestion.summary }}</p>
-						<div
-							v-if="suggestion.steps.length || suggestion.notes.length || suggestion.actions.length"
-							:class="$style.aiGrid"
-						>
-							<div v-if="suggestion.steps.length" :class="$style.aiCard">
-								<N8nText tag="span" size="small" color="text-light">Workflow blueprint</N8nText>
-								<ul>
-									<li v-for="step in suggestion.steps" :key="step">{{ step }}</li>
-								</ul>
+						<N8nIcon icon="sparkles" size="xlarge" color="primary" />
+						<N8nText size="large" :bold="true" color="text-dark">
+							Kaelux-Agent
+						</N8nText>
+						<N8nText color="text-base">
+							What would you like to automate today?
+						</N8nText>
+					</div>
+					<section v-else :class="$style.exchange" v-for="suggestion in suggestions" :key="suggestion.id">
+						<div :class="[$style.message, $style.userMessage]">
+							<div :class="$style.messageMeta">
+								<span>You</span>
+								<span>{{ new Date(suggestion.createdAt).toLocaleTimeString() }}</span>
 							</div>
-							<div v-if="suggestion.notes.length" :class="$style.aiCard">
-								<N8nText tag="span" size="small" color="text-light">Implementation notes</N8nText>
-								<ul>
-									<li v-for="note in suggestion.notes" :key="note">{{ note }}</li>
-								</ul>
+							<p>{{ suggestion.prompt }}</p>
+						</div>
+						<div :class="[$style.message, $style.aiMessage]">
+							<div :class="$style.messageMeta">
+								<span>Kaelux-Agent</span>
+								<span v-if="suggestion.replacesWorkflow">Replaces Workflow</span>
+								<span v-else>Updates Workflow</span>
 							</div>
-							<div v-if="suggestion.actions.length" :class="$style.aiCard">
-								<N8nText tag="span" size="small" color="text-light">Proposed actions</N8nText>
-								<ul>
-									<li v-for="action in suggestion.actions" :key="`${suggestion.id}-${action.type}-${action.summary}`">
-										<strong>{{ formatActionType(action.type) }}</strong>
-										<span>{{ action.summary }}</span>
-										<span v-if="action.targetNode" :class="$style.actionMeta">Node: {{ action.targetNode }}</span>
-									</li>
-								</ul>
+							<p :class="$style.aiSummary">{{ suggestion.summary }}</p>
+							
+							<div v-if="suggestion.actions.length > 0" :class="$style.aiGrid">
+								<div v-for="(action, idx) in suggestion.actions" :key="idx" :class="$style.aiCard">
+									<div :class="$style.actionMeta">
+										<N8nIcon icon="wrench" size="small" />
+										<span style="text-transform: capitalize">{{ action.type.replace('_', ' ') }}</span>
+									</div>
+									<N8nText size="small" color="text-dark" :bold="true">
+										{{ action.summary }}
+									</N8nText>
+									<ul v-if="action.details">
+										<li v-for="(val, key) in action.details" :key="key">
+											{{ key }}: {{ val }}
+										</li>
+									</ul>
+								</div>
 							</div>
-						</div>
-						<div v-if="suggestion.disconnectedNodes.length" :class="$style.aiWarning">
-							<N8nText tag="span" size="small" color="danger">Disconnected nodes</N8nText>
-							<p>
-								Some nodes are not connected: {{ suggestion.disconnectedNodes.join(', ') }}
-							</p>
-							<N8nButton size="mini" type="secondary" @click="handleRegenerateConnections(suggestion)">
-								Ask AI to reconnect them
-							</N8nButton>
-						</div>
-						<div :class="$style.aiActions">
-							<N8nButton
-								size="small"
-								type="primary"
-								:disabled="isGenerating || isSuggestionUnparsed(suggestion)"
-								@click="handleInsert(suggestion)"
-							>
-								Insert into canvas
-							</N8nButton>
-							<N8nButton
-								size="small"
-								type="secondary"
-								@click="toggleJsonVisibility(suggestion.id)"
-							>
-								{{ isJsonExpanded(suggestion.id) ? 'Hide JSON' : 'View JSON' }}
-							</N8nButton>
-						</div>
-						<div v-if="isJsonExpanded(suggestion.id)" :class="$style.codePreview">
-							<div :class="$style.codePreviewHeader">
-								<span>Workflow JSON</span>
-								<div :class="$style.codePreviewActions">
+
+							<div v-if="suggestion.disconnectedNodes.length > 0" :class="$style.aiWarning">
+								<N8nText color="danger" size="small" :bold="true">
+									Disconnected Nodes Warning
+								</N8nText>
+								<N8nText size="small" color="danger">
+									The following nodes are not connected to the workflow: {{ suggestion.disconnectedNodes.join(', ') }}
+								</N8nText>
+							</div>
+
+							<article :class="$style.aiActions">
+								<div :class="$style.actions">
 									<N8nButton
-										size="mini"
-										type="tertiary"
-										@click="copyJson(suggestion.workflowJson, suggestion.id)"
+										size="small"
+										type="primary"
+										:disabled="isGenerating || isSuggestionUnparsed(suggestion)"
+										@click="handleInsert(suggestion)"
 									>
-										Copy JSON
+										Insert into canvas
 									</N8nButton>
 									<N8nButton
-										size="mini"
+										size="small"
 										type="secondary"
 										@click="toggleJsonVisibility(suggestion.id)"
 									>
-										Close
+										{{ isJsonExpanded(suggestion.id) ? 'Hide JSON' : 'View JSON' }}
 									</N8nButton>
 								</div>
-							</div>
-							<pre>{{ suggestion.workflowJson }}</pre>
-							<p
-								v-if="copyFeedback && copiedSuggestionId === suggestion.id"
-								:class="$style.copyFeedback"
-							>
-								{{ copyFeedback }}
-							</p>
+								<div v-if="isJsonExpanded(suggestion.id)" :class="$style.codePreview">
+									<div :class="$style.codePreviewHeader">
+										<span>Workflow JSON</span>
+										<div :class="$style.codePreviewActions">
+											<N8nButton
+												size="mini"
+												type="tertiary"
+												@click="copyJson(suggestion.workflowJson, suggestion.id)"
+											>
+												Copy JSON
+											</N8nButton>
+											<N8nButton
+												size="mini"
+												type="secondary"
+												@click="toggleJsonVisibility(suggestion.id)"
+											>
+												Close
+											</N8nButton>
+										</div>
+									</div>
+									<pre>{{ suggestion.workflowJson }}</pre>
+									<p
+										v-if="copyFeedback && copiedSuggestionId === suggestion.id"
+										:class="$style.copyFeedback"
+									>
+										{{ copyFeedback }}
+									</p>
+								</div>
+							</article>
 						</div>
-					</article>
+					</section>
 				</div>
-			</div>
-			<div :class="$style.composerShell">
-				<div :class="$style.composerAlerts">
-					<N8nCallout v-if="errorMessage" icon="triangle-alert" theme="danger">
-						{{ errorMessage }}
-					</N8nCallout>
-					<N8nCallout v-else icon="sparkles" theme="info">
-						{{ locale.baseText('logs.aiPanel.infoCallout') }}
-					</N8nCallout>
-				</div>
-				<form :class="$style.form" @submit.prevent="handleGenerate">
-					<label :class="$style.label" for="ai-workflow-prompt">
-						{{ locale.baseText('logs.aiPanel.promptLabel') }}
-					</label>
-					<textarea
-						id="ai-workflow-prompt"
-						v-model="prompt"
-						:placeholder="locale.baseText('logs.aiPanel.promptPlaceholder')"
-						:class="$style.textarea"
-						rows="4"
-					/>
-					<div :class="$style.actions">
-						<N8nButton
-							type="primary"
-							size="medium"
-							:loading="isGenerating"
-							:disabled="prompt.trim().length === 0"
-							@click="handleGenerate"
-						>
-							{{ locale.baseText('logs.aiPanel.generateButton') }}
-						</N8nButton>
-						<N8nButton
-							type="tertiary"
-							size="medium"
-							:disabled="!latestSuggestion || isGenerating || isSuggestionUnparsed(latestSuggestion)"
-							@click.prevent="handleInsert()"
-						>
-							{{ locale.baseText('logs.aiPanel.insertButton') }}
-						</N8nButton>
+				
+				<div :class="$style.composerShell">
+					<div :class="$style.composerContainer">
+						<div :class="$style.composerSide">
+							<div :class="$style.modelToggle">
+								<button 
+									:class="[$style.modelBtn, modelMode === 'thinking' ? $style.activeModel : '']"
+									@click="modelMode = 'thinking'"
+									title="Gemini 1.5 Pro"
+								>
+									Thinking
+								</button>
+								<button 
+									:class="[$style.modelBtn, modelMode === 'fast' ? $style.activeModel : '']"
+									@click="modelMode = 'fast'"
+									title="Gemini 2.0 Flash"
+								>
+									Fast
+								</button>
+							</div>
+						</div>
+						
+						<div :class="$style.composerMain">
+							<div :class="$style.composerAlerts">
+								<N8nCallout v-if="errorMessage" icon="triangle-alert" theme="danger">
+									{{ errorMessage }}
+								</N8nCallout>
+							</div>
+							<form :class="$style.form" @submit.prevent="handleGenerate">
+								<textarea
+									id="ai-workflow-prompt"
+									v-model="prompt"
+									:placeholder="locale.baseText('logs.aiPanel.promptPlaceholder')"
+									:class="$style.textarea"
+									rows="1"
+									@keydown.enter.prevent="handleGenerate"
+								/>
+								<button 
+									:class="$style.sendBtn"
+									:disabled="prompt.trim().length === 0 || isGenerating"
+									@click.prevent="handleGenerate"
+									data-test-id="ai-generate-button"
+								>
+									<N8nIcon icon="arrow-up" size="medium" />
+								</button>
+							</form>
+						</div>
+
+						<div :class="$style.composerSide">
+							<!-- Right side space for future features -->
+						</div>
 					</div>
-				</form>
+					<div :class="$style.footerText">
+						Kaelux-Agent can make mistakes. Please review generated workflows.
+					</div>
+				</div>
 			</div>
-			</section>
 		</div>
 	</div>
-</N8nScrollArea>
 </template>
 
 <style lang="scss" module>
-.scrollRoot {
-	height: 100%;
-	width: 100%;
-}
-
-.scrollRoot :global(.n8n-scroll-area__viewport) {
-	height: 100%;
-}
-
 .container {
 	display: flex;
 	flex-direction: column;
-	gap: var(--spacing-l);
+	gap: var(--spacing-m);
 	height: 100%;
 	padding: var(--spacing-l);
-	background-color: var(--color--background--shade-1);
-	border-radius: 32px;
-	border: 1px solid var(--color--foreground);
-	overflow: auto;
+	background-color: #050505; // Dark background
+	border-radius: 0;
+	overflow: hidden;
 }
 
 .workspace {
-	display: grid;
-	grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
-	gap: var(--spacing-xl);
+	display: flex;
 	flex: 1;
 	min-height: 0;
-}
-
-@media (max-width: 1480px) {
-	.workspace {
-		grid-template-columns: 1fr;
-	}
-}
-
-.header {
-	display: flex;
 	flex-direction: column;
-	gap: var(--spacing-4xs);
-}
-
-.bodyScroll {
-	flex: 1;
-	min-height: 0;
-	overflow-y: auto;
-}
-
-.bodyScroll::-webkit-scrollbar {
-	width: 8px;
-}
-
-.bodyScroll::-webkit-scrollbar-thumb {
-	background: color-mix(in srgb, var(--color--foreground) 60%, transparent);
-	border-radius: 4px;
-}
-
-.samples {
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-xs);
-	background: linear-gradient(135deg, rgba(12, 12, 26, 0.9), rgba(26, 26, 42, 0.85));
-	border-radius: 28px;
-	padding: var(--spacing-m);
-	border: 1px solid var(--color--foreground);
-	box-shadow: 0 30px 55px rgba(0, 0, 0, 0.4);
-}
-
-@media (max-width: 1480px) {
-	.samples {
-		position: static;
-	}
-}
-
-.samplesLoading {
-	padding: var(--spacing-2xs) var(--spacing-xs);
-}
-
-.sampleGroups {
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-s);
-}
-
-.sampleGroup {
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-2xs);
-}
-
-.sampleGroupHeader {
-	display: flex;
-	flex-direction: column;
-}
-
-.sampleCardGrid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-	gap: var(--spacing-s);
-}
-
-.sampleCard {
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-xs);
-	background: var(--color--background);
-	border-radius: 20px;
-	border: 1px solid var(--color--foreground);
-	padding: var(--spacing-m);
-	box-shadow: 0 18px 30px rgba(0, 0, 0, 0.35);
-	cursor: pointer;
-	transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.sampleCard:hover {
-	transform: translateY(-3px);
-	border-color: var(--color--primary);
-	box-shadow: 0 25px 45px rgba(0, 0, 0, 0.45);
-}
-
-.sampleCardActive {
-	border-color: var(--color--primary);
-	box-shadow: 0 30px 55px rgba(255, 59, 255, 0.25);
-}
-
-.sampleDescription {
-	font-size: var(--font-size-2xs);
-	color: var(--color--text--tint-1);
-	margin: 0;
-	min-height: 48px;
-}
-
-.sampleMetaRow {
-	display: flex;
-	justify-content: space-between;
-	font-size: var(--font-size-3xs);
-	text-transform: uppercase;
-	color: var(--color--text--tint-2);
-	gap: var(--spacing-3xs);
-}
-
-.sampleActions {
-	display: flex;
-	gap: var(--spacing-2xs);
 }
 
 .chatShell {
@@ -1441,6 +917,7 @@ function formatActionType(type: WorkflowAction['type']) {
 	gap: var(--spacing-l);
 	flex: 1;
 	min-height: 0;
+	position: relative;
 }
 
 .chatStream {
@@ -1450,37 +927,34 @@ function formatActionType(type: WorkflowAction['type']) {
 	flex: 1;
 	overflow-y: auto;
 	padding-right: var(--spacing-2xs);
+	padding-bottom: 220px; // Increased space for the fixed composer
 }
 
 .exchange {
 	display: flex;
 	flex-direction: column;
 	gap: var(--spacing-xs);
+	max-width: 800px;
+	margin: 0 auto;
+	width: 100%;
 }
 
 .message {
-	max-width: 960px;
 	width: 100%;
 	margin: 0 auto;
-	border-radius: 32px;
+	border-radius: 12px;
 	padding: var(--spacing-m);
 	line-height: 1.6;
-	box-shadow: 0 30px 55px rgba(0, 0, 0, 0.45);
-	border: 1px solid var(--color--foreground);
 }
 
 .userMessage {
-	background: var(--color--background--light-2);
+	background: transparent;
 	color: var(--color--text);
-}
-
-.userMessage p {
-	margin: 0;
-	font-size: var(--font-size-base);
+	border-bottom: 1px solid var(--color--foreground);
 }
 
 .aiMessage {
-	background: var(--color--background);
+	background: transparent;
 	display: flex;
 	flex-direction: column;
 	gap: var(--spacing-m);
@@ -1493,6 +967,7 @@ function formatActionType(type: WorkflowAction['type']) {
 	letter-spacing: 0.1em;
 	text-transform: uppercase;
 	color: var(--color--text--tint-2);
+	margin-bottom: var(--spacing-2xs);
 }
 
 .aiSummary {
@@ -1508,7 +983,7 @@ function formatActionType(type: WorkflowAction['type']) {
 }
 
 .aiCard {
-	border-radius: 22px;
+	border-radius: 12px;
 	padding: var(--spacing-m);
 	background: var(--color--background--light-2);
 	border: 1px solid var(--color--foreground);
@@ -1533,7 +1008,7 @@ function formatActionType(type: WorkflowAction['type']) {
 }
 
 .aiWarning {
-	border-radius: 22px;
+	border-radius: 12px;
 	background: color-mix(in srgb, var(--color--danger) 18%, transparent);
 	border: 1px solid var(--color--danger);
 	padding: var(--spacing-m);
@@ -1557,7 +1032,7 @@ function formatActionType(type: WorkflowAction['type']) {
 
 .codePreview {
 	background: #05050b;
-	border-radius: 20px;
+	border-radius: 12px;
 	border: 1px solid var(--color--foreground);
 	padding: var(--spacing-s);
 	font-size: var(--font-size-xs);
@@ -1565,11 +1040,8 @@ function formatActionType(type: WorkflowAction['type']) {
 	max-height: 320px;
 	overflow: auto;
 	font-family: var(--font-family--monospace, 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace);
-	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
-	background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent);
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-3xs);
+	width: 100%;
+	margin-top: var(--spacing-m);
 }
 
 .codePreview pre {
@@ -1598,34 +1070,81 @@ function formatActionType(type: WorkflowAction['type']) {
 	max-width: 720px;
 	margin: 0 auto;
 	text-align: center;
-	background: var(--color--background--light-2);
-	border-radius: 28px;
-	border: 1px dashed var(--color--foreground);
+	background: transparent;
 	padding: var(--spacing-l);
 	display: flex;
 	flex-direction: column;
 	gap: var(--spacing-s);
-	box-shadow: 0 20px 35px rgba(0, 0, 0, 0.35);
-}
-
-.emptyState ul {
-	margin: 0;
-	padding-left: var(--spacing-l);
-	text-align: left;
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-4xs);
-	color: var(--color--text);
+	align-items: center;
+	margin-top: var(--spacing-2xl);
 }
 
 .composerShell {
-	position: sticky;
+	position: absolute;
 	bottom: 0;
+	left: 0;
+	right: 0;
 	display: flex;
 	flex-direction: column;
-	gap: var(--spacing-s);
-	background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.55));
-	padding-bottom: var(--spacing-xs);
+	align-items: center;
+	gap: var(--spacing-xs);
+	background: linear-gradient(180deg, transparent, #050505 40%);
+	padding-bottom: var(--spacing-xl); // Increased bottom padding to lift it up
+	padding-top: var(--spacing-xl);
+	pointer-events: none; // Let clicks pass through gradient area
+}
+
+.composerContainer {
+	display: flex;
+	width: 100%;
+	max-width: 900px;
+	align-items: flex-end;
+	gap: var(--spacing-m);
+	pointer-events: auto; // Re-enable clicks
+	padding: 0 var(--spacing-m);
+}
+
+.composerSide {
+	flex: 0 0 120px; // Fixed width for sides
+	display: flex;
+	justify-content: center;
+	padding-bottom: 12px;
+}
+
+.composerMain {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-2xs);
+}
+
+.modelToggle {
+	display: flex;
+	background: var(--color--background--light-2);
+	border-radius: 20px;
+	padding: 4px;
+	border: 1px solid var(--color--foreground);
+}
+
+.modelBtn {
+	background: transparent;
+	border: none;
+	color: var(--color--text--tint-1);
+	padding: 4px 12px;
+	font-size: var(--font-size-2xs);
+	border-radius: 16px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+
+	&:hover {
+		color: var(--color--text);
+	}
+}
+
+.activeModel {
+	background: var(--color--background--light-3);
+	color: #ffffff;
+	font-weight: var(--font-weight--bold);
 }
 
 .composerAlerts {
@@ -1636,38 +1155,65 @@ function formatActionType(type: WorkflowAction['type']) {
 
 .form {
 	display: flex;
-	flex-direction: column;
+	align-items: flex-end;
 	gap: var(--spacing-xs);
-	background: var(--color--background);
-	border-radius: 30px;
+	background: var(--color--background--light-2);
+	border-radius: 24px;
 	border: 1px solid var(--color--foreground);
-	box-shadow: 0 35px 65px rgba(0, 0, 0, 0.55);
-	padding: var(--spacing-m);
-}
+	padding: 8px 8px 8px 16px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+	transition: border-color 0.2s ease;
 
-.label {
-	font-size: var(--font-size-xs);
-	color: var(--color--text--tint-1);
-	text-transform: uppercase;
-	letter-spacing: 0.1em;
+	&:focus-within {
+		border-color: var(--color--primary);
+	}
 }
 
 .textarea {
-	width: 100%;
-	min-height: 120px;
+	flex: 1;
+	min-height: 24px;
+	max-height: 200px;
 	resize: none;
-	padding: var(--spacing-m);
+	padding: 8px 0;
 	font-size: var(--font-size-base);
-	border-radius: 22px;
-	border: 1px solid var(--color--foreground);
-	background-color: var(--color--background--shade-1);
+	border: none;
+	background: transparent;
 	color: var(--color--text);
+	outline: none;
+
+	&::placeholder {
+		color: var(--color--text--tint-2);
+	}
 }
 
-.actions {
+.sendBtn {
 	display: flex;
-	flex-wrap: wrap;
-	gap: var(--spacing-2xs);
-	justify-content: flex-end;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	border: none;
+	background: var(--color--background--light-3);
+	color: var(--color--text);
+	cursor: pointer;
+	transition: all 0.2s ease;
+
+	&:hover:not(:disabled) {
+		background: #ffffff;
+		color: #000000;
+	}
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+}
+
+.footerText {
+	font-size: var(--font-size-2xs);
+	color: var(--color--text--tint-2);
+	text-align: center;
+	pointer-events: auto;
 }
 </style>

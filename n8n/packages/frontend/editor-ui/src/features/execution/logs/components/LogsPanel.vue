@@ -7,6 +7,7 @@ import ChatMessagesPanel from '@/features/execution/logs/components/ChatMessages
 import LogsDetailsPanel from '@/features/execution/logs/components/LogDetailsPanel.vue';
 import LogsPanelActions from '@/features/execution/logs/components/LogsPanelActions.vue';
 import AiWorkflowPanel from '@/features/execution/logs/components/AiWorkflowPanel.vue';
+import AiTemplatesPanel from '@/features/execution/logs/components/AiTemplatesPanel.vue';
 import { useLogsExecutionData } from '@/features/execution/logs/composables/useLogsExecutionData';
 import { useNDVStore } from '@/features/ndv/shared/ndv.store';
 import { ndvEventBus } from '@/features/ndv/shared/ndv.eventBus';
@@ -28,6 +29,7 @@ const container = useTemplateRef('container');
 const logsContainer = useTemplateRef('logsContainer');
 const popOutContainer = useTemplateRef('popOutContainer');
 const popOutContent = useTemplateRef('popOutContent');
+const aiWorkflowPanel = ref<InstanceType<typeof AiWorkflowPanel> | null>(null);
 
 const logsStore = useLogsStore();
 const ndvStore = useNDVStore();
@@ -96,6 +98,10 @@ const footerTabOptions = computed(() => [
 		value: LOGS_FOOTER_TABS.LOGS,
 	},
 	{
+		label: 'AI Templates', // TODO: Add localization
+		value: LOGS_FOOTER_TABS.AI_TEMPLATES,
+	},
+	{
 		label: locale.baseText('logs.footer.tabs.ai'),
 		value: LOGS_FOOTER_TABS.AI,
 	},
@@ -110,8 +116,19 @@ const isAiFooterTabActive = computed(
 	() => activeFooterTab.value === LOGS_FOOTER_TABS.AI && isOpen.value,
 );
 
+const isAiTemplatesFooterTabActive = computed(
+	() => activeFooterTab.value === LOGS_FOOTER_TABS.AI_TEMPLATES && isOpen.value,
+);
+
 function handleFooterTabChange(tab: (typeof LOGS_FOOTER_TABS)[keyof typeof LOGS_FOOTER_TABS]) {
 	logsStore.setActiveFooterTab(tab);
+}
+
+function handleUseTemplate(prompt: string) {
+	logsStore.setActiveFooterTab(LOGS_FOOTER_TABS.AI);
+	void nextTick(() => {
+		aiWorkflowPanel.value?.setPrompt(prompt);
+	});
 }
 const inputCollapsingColumnName = computed(() =>
 	inputTableColumnCollapsing.value?.nodeName === selected.value?.node.name
@@ -235,7 +252,7 @@ function handleChangeOutputTableColumnCollapsing(columnName: string | null) {
 								v-bind="logsPanelActionsProps"
 							/>
 						</div>
-						<div v-if="!isAiFooterTabActive" :class="$style.logsPanels">
+						<div v-if="!isAiFooterTabActive && !isAiTemplatesFooterTabActive" :class="$style.logsPanels">
 							<N8nResizeWrapper
 								:class="$style.overviewResizer"
 								:width="overviewPanelWidth"
@@ -296,8 +313,12 @@ function handleChangeOutputTableColumnCollapsing(columnName: string | null) {
 								</template>
 							</LogsDetailsPanel>
 						</div>
+						<div v-else-if="isAiTemplatesFooterTabActive" :class="$style.aiPanelWrapper">
+							<AiTemplatesPanel @use-template="handleUseTemplate" />
+						</div>
 						<div v-else :class="$style.aiPanelWrapper">
 							<AiWorkflowPanel
+								ref="aiWorkflowPanel"
 								@generate="emit('ai-generate', $event)"
 								@insert="emit('ai-insert', $event)"
 							/>
@@ -359,7 +380,8 @@ function handleChangeOutputTableColumnCollapsing(columnName: string | null) {
 	align-items: center;
 	justify-content: space-between;
 	padding: var(--spacing-2xs) var(--spacing-s);
-	background-color: var(--color--foreground);
+	background-color: #000000; // Black background
+	border-bottom: 1px solid var(--color--foreground);
 }
 
 .logsPanels {
@@ -393,8 +415,10 @@ function handleChangeOutputTableColumnCollapsing(columnName: string | null) {
 .aiPanelWrapper {
 	flex: 1;
 	display: flex;
-	overflow: auto;
-	background-color: var(--color--background--light-2);
-	padding: var(--spacing-m);
+	flex-direction: column; // Ensure column layout for full width children
+	overflow: hidden; // Prevent double scrollbars
+	background-color: #050505;
+	padding: 0; // Remove padding to let child control it
+	width: 100%; // Force full width
 }
 </style>

@@ -10,7 +10,13 @@ defineProps<{
 }>();
 </script>
 <template>
-	<Background data-test-id="canvas-background" pattern-color="#aaa" :gap="GRID_SIZE">
+	<Background
+		class="canvas-background"
+		data-test-id="canvas-background"
+		color="var(--canvas--color--background)"
+		pattern-color="var(--canvas--dot--color)"
+		:gap="GRID_SIZE"
+	>
 		<template v-if="striped" #pattern-container="patternProps">
 			<CanvasBackgroundStripedPattern
 				:id="patternProps.id"
@@ -22,3 +28,15 @@ defineProps<{
 		</template>
 	</Background>
 </template>
+
+<style scoped lang="scss">
+.canvas-background {
+	background-color: var(--canvas--color--background);
+}
+
+.canvas-background :deep(circle),
+.canvas-background :deep(path) {
+	fill: var(--canvas--dot--color);
+	stroke: var(--canvas--dot--color);
+}
+</style>

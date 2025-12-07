@@ -96,6 +96,15 @@ describe('SettingsPersonalView', () => {
 			expect(getByTestId('save-settings-button')).toBeEnabled();
 		});
 
+		it('should list the Kaelux theme in the dropdown', async () => {
+			const { getByPlaceholderText, findByText } = renderComponent({ pinia });
+			await waitAllPromises();
+
+			getByPlaceholderText('Select').click();
+
+			expect(await findByText('Kaelux theme')).toBeDefined();
+		});
+
 		it('should not update theme after changing the selected theme', async () => {
 			const { getByPlaceholderText, findByText } = renderComponent({ pinia });
 			await waitAllPromises();

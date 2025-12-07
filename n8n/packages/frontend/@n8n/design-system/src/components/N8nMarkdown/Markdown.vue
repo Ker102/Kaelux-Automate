@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { Options as MarkdownOptions } from 'markdown-it';
 import Markdown from 'markdown-it';
-import markdownEmoji from 'markdown-it-emoji';
+import { full as markdownEmoji } from 'markdown-it-emoji';
 import markdownLink from 'markdown-it-link-attributes';
 import markdownTaskLists from 'markdown-it-task-lists';
 import { computed, ref } from 'vue';
@@ -69,7 +69,7 @@ const editor = ref<HTMLDivElement | undefined>(undefined);
 const { options } = props;
 const md = new Markdown(options.markdown)
 	.use(markdownLink, options.linkAttributes)
-	.use(markdownEmoji)
+	.use(markdownEmoji as Markdown.PluginSimple)
 	.use(markdownTaskLists, options.tasklists)
 	.use(markdownYoutubeEmbed, options.youtube);
 

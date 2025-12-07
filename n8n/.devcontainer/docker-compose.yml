@@ -18,6 +18,8 @@ services:
     volumes:
       - ..:/workspaces:cached
     command: sleep infinity
+    ports:
+      - "5678:5678"
     environment:
       DB_POSTGRESDB_HOST: postgres
       DB_TYPE: postgresdb

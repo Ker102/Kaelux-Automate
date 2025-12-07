@@ -58,4 +58,5 @@ export class AiBuilderChatRequestDto extends Z.class({
 				.optional(),
 		}),
 	}),
-}) {}
+	modelMode: z.enum(['fast', 'thinking', 'thinking-pro']).optional(),
+}) { }
