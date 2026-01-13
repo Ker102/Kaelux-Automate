@@ -5,91 +5,165 @@
 [![CodeQL](https://github.com/Ker102/Kaelux-Automate/actions/workflows/codeql.yml/badge.svg)](https://github.com/Ker102/Kaelux-Automate/actions/workflows/codeql.yml)
 [![Release Drafter](https://github.com/Ker102/Kaelux-Automate/actions/workflows/release-drafter.yml/badge.svg)](https://github.com/Ker102/Kaelux-Automate/actions/workflows/release-drafter.yml)
 
-Enterprise-grade automation builder that blends a Next.js control plane, an embedded n8n instance, and a vector-powered retrieval layer for curated workflow examples. The AI assistant synthesizes diffs (add/update/remove/reconnect) instead of blindly replacing canvases, making it safe to iterate on complex workflows.
+### Tech Stack
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![n8n](https://img.shields.io/badge/n8n-EA4B71?style=flat-square&logo=n8n&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=flat-square&logo=prisma&logoColor=white)
 
-## Architecture
+### AI & RAG
+![Gemini](https://img.shields.io/badge/Gemini%202.0-Flash-4285F4?style=flat-square&logo=google&logoColor=white)
+![Qdrant](https://img.shields.io/badge/Qdrant-FF4F64?style=flat-square&logo=qdrant&logoColor=white)
+![Vectors](https://img.shields.io/badge/Vectors-36,166-blueviolet?style=flat-square)
+
+> 🚀 **Enterprise AI-powered n8n workflow builder** with RAG-enhanced generation and diff-based canvas updates.
+
+---
+
+## ✨ Key Features
+
+| Feature | Description |
+|---------|-------------|
+| 🧠 **AI Workflow Builder** | Generate n8n workflows from natural language prompts |
+| 🔍 **RAG-Powered** | 36,166 workflow vectors for semantic retrieval |
+| ⚡ **Diff-Based Updates** | Safe add/update/remove/reconnect actions (no canvas overwrites) |
+| 🎨 **Embedded n8n** | Full n8n canvas with custom AI Builder panel |
+| 🔄 **Live Preview** | Real-time workflow visualization |
+
+---
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        Kaelux Automate                          │
+├─────────────────┬─────────────────┬─────────────────────────────┤
+│   Next.js App   │   n8n Canvas    │      AI Pipeline            │
+│   (Port 3000)   │   (Port 5678)   │                             │
+├─────────────────┴─────────────────┤                             │
+│                                   │  ┌───────────────────────┐  │
+│   ┌─────────────────────────┐     │  │   Gemini 2.0 Flash    │  │
+│   │      PostgreSQL         │     │  └───────────┬───────────┘  │
+│   │      (Port 5433)        │     │              │              │
+│   └─────────────────────────┘     │  ┌───────────▼───────────┐  │
+│                                   │  │   Qdrant (36k RAG)    │  │
+│                                   │  └───────────────────────┘  │
+└───────────────────────────────────┴─────────────────────────────┘
+```
 
 | Component | Purpose |
-| --------- | ------- |
-| Next.js app (`app` service) | API, Prisma/Postgres access, AI orchestration endpoints (`/api/ai/workflow`, `/api/ai/prompts`). |
-| Postgres (`postgres` service) | Primary relational data store (`DATABASE_URL`). |
-| Qdrant (`qdrant` service) | Vector index for workflow exemplars (`QDRANT_URL`, `QDRANT_COLLECTION`). |
-| n8n (`n8n` service) | Vue-based workflow canvas extended with the AI Builder panel. |
+|-----------|---------|
+| **Next.js app** | API routes, Prisma/Postgres, AI orchestration (`/api/ai/workflow`) |
+| **PostgreSQL** | Primary data store |
+| **Qdrant** | Vector index for 36,166 workflow exemplars |
+| **n8n** | Vue-based workflow canvas with AI Builder panel |
 
-All services are orchestrated via Docker Compose (`docker-compose.dev.yml`). Persistent state lives in `./.data/**`.
+---
 
-## Requirements
+## 🚀 Quick Start
 
+### Requirements
 - Docker + Docker Compose v2
-- Node.js 22.x / pnpm 9.x for local builds
-- A compatible LLM API key (configured via `GEMINI_*` environment variables). The README intentionally references a “configurable LLM provider” only; swap providers as needed.
+- Node.js 22.x / pnpm 9.x
+- Gemini API key
 
-## Getting started
-
-1. Copy env templates and add secrets:
-   ```bash
-   cp .env.local.example .env.local   # create this file if it doesn't exist
-   cp .env.example .env
-   ```
-2. Build the editor + image:
-   ```bash
-   cd n8n
-   pnpm build:n8n > /tmp/n8n-build.log 2>&1 && pnpm build:docker > /tmp/n8n-dockerize.log 2>&1
-   cd ..
-   ```
-3. Start the stack:
-   ```bash
-   COMPOSE_CONVERT_WINDOWS_PATHS=0 docker compose -f docker-compose.dev.yml up -d postgres qdrant app n8n
-   ```
-4. Seed Qdrant (optional but recommended):
-   ```bash
-   docker compose -f docker-compose.dev.yml exec app npm run seed:qdrant
-   ```
-
-Access points:
-
-- Next.js dev server: http://localhost:3000
-- n8n canvas: http://localhost:5678
-- Qdrant REST: http://localhost:6333
-- Postgres: localhost:5433 (`postgres/postgres`)
-
-## Iterating on the n8n UI
-
-Whenever `packages/frontend` files change:
+### Setup
 
 ```bash
+# 1. Clone and configure
+git clone https://github.com/Ker102/Kaelux-Automate.git
+cd Kaelux-Automate
+cp .env.example .env
+cp .env.local.example .env.local
+
+# 2. Add your API keys to .env.local
+# GEMINI_API_KEY=your-key-here
+
+# 3. Build n8n with AI Builder
 cd n8n
+pnpm install
 pnpm build:n8n && pnpm build:docker
 cd ..
-COMPOSE_CONVERT_WINDOWS_PATHS=0 docker compose -f docker-compose.dev.yml up -d n8n
+
+# 4. Start services
+docker compose -f docker-compose.dev.yml up -d
+
+# 5. (Optional) Seed RAG database
+docker compose exec app npm run seed:qdrant
 ```
 
-This produces the `n8nio/n8n:local` image consumed by the compose stack.
+### Access Points
 
-## Database and Prisma
+| Service | URL |
+|---------|-----|
+| Next.js App | http://localhost:3000 |
+| n8n Canvas | http://localhost:5678 |
+| Qdrant REST | http://localhost:6333 |
+| PostgreSQL | localhost:5433 |
 
+---
+
+## 🧠 AI Workflow Builder
+
+The AI builder generates structured diff actions instead of replacing entire canvases:
+
+```typescript
+// Example API response
+{
+  "workflow": { /* n8n workflow JSON */ },
+  "actions": [
+    { "type": "add", "node": {...} },
+    { "type": "update", "nodeId": "123", "changes": {...} },
+    { "type": "connect", "from": "A", "to": "B" }
+  ]
+}
+```
+
+**Endpoints:**
+- `POST /api/ai/workflow` - Generate workflow from prompt
+- `GET /api/ai/prompts` - List prompt templates
+
+---
+
+## 🔧 Development
+
+### Rebuild n8n UI
 ```bash
-docker compose -f docker-compose.dev.yml exec app npx prisma migrate deploy
-docker compose -f docker-compose.dev.yml exec app npx prisma generate
+cd n8n && pnpm build:n8n && pnpm build:docker && cd ..
+docker compose -f docker-compose.dev.yml up -d n8n
 ```
 
-## AI workflow builder
+### Database Migrations
+```bash
+docker compose exec app npx prisma migrate deploy
+docker compose exec app npx prisma generate
+```
 
-- `/api/ai/workflow` produces workflow JSON **plus structured actions** (add/update/remove/reconnect).
-- The n8n panel validates the payload and only imports diffable actions when safe. Empty or invalid responses are rejected before touching the canvas.
-- Model settings are controlled exclusively through environment variables (`GEMINI_MODEL`, `GEMINI_FALLBACK_MODEL`, etc.) so you can swap providers without code changes.
+---
 
-## Automation & security
+## 🔐 Security
 
-- [Dependabot](.github/dependabot.yml) monitors npm workspaces and GitHub Actions.
-- [CodeQL](.github/workflows/codeql.yml) scans JS/TS on pushes and PRs.
-- [Release Drafter](.github/release-drafter.yml) aggregates release notes.
-- [SECURITY.md](./SECURITY.md) documents the responsible disclosure process.
+- [Dependabot](.github/dependabot.yml) monitors npm and GitHub Actions
+- [CodeQL](.github/workflows/codeql.yml) scans on pushes and PRs
+- [SECURITY.md](./SECURITY.md) documents disclosure process
 
-## Contributing
+---
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for branching strategy, local build steps, and testing expectations. All changes must go through pull requests and include relevant documentation or tests. CODEOWNERS routes reviews to @Ker102.
+## 🤝 Contributing
 
-## License & credits
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines. All changes require PRs with tests/docs.
 
-Copyright © Kaelux. See the repository license for full details.
+---
+
+## 📄 License
+
+Copyright © Kaelux. See repository license for details.
+
+---
+
+## 🔗 Related
+
+- **[n8n Automation Atlas](https://github.com/Ker102/n8n-workflows-36k)** - Source of 131k+ workflows powering the RAG
+- **[HuggingFace Dataset](https://huggingface.co/datasets/Ker102/n8n-mega-workflows)** - Training data for fine-tuning
