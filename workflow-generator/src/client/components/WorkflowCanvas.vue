@@ -1,24 +1,51 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue';
-import { VueFlow, useVueFlow, type Node, type Edge, Position } from '@vue-flow/core';
+/**
+ * WorkflowCanvas - Vue Flow canvas with node editing and connection support
+ * Tracks all changes and syncs with model via currentWorkflow
+ */
+import { ref, computed, watch } from 'vue';
+import { VueFlow, useVueFlow, type Node, type Edge, Position, type Connection } from '@vue-flow/core';
 import { Background } from '@vue-flow/background';
 import { Controls } from '@vue-flow/controls';
 import { MiniMap } from '@vue-flow/minimap';
-import type { Workflow } from '@shared/types';
+import type { Workflow, WorkflowNode as WFNode } from '@shared/types';
 import WorkflowNode from './WorkflowNode.vue';
+import NodeEditor from './NodeEditor.vue';
 
 const props = defineProps<{
   workflow: Workflow | null;
   isLoading: boolean;
 }>();
 
-const { fitView } = useVueFlow();
+const emit = defineEmits<{
+  'update:workflow': [workflow: Workflow];
+}>();
 
-// Convert n8n workflow to Vue Flow nodes/edges
-const nodes = computed<Node[]>(() => {
-  if (!props.workflow?.nodes) return [];
-  
-  return props.workflow.nodes.map((node) => ({
+const { fitView, onConnect, onNodesChange, onEdgesChange } = useVueFlow();
+
+// Local state for tracking changes
+const selectedNodeId = ref<string | null>(null);
+const localNodes = ref<Node[]>([]);
+const localEdges = ref<Edge[]>([]);
+
+// Selected node data for editor
+const selectedNode = computed(() => {
+  if (!selectedNodeId.value) return null;
+  const node = localNodes.value.find(n => n.id === selectedNodeId.value);
+  if (!node) return null;
+  return {
+    id: node.id,
+    label: node.data.label,
+    type: node.data.type,
+    typeVersion: node.data.typeVersion,
+    parameters: node.data.parameters,
+  };
+});
+
+// Convert n8n workflow to Vue Flow nodes
+function workflowToNodes(workflow: Workflow): Node[] {
+  if (!workflow?.nodes) return [];
+  return workflow.nodes.map((node) => ({
     id: node.id,
     type: 'workflow',
     position: { x: node.position[0], y: node.position[1] },
@@ -31,17 +58,18 @@ const nodes = computed<Node[]>(() => {
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
   }));
-});
+}
 
-const edges = computed<Edge[]>(() => {
-  if (!props.workflow?.connections) return [];
+// Convert n8n connections to Vue Flow edges
+function workflowToEdges(workflow: Workflow): Edge[] {
+  if (!workflow?.connections) return [];
   
   const result: Edge[] = [];
   const nodeNameToId = new Map(
-    props.workflow.nodes.map(n => [n.name, n.id])
+    workflow.nodes.map(n => [n.name, n.id])
   );
 
-  Object.entries(props.workflow.connections).forEach(([sourceNode, targets]) => {
+  Object.entries(workflow.connections).forEach(([sourceNode, targets]) => {
     Object.entries(targets).forEach(([, connectionSets]) => {
       connectionSets.forEach((connections, outputIndex) => {
         connections.forEach((conn) => {
@@ -62,13 +90,119 @@ const edges = computed<Edge[]>(() => {
   });
 
   return result;
-});
+}
 
-// Fit view when workflow changes
+// Convert Vue Flow state back to n8n workflow format
+function nodesToWorkflow(): Workflow {
+  const nodes: WFNode[] = localNodes.value.map(n => ({
+    id: n.id,
+    name: n.data.label,
+    type: n.data.type,
+    typeVersion: n.data.typeVersion,
+    position: [n.position.x, n.position.y],
+    parameters: n.data.parameters || {},
+  }));
+
+  const nodeIdToName = new Map(nodes.map(n => [n.id, n.name]));
+  const connections: Workflow['connections'] = {};
+
+  localEdges.value.forEach(edge => {
+    const sourceName = nodeIdToName.get(edge.source);
+    const targetName = nodeIdToName.get(edge.target);
+    
+    if (sourceName && targetName) {
+      if (!connections[sourceName]) {
+        connections[sourceName] = { main: [[]] };
+      }
+      connections[sourceName].main[0].push({
+        node: targetName,
+        type: 'main',
+        index: 0,
+      });
+    }
+  });
+
+  return {
+    name: props.workflow?.name || 'Workflow',
+    nodes,
+    connections,
+  };
+}
+
+// Emit updated workflow to parent
+function emitUpdate() {
+  const workflow = nodesToWorkflow();
+  emit('update:workflow', workflow);
+}
+
+// Watch for workflow prop changes
 watch(() => props.workflow, (newWorkflow) => {
   if (newWorkflow) {
+    localNodes.value = workflowToNodes(newWorkflow);
+    localEdges.value = workflowToEdges(newWorkflow);
     setTimeout(() => fitView({ padding: 0.2 }), 100);
+  } else {
+    localNodes.value = [];
+    localEdges.value = [];
   }
+}, { immediate: true });
+
+// Handle node selection
+function handleNodeClick(event: { node: Node }) {
+  selectedNodeId.value = event.node.id;
+}
+
+function closeEditor() {
+  selectedNodeId.value = null;
+}
+
+// Handle node parameter update from editor
+function handleNodeUpdate(nodeId: string, parameters: Record<string, unknown>) {
+  const nodeIndex = localNodes.value.findIndex(n => n.id === nodeId);
+  if (nodeIndex !== -1) {
+    localNodes.value[nodeIndex].data.parameters = parameters;
+    emitUpdate();
+  }
+}
+
+// Handle new connection
+onConnect((connection: Connection) => {
+  const edgeId = `${connection.source}-${connection.target}`;
+  const exists = localEdges.value.some(e => e.id === edgeId);
+  
+  if (!exists) {
+    localEdges.value.push({
+      id: edgeId,
+      source: connection.source!,
+      target: connection.target!,
+      animated: true,
+    });
+    emitUpdate();
+  }
+});
+
+// Handle node position changes
+onNodesChange((changes) => {
+  changes.forEach(change => {
+    if (change.type === 'position' && change.position) {
+      const node = localNodes.value.find(n => n.id === change.id);
+      if (node) {
+        node.position = change.position;
+      }
+    }
+  });
+  // Debounce position updates
+  emitUpdate();
+});
+
+// Handle edge deletions
+onEdgesChange((changes) => {
+  changes.forEach(change => {
+    if (change.type === 'remove') {
+      localEdges.value = localEdges.value.filter(e => e.id !== change.id);
+      emitUpdate();
+    }
+  });
 });
 </script>
 
@@ -89,12 +223,14 @@ watch(() => props.workflow, (newWorkflow) => {
 
     <VueFlow
       v-else
-      :nodes="nodes"
-      :edges="edges"
+      v-model:nodes="localNodes"
+      v-model:edges="localEdges"
       :fit-view-on-init="true"
       :nodes-draggable="true"
-      :nodes-connectable="false"
-      :edges-updatable="false"
+      :nodes-connectable="true"
+      :edges-updatable="true"
+      :delete-key-code="'Delete'"
+      @node-click="handleNodeClick"
     >
       <template #node-workflow="nodeProps">
         <WorkflowNode v-bind="nodeProps" />
@@ -104,6 +240,18 @@ watch(() => props.workflow, (newWorkflow) => {
       <Controls />
       <MiniMap />
     </VueFlow>
+
+    <!-- Node Editor Panel -->
+    <NodeEditor
+      :node="selectedNode"
+      @close="closeEditor"
+      @update="handleNodeUpdate"
+    />
+    
+    <!-- Connection hint -->
+    <div v-if="workflow && !selectedNodeId" class="canvas-hint">
+      <span>💡 Drag from handle to connect • Click node to edit • Delete key to remove</span>
+    </div>
   </div>
 </template>
 
@@ -163,5 +311,19 @@ watch(() => props.workflow, (newWorkflow) => {
   p {
     font-size: 14px;
   }
+}
+
+.canvas-hint {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(26, 26, 36, 0.9);
+  border: 1px solid #2a2a3a;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #8b8fa3;
+  pointer-events: none;
 }
 </style>

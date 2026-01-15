@@ -35,6 +35,7 @@ export interface Workflow {
 export interface GenerateRequest {
     prompt: string;
     modelMode?: 'fast' | 'thinking' | 'thinking-pro';
+    currentWorkflow?: Workflow;
 }
 
 export interface GenerateResponse {

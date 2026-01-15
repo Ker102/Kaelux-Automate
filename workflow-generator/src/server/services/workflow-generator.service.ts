@@ -1,11 +1,17 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import type { Workflow, GenerateResponse } from '@shared/types.js';
+import { getRAGService, type RAGService } from './rag.service.js';
 
 /**
  * Lightweight Workflow Generator Service
  * Uses Gemini to generate n8n workflows from natural language prompts
  */
 export class WorkflowGeneratorService {
+    private ragService: RAGService;
+
+    constructor() {
+        this.ragService = getRAGService();
+    }
     private getModel(modelMode: 'fast' | 'thinking' | 'thinking-pro') {
         const apiKey = process.env.GEMINI_API_KEY || process.env.N8N_AI_GEMINI_KEY;
 
@@ -13,9 +19,10 @@ export class WorkflowGeneratorService {
             throw new Error('GEMINI_API_KEY environment variable is required');
         }
 
-        let modelName = 'gemini-2.0-flash';
+        // Valid Gemini model names (as of Jan 2026)
+        let modelName = 'gemini-2.0-flash';  // Fast
         if (modelMode === 'thinking') modelName = 'gemini-2.5-pro';
-        if (modelMode === 'thinking-pro') modelName = 'gemini-3.0-pro';
+        if (modelMode === 'thinking-pro') modelName = 'gemini-3-pro-preview';
 
         return new ChatGoogleGenerativeAI({
             apiKey,
@@ -77,16 +84,39 @@ POSITIONING:
 
     async generate(
         prompt: string,
-        modelMode: 'fast' | 'thinking' | 'thinking-pro' = 'fast'
+        modelMode: 'fast' | 'thinking' | 'thinking-pro' = 'fast',
+        currentWorkflow?: Workflow
     ): Promise<GenerateResponse> {
         const model = this.getModel(modelMode);
 
+        // Get RAG context
+        const ragContext = await this.ragService.getContextForPrompt(prompt, 3);
+
+        // Build context-aware prompt
+        let userPrompt = '';
+
+        if (currentWorkflow && currentWorkflow.nodes && currentWorkflow.nodes.length > 0) {
+            userPrompt = `CURRENT WORKFLOW ON CANVAS:
+${JSON.stringify(currentWorkflow, null, 2)}
+
+USER REQUEST: ${prompt}
+
+INSTRUCTIONS: Modify the existing workflow based on the user's request. 
+- You can add, update, or remove nodes
+- Preserve existing nodes unless the user asks to remove them
+- Return the complete modified workflow JSON`;
+        } else {
+            userPrompt = `Generate an n8n workflow for: ${prompt}`;
+        }
+
         const messages = [
-            { role: 'system' as const, content: this.getSystemPrompt() },
-            { role: 'user' as const, content: `Generate an n8n workflow for: ${prompt}` },
+            { role: 'system' as const, content: this.getSystemPrompt() + ragContext },
+            { role: 'user' as const, content: userPrompt },
         ];
 
         console.log(`🤖 Calling ${modelMode} model...`);
+        if (ragContext) console.log('📚 RAG context included');
+        if (currentWorkflow) console.log('🎨 Canvas-aware mode active');
 
         const response = await model.invoke(messages);
         const content = typeof response.content === 'string'
@@ -116,7 +146,9 @@ POSITIONING:
             return {
                 workflow,
                 name: workflow.name || 'Generated Workflow',
-                message: 'Workflow generated successfully',
+                message: currentWorkflow
+                    ? 'Workflow modified successfully'
+                    : 'Workflow generated successfully',
             };
         } catch (parseError) {
             console.error('Failed to parse workflow JSON:', parseError);

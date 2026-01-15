@@ -1,0 +1,5013 @@
+{
+  "version": "2.3.4",
+  "generatedAt": "2026-01-14T12:01:26.905Z",
+  "totalNodes": 296,
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.actionNetwork",
+      "displayName": "Action Network",
+      "description": "Consume the Action Network API",
+      "icon": "file:actionNetwork.svg",
+      "categories": [
+        "Sales",
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [
+        "Attendance",
+        "Event",
+        "Person",
+        "Person Tag",
+        "Petition",
+        "Signature",
+        "Tag"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.actionnetwork/"
+    },
+    {
+      "type": "n8n-nodes-base.activeCampaign",
+      "displayName": "ActiveCampaign",
+      "description": "Create and edit data in ActiveCampaign",
+      "icon": "file:activecampaign.svg",
+      "categories": [
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [
+        "Account",
+        "Account Contact",
+        "Connection",
+        "Contact",
+        "Contact List",
+        "Contact Tag",
+        "Deal",
+        "E-Commerce Customer",
+        "E-Commerce Order",
+        "E-Commerce Order Product"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.activecampaign/"
+    },
+    {
+      "type": "n8n-nodes-base.acuityScheduling",
+      "displayName": "Acuity Scheduling Trigger",
+      "description": "Handle Acuity Scheduling events via webhooks",
+      "icon": "file:acuityScheduling.png",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "API Key",
+        "OAuth2"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.adalo",
+      "displayName": "Adalo",
+      "description": "Consume Adalo API",
+      "icon": "file:adalo.svg",
+      "categories": [
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "Collection"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.adalo/"
+    },
+    {
+      "type": "n8n-nodes-base.affinity",
+      "displayName": "Affinity",
+      "description": "Consume Affinity API",
+      "icon": "file:affinity.svg",
+      "categories": [
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "List",
+        "List Entry",
+        "Organization",
+        "Person"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.affinity/"
+    },
+    {
+      "type": "n8n-nodes-base.agileCrm",
+      "displayName": "Agile CRM",
+      "description": "Consume Agile CRM API",
+      "icon": "file:agilecrm.png",
+      "categories": [
+        "Marketing",
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "Company",
+        "Contact",
+        "Deal"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.agilecrm/"
+    },
+    {
+      "type": "n8n-nodes-base.aiTransform",
+      "displayName": "AI Transform",
+      "description": "Modify data based on instructions written in plain english",
+      "icon": "file:aitransform.svg",
+      "categories": [
+        "Development",
+        "Core Nodes"
+      ],
+      "aliases": [
+        "code",
+        "Javascript",
+        "JS",
+        "Script",
+        "Custom Code",
+        "Function",
+        "AI",
+        "LLM"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.aitransform/"
+    },
+    {
+      "type": "n8n-nodes-base.airtable",
+      "displayName": "Airtable",
+      "description": "Read, update, write and delete data from Airtable",
+      "icon": "file:airtable.svg",
+      "categories": [
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.airtable/"
+    },
+    {
+      "type": "n8n-nodes-base.airtop",
+      "displayName": "Airtop",
+      "description": "Scrape and control any site with Airtop",
+      "icon": "file:airtop.svg",
+      "categories": [
+        "Productivity",
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Extraction",
+        "File",
+        "Interaction",
+        "Session",
+        "Window"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.airtop/"
+    },
+    {
+      "type": "n8n-nodes-base.amqp",
+      "displayName": "AMQP Sender",
+      "description": "Sends a raw-message via AMQP 1.0, executed once per item",
+      "icon": "file:amqp.svg",
+      "categories": [
+        "Development",
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "containerId",
+        "dataAsObject",
+        "reconnect",
+        "reconnectLimit",
+        "sendOnlyProperty"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.amqp/"
+    },
+    {
+      "type": "n8n-nodes-base.apiTemplateIo",
+      "displayName": "APITemplate.io",
+      "description": "Consume the APITemplate.io API",
+      "icon": "file:apiTemplateIo.svg",
+      "categories": [
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [
+        "Account",
+        "Image",
+        "PDF"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.apitemplateio/"
+    },
+    {
+      "type": "n8n-nodes-base.asana",
+      "displayName": "Asana",
+      "description": "Consume Asana REST API",
+      "icon": "file:asana.svg",
+      "categories": [
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [
+        "Access Token",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.asana/"
+    },
+    {
+      "type": "n8n-nodes-base.automizy",
+      "displayName": "Automizy",
+      "description": "Consume Automizy API",
+      "icon": "file:automizy.png",
+      "categories": [
+        "Communication",
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [
+        "Contact",
+        "List"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.automizy/"
+    },
+    {
+      "type": "n8n-nodes-base.autopilot",
+      "displayName": "Autopilot",
+      "description": "Consume Autopilot API",
+      "icon": "file:autopilot.svg",
+      "categories": [
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [
+        "Contact",
+        "Contact Journey",
+        "Contact List",
+        "List"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.autopilot/"
+    },
+    {
+      "type": "n8n-nodes-base.aws",
+      "displayName": "AWS Lambda",
+      "description": "Invoke functions on AWS Lambda",
+      "icon": "file:lambda.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "Invoke"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.editImage",
+      "displayName": "Background Color",
+      "description": "Adds a blur to the image and so makes it less sharp",
+      "icon": "fa:image",
+      "categories": [
+        "Marketing",
+        "Core Nodes"
+      ],
+      "aliases": [],
+      "resources": [
+        "Circle",
+        "Line",
+        "Rectangle"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.editimage/"
+    },
+    {
+      "type": "n8n-nodes-base.bambooHr",
+      "displayName": "BambooHr",
+      "description": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.bamboohr/",
+      "icon": "file:bamboohr.svg",
+      "categories": [
+        "Miscellaneous"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.bamboohr/"
+    },
+    {
+      "type": "n8n-nodes-base.bannerbear",
+      "displayName": "Bannerbear",
+      "description": "Consume Bannerbear API",
+      "icon": "file:bannerbear.png",
+      "categories": [
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [
+        "Image",
+        "Template"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.bannerbear/"
+    },
+    {
+      "type": "n8n-nodes-base.baserow",
+      "displayName": "Baserow",
+      "description": "Consume the Baserow API",
+      "icon": "file:baserow.svg",
+      "categories": [
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "Row"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.baserow/"
+    },
+    {
+      "type": "n8n-nodes-base.beeminder",
+      "displayName": "Beeminder",
+      "description": "Consume Beeminder API",
+      "icon": "file:beeminder.png",
+      "categories": [
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [
+        "API Token",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.beeminder/"
+    },
+    {
+      "type": "n8n-nodes-base.bitbucket",
+      "displayName": "Bitbucket Trigger",
+      "description": "Handle Bitbucket events via webhooks",
+      "icon": "file:bitbucket.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "Password (Deprecated)",
+        "Access Token"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.bitly",
+      "displayName": "Bitly",
+      "description": "Consume Bitly API",
+      "icon": "file:bitly.svg",
+      "categories": [
+        "Utility"
+      ],
+      "aliases": [],
+      "resources": [
+        "Access Token",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.bitly/"
+    },
+    {
+      "type": "n8n-nodes-base.bitwarden",
+      "displayName": "Bitwarden",
+      "description": "Consume the Bitwarden API",
+      "icon": "file:bitwarden.svg",
+      "categories": [
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "Collection",
+        "Event",
+        "Group",
+        "Member"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.bitwarden/"
+    },
+    {
+      "type": "n8n-nodes-base.box",
+      "displayName": "Box",
+      "description": "Consume Box API",
+      "icon": "file:box.png",
+      "categories": [
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "File",
+        "Folder"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.box/"
+    },
+    {
+      "type": "n8n-nodes-base.brandfetch",
+      "displayName": "Brandfetch",
+      "description": "Consume Brandfetch API",
+      "icon": "file:brandfetch.png",
+      "categories": [
+        "Utility",
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "Color",
+        "Company",
+        "Font",
+        "Industry",
+        "Logo"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.brandfetch/"
+    },
+    {
+      "type": "n8n-nodes-base.brevo",
+      "displayName": "Brevo",
+      "description": "Consume Brevo API",
+      "icon": "file:brevo.svg",
+      "categories": [
+        "Marketing",
+        "Communication"
+      ],
+      "aliases": [
+        "sendinblue"
+      ],
+      "resources": [
+        "Contact",
+        "Contact Attribute",
+        "Email",
+        "Sender"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.brevo/"
+    },
+    {
+      "type": "n8n-nodes-base.bubble",
+      "displayName": "Bubble",
+      "description": "Consume the Bubble Data API",
+      "icon": "file:bubble.svg",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Object"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.bubble/"
+    },
+    {
+      "type": "n8n-nodes-base.cal",
+      "displayName": "Cal.com Trigger",
+      "description": "Handle Cal.com events via webhooks",
+      "icon": "file:cal.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "Booking Cancelled",
+        "Booking Created",
+        "Booking Rescheduled",
+        "Meeting Ended"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.calendly",
+      "displayName": "Calendly Trigger",
+      "description": "Starts the workflow when Calendly events occur",
+      "icon": "file:calendly.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "OAuth2 (recommended)",
+        "API Key or Personal Access Token"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.chargebee",
+      "displayName": "Chargebee",
+      "description": "Retrieve data from Chargebee API",
+      "icon": "file:chargebee.png",
+      "categories": [
+        "Finance & Accounting"
+      ],
+      "aliases": [],
+      "resources": [
+        "Customer",
+        "Invoice",
+        "Subscription"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.chargebee/"
+    },
+    {
+      "type": "n8n-nodes-base.circleCi",
+      "displayName": "CircleCI",
+      "description": "Consume CircleCI API",
+      "icon": "file:circleci.svg",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Pipeline"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.circleci/"
+    },
+    {
+      "type": "n8n-nodes-base.clearbit",
+      "displayName": "Clearbit",
+      "description": "Consume Clearbit API",
+      "icon": "file:clearbit.svg",
+      "categories": [
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "Company",
+        "Person"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.clearbit/"
+    },
+    {
+      "type": "n8n-nodes-base.clickUp",
+      "displayName": "ClickUp",
+      "description": "Consume ClickUp API (Beta)",
+      "icon": "file:clickup.svg",
+      "categories": [
+        "Productivity",
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Access Token",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.clickup/"
+    },
+    {
+      "type": "n8n-nodes-base.clockify",
+      "displayName": "Clockify",
+      "description": "Consume Clockify REST API",
+      "icon": "file:clockify.svg",
+      "categories": [
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [
+        "Client",
+        "Project",
+        "Tag",
+        "Task",
+        "Time Entry",
+        "User",
+        "Workspace"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.clockify/"
+    },
+    {
+      "type": "n8n-nodes-base.cloudflare",
+      "displayName": "Cloudflare",
+      "description": "Consume Cloudflare API",
+      "icon": "file:cloudflare.svg",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Zone Certificate"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.cloudflare/"
+    },
+    {
+      "type": "n8n-nodes-base.cockpit",
+      "displayName": "Cockpit",
+      "description": "Consume Cockpit API",
+      "icon": "file:cockpit.svg",
+      "categories": [
+        "Marketing",
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Collection",
+        "Form",
+        "Singleton"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.cockpit/"
+    },
+    {
+      "type": "n8n-nodes-base.coda",
+      "displayName": "Coda",
+      "description": "Consume Coda API",
+      "icon": "file:coda.svg",
+      "categories": [
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [
+        "Control",
+        "Formula",
+        "Table",
+        "View"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.coda/"
+    },
+    {
+      "type": "n8n-nodes-base.code",
+      "displayName": "Code",
+      "description": "Run custom JavaScript or Python code",
+      "icon": "={{(${iconForLanguage})($parameter.language)}}",
+      "categories": [
+        "Development",
+        "Core Nodes"
+      ],
+      "aliases": [
+        "cpde",
+        "Javascript",
+        "JS",
+        "Python",
+        "Script",
+        "Custom Code",
+        "Function"
+      ],
+      "resources": [
+        "Run Once for All Items",
+        "Run Once for Each Item"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.code/"
+    },
+    {
+      "type": "n8n-nodes-base.coinGecko",
+      "displayName": "CoinGecko",
+      "description": "Consume CoinGecko API",
+      "icon": "file:coinGecko.svg",
+      "categories": [
+        "Productivity",
+        "Finance & Accounting"
+      ],
+      "aliases": [],
+      "resources": [
+        "Coin",
+        "Event"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.coingecko/"
+    },
+    {
+      "type": "n8n-nodes-base.compareDatasets",
+      "displayName": "Compare Datasets",
+      "description": "Compare two inputs for changes",
+      "icon": "file:compare.svg",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Join",
+        "Concatenate",
+        "Compare",
+        "Dataset",
+        "Split",
+        "Sync",
+        "Syncing"
+      ],
+      "resources": [
+        "values",
+        "field1",
+        "field2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.comparedatasets/"
+    },
+    {
+      "type": "n8n-nodes-base.compression",
+      "displayName": "Compression",
+      "description": "Compress and decompress files",
+      "icon": "fa:file-archive",
+      "categories": [
+        "Core Nodes",
+        "Data & Storage"
+      ],
+      "aliases": [
+        "Zip",
+        "Gzip",
+        "uncompress",
+        "compress",
+        "decompress",
+        "archive",
+        "unarchive",
+        "Binary",
+        "Files",
+        "File"
+      ],
+      "resources": [
+        "Compress",
+        "Decompress"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.compression/"
+    },
+    {
+      "type": "n8n-nodes-base.contentful",
+      "displayName": "Contentful",
+      "description": "Consume Contentful API",
+      "icon": "file:contentful.png",
+      "categories": [
+        "Marketing",
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Delivery API",
+        "Preview API"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.contentful/"
+    },
+    {
+      "type": "n8n-nodes-base.moveBinaryData",
+      "displayName": "Convert to/from binary data",
+      "description": "Move data between binary and JSON properties",
+      "icon": "fa:exchange-alt",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Move Binary Data"
+      ],
+      "resources": [
+        "Binary to JSON",
+        "JSON to Binary"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.converttofile/"
+    },
+    {
+      "type": "n8n-nodes-base.convertKit",
+      "displayName": "ConvertKit",
+      "description": "Consume ConvertKit API",
+      "icon": "file:convertKit.svg",
+      "categories": [
+        "Marketing",
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "Custom Field",
+        "Form",
+        "Sequence",
+        "Tag",
+        "Tag Subscriber"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.convertkit/"
+    },
+    {
+      "type": "n8n-nodes-base.copper",
+      "displayName": "Copper",
+      "description": "Consume the Copper API",
+      "icon": "file:copper.svg",
+      "categories": [
+        "Marketing",
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "Company",
+        "Customer Source",
+        "Lead",
+        "Opportunity",
+        "Person",
+        "Project",
+        "Task",
+        "User"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.copper/"
+    },
+    {
+      "type": "n8n-nodes-base.cortex",
+      "displayName": "Cortex",
+      "description": "Apply the Cortex analyzer/responder on the given entity",
+      "icon": "file:cortex.svg",
+      "categories": [
+        "Development",
+        "Analytics"
+      ],
+      "aliases": [],
+      "resources": [
+        "Analyzer",
+        "Job",
+        "Responder"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.cortex/"
+    },
+    {
+      "type": "n8n-nodes-base.crateDb",
+      "displayName": "CrateDB",
+      "description": "Add and update data in CrateDB",
+      "icon": "file:cratedb.png",
+      "categories": [
+        "Development",
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "Execute Query",
+        "Insert",
+        "Update"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.cratedb/"
+    },
+    {
+      "type": "n8n-nodes-base.cron",
+      "displayName": "Cron",
+      "description": "Triggers the workflow at a specific time",
+      "icon": "fa:clock",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Time",
+        "Scheduler",
+        "Polling",
+        "Cron",
+        "Interval"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.scheduletrigger/"
+    },
+    {
+      "type": "n8n-nodes-base.crowdDev",
+      "displayName": "crowd.dev",
+      "description": "crowd.dev is an open-source suite of community and data tools built to unlock community-led growth for your organization.",
+      "icon": "file:crowddev.svg",
+      "categories": [
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.crowddev/"
+    },
+    {
+      "type": "n8n-nodes-base.crypto",
+      "displayName": "Crypto",
+      "description": "Provide cryptographic utilities",
+      "icon": "fa:key",
+      "categories": [
+        "Development",
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Encrypt",
+        "SHA",
+        "Hash"
+      ],
+      "resources": [
+        "Generate",
+        "Hash",
+        "Hmac",
+        "Sign"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.crypto/"
+    },
+    {
+      "type": "n8n-nodes-base.n8nTrainingCustomerDatastore",
+      "displayName": "Customer Datastore (n8n training)",
+      "description": "Dummy node used for n8n training",
+      "icon": "file:n8ntrainingcustomerdatastore.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "Get One Person",
+        "Get All People"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.n8nTrainingCustomerMessenger",
+      "displayName": "Customer Messenger (n8n training)",
+      "description": "Dummy node used for n8n training",
+      "icon": "file:n8ntrainingcustomermessenger.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.customerIo",
+      "displayName": "Customer.io",
+      "description": "Consume Customer.io API",
+      "icon": "file:customerio.svg",
+      "categories": [
+        "Communication",
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Customer",
+        "Event",
+        "Campaign",
+        "Segment"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.customerio/"
+    },
+    {
+      "type": "n8n-nodes-base.dataTable",
+      "displayName": "Data table",
+      "description": "Permanently save data across workflow executions in a table",
+      "icon": "fa:table",
+      "categories": [
+        "Core Nodes",
+        "Development"
+      ],
+      "aliases": [
+        "data",
+        "table",
+        "knowledge",
+        "data table",
+        "table",
+        "sheet"
+      ],
+      "resources": [
+        "Row"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.datatable/"
+    },
+    {
+      "type": "n8n-nodes-base.dateTime",
+      "displayName": "Date & Time",
+      "description": "Allows you to manipulate date and time values",
+      "icon": "fa:clock",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.datetime/"
+    },
+    {
+      "type": "n8n-nodes-base.debugHelper",
+      "displayName": "DebugHelper",
+      "description": "Causes problems intentionally and generates useful data for debugging",
+      "icon": "file:debughelper.svg",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [
+        "Mock",
+        "Sample",
+        "Demo",
+        "Test",
+        "Throw error",
+        "OOM",
+        "Out of Memory",
+        "placeholder"
+      ],
+      "resources": [
+        "Do Nothing",
+        "Throw Error",
+        "Out Of Memory",
+        "Generate Random Data"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.debughelper/"
+    },
+    {
+      "type": "n8n-nodes-base.deepL",
+      "displayName": "DeepL",
+      "description": "Translate data using DeepL",
+      "icon": "file:deepl.svg",
+      "categories": [
+        "Utility"
+      ],
+      "aliases": [
+        "Translate",
+        "Translator"
+      ],
+      "resources": [
+        "Language"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.deepl/"
+    },
+    {
+      "type": "n8n-nodes-base.demio",
+      "displayName": "Demio",
+      "description": "Consume the Demio API",
+      "icon": "file:demio.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Event",
+        "Report"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.demio/"
+    },
+    {
+      "type": "n8n-nodes-base.dhl",
+      "displayName": "DHL",
+      "description": "Consume DHL API",
+      "icon": "file:dhl.svg",
+      "categories": [
+        "Miscellaneous"
+      ],
+      "aliases": [
+        "Shipping"
+      ],
+      "resources": [
+        "Shipment"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.dhl/"
+    },
+    {
+      "type": "n8n-nodes-base.discord",
+      "displayName": "Discord",
+      "description": "Sends data to Discord",
+      "icon": "file:discord.svg",
+      "categories": [
+        "Communication",
+        "HITL"
+      ],
+      "aliases": [
+        "human",
+        "form",
+        "wait",
+        "hitl",
+        "approval"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.discord/"
+    },
+    {
+      "type": "n8n-nodes-base.discourse",
+      "displayName": "Discourse",
+      "description": "Consume Discourse API",
+      "icon": "file:discourse.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Category",
+        "Group",
+        "Post",
+        "Search",
+        "User",
+        "User Group"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.discourse/"
+    },
+    {
+      "type": "n8n-nodes-base.disqus",
+      "displayName": "Disqus",
+      "description": "Access data on Disqus",
+      "icon": "file:disqus.png",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Forum"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.disqus/"
+    },
+    {
+      "type": "n8n-nodes-base.drift",
+      "displayName": "Drift",
+      "description": "Consume Drift API",
+      "icon": "file:drift.svg",
+      "categories": [
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "Access Token",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.drift/"
+    },
+    {
+      "type": "n8n-nodes-base.dropbox",
+      "displayName": "Dropbox",
+      "description": "Access data on Dropbox",
+      "icon": "file:dropbox.svg",
+      "categories": [
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "Access Token",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.dropbox/"
+    },
+    {
+      "type": "n8n-nodes-base.dropcontact",
+      "displayName": "Dropcontact",
+      "description": "Find B2B emails and enrich contacts",
+      "icon": "file:dropcontact.svg",
+      "categories": [
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "Contact"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.dropcontact/"
+    },
+    {
+      "type": "n8n-nodes-base.egoi",
+      "displayName": "E-goi",
+      "description": "Consume E-goi API",
+      "icon": "file:egoi.svg",
+      "categories": [
+        "Communication",
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [
+        "Contact"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.egoi/"
+    },
+    {
+      "type": "n8n-nodes-base.e2eTest",
+      "displayName": "E2E Test",
+      "description": "Dummy node used for e2e testing",
+      "icon": "fa:play",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [],
+      "resources": [
+        "Remote Options",
+        "Resource Locator",
+        "Resource Mapping Component"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.editimage/"
+    },
+    {
+      "type": "n8n-nodes-base.emailReadImap",
+      "displayName": "Email Trigger (IMAP)",
+      "description": "Triggers the workflow when a new email is received",
+      "icon": "fa:inbox",
+      "categories": [
+        "Communication",
+        "Core Nodes"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.emailimap/"
+    },
+    {
+      "type": "n8n-nodes-base.emelia",
+      "displayName": "Emelia",
+      "description": "Consume the Emelia API",
+      "icon": "file:emelia.svg",
+      "categories": [
+        "Communication",
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [
+        "Campaign",
+        "Contact List"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.emelia/"
+    },
+    {
+      "type": "n8n-nodes-base.eRPNext",
+      "displayName": "ERPNext",
+      "description": "Consume ERPNext API",
+      "icon": "file:erpnext.svg",
+      "categories": [
+        "Finance & Accounting",
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "Document"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.erpnext/"
+    },
+    {
+      "type": "n8n-nodes-base.errorTrigger",
+      "displayName": "Error Trigger",
+      "description": "Triggers the workflow when another workflow has an error",
+      "icon": "fa:bug",
+      "categories": [
+        "Development",
+        "Core Nodes"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.errortrigger/"
+    },
+    {
+      "type": "n8n-nodes-base.eventbrite",
+      "displayName": "Eventbrite Trigger",
+      "description": "Handle Eventbrite events via webhooks",
+      "icon": "file:eventbrite.png",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "Private Key",
+        "OAuth2"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.executeCommand",
+      "displayName": "Execute Command",
+      "description": "Executes a command on the host",
+      "icon": "fa:terminal",
+      "categories": [
+        "Development",
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Shell",
+        "Command",
+        "OS",
+        "Bash"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.executecommand/"
+    },
+    {
+      "type": "n8n-nodes-base.executionData",
+      "displayName": "Execution Data",
+      "description": "Add execution data for search",
+      "icon": "fa:tasks",
+      "categories": [
+        "Development",
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Filter",
+        "_Set",
+        "Data"
+      ],
+      "resources": [
+        "Save Highlight Data (for Search/review)"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.executiondata/"
+    },
+    {
+      "type": "n8n-nodes-base.html",
+      "displayName": "Extraction Values",
+      "description": "The key under which the extracted value should be saved",
+      "icon": "file:html.svg",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "extract",
+        "template",
+        "table"
+      ],
+      "resources": [
+        "values",
+        "key",
+        "cssSelector",
+        "returnValue",
+        "Attribute",
+        "HTML",
+        "Text",
+        "Value"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.html/"
+    },
+    {
+      "type": "n8n-nodes-base.facebook",
+      "displayName": "Facebook Graph API",
+      "description": "Interacts with Facebook using the Graph API",
+      "icon": "file:facebook.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "Default",
+        "Video Uploads"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.facebookLeadAds",
+      "displayName": "Facebook Lead Ads Trigger",
+      "description": "Handle Facebook Lead Ads events via webhooks",
+      "icon": "file:facebook.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "New Lead"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.figma",
+      "displayName": "Figma Trigger (Beta)",
+      "description": "Starts the workflow when Figma events occur",
+      "icon": "file:figma.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "File Commented",
+        "File Deleted",
+        "File Updated",
+        "File Version Updated",
+        "Library Publish"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.fileMaker",
+      "displayName": "FileMaker",
+      "description": "Retrieve data from the FileMaker data API",
+      "icon": "file:filemaker.png",
+      "categories": [
+        "Development",
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "Login",
+        "Logout",
+        "Create Record",
+        "Delete Record",
+        "Duplicate Record",
+        "Edit Record",
+        "Find Records",
+        "Get Records",
+        "Get Records By ID",
+        "Perform Script"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.filemaker/"
+    },
+    {
+      "type": "n8n-nodes-base.filter",
+      "displayName": "Filter",
+      "description": "Remove items matching a condition",
+      "icon": "fa:filter",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Router",
+        "Filter",
+        "Condition",
+        "Logic",
+        "Boolean",
+        "Branch"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.filter/"
+    },
+    {
+      "type": "n8n-nodes-base.flow",
+      "displayName": "Flow",
+      "description": "Consume Flow API",
+      "icon": "file:flow.svg",
+      "categories": [
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [
+        "Task"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.flow/"
+    },
+    {
+      "type": "n8n-nodes-base.formIo",
+      "displayName": "Form.io Trigger",
+      "description": "Handle form.io events via webhooks",
+      "icon": "file:formio.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "Submission Created",
+        "Submission Updated"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.formstack",
+      "displayName": "Formstack Trigger",
+      "description": "Starts the workflow on a Formstack form submission.",
+      "icon": "file:formstack.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "Access Token",
+        "OAuth2"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.freshdesk",
+      "displayName": "Freshdesk",
+      "description": "Consume Freshdesk API",
+      "icon": "file:freshdesk.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Contact",
+        "Ticket"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.freshdesk/"
+    },
+    {
+      "type": "n8n-nodes-base.freshservice",
+      "displayName": "Freshservice",
+      "description": "Consume the Freshservice API",
+      "icon": "file:freshservice.svg",
+      "categories": [
+        "Productivity"
+      ],
+      "aliases": [
+        "Freshdesk"
+      ],
+      "resources": [
+        "Agent",
+        "Agent Group",
+        "Agent Role",
+        "Announcement",
+        "Asset",
+        "Asset Type",
+        "Change",
+        "Department",
+        "Location",
+        "Problem"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.freshservice/"
+    },
+    {
+      "type": "n8n-nodes-base.freshworksCrm",
+      "displayName": "Freshworks CRM",
+      "description": "Consume the Freshworks CRM API",
+      "icon": "file:freshworksCrm.svg",
+      "categories": [
+        "Marketing",
+        "Sales"
+      ],
+      "aliases": [
+        "Freshdesk"
+      ],
+      "resources": [
+        "Account",
+        "Appointment",
+        "Contact",
+        "Deal",
+        "Note",
+        "Sales Activity",
+        "Search",
+        "Task"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.freshworkscrm/"
+    },
+    {
+      "type": "n8n-nodes-base.ftp",
+      "displayName": "FTP",
+      "description": "Transfer files via FTP or SFTP",
+      "icon": "fa:server",
+      "categories": [
+        "Core Nodes",
+        "Data & Storage",
+        "Development",
+        "Utility"
+      ],
+      "aliases": [
+        "SFTP",
+        "FTP",
+        "Binary",
+        "File",
+        "Transfer"
+      ],
+      "resources": [
+        "FTP",
+        "SFTP"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.ftp/"
+    },
+    {
+      "type": "n8n-nodes-base.function",
+      "displayName": "Function",
+      "description": "Run custom function code which gets executed once and allows you to add, remove, change and replace items",
+      "icon": "fa:code",
+      "categories": [
+        "Development",
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Code",
+        "Javascript",
+        "Custom Code",
+        "Script",
+        "cpde"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.code/"
+    },
+    {
+      "type": "n8n-nodes-base.functionItem",
+      "displayName": "Function Item",
+      "description": "Run custom function code which gets executed once per item",
+      "icon": "fa:code",
+      "categories": [
+        "Development",
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Javascript",
+        "Code",
+        "Custom Code",
+        "JS"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.code/"
+    },
+    {
+      "type": "n8n-nodes-base.getResponse",
+      "displayName": "GetResponse",
+      "description": "Consume GetResponse API",
+      "icon": "file:getResponse.png",
+      "categories": [
+        "Communication",
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [
+        "API Key",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.getresponse/"
+    },
+    {
+      "type": "n8n-nodes-base.ghost",
+      "displayName": "Ghost",
+      "description": "Consume Ghost API",
+      "icon": "file:ghost.svg",
+      "categories": [
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [
+        "Admin API",
+        "Content API"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.ghost/"
+    },
+    {
+      "type": "n8n-nodes-base.git",
+      "displayName": "Git",
+      "description": "Control git.",
+      "icon": "file:git.svg",
+      "categories": [
+        "Core Nodes",
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Authenticate",
+        "None"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.git/"
+    },
+    {
+      "type": "n8n-nodes-base.github",
+      "displayName": "GitHub",
+      "description": "Consume GitHub API",
+      "icon": "file:github.svg",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Access Token",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.github/"
+    },
+    {
+      "type": "n8n-nodes-base.gitlab",
+      "displayName": "GitLab",
+      "description": "Retrieve data from GitLab API",
+      "icon": "file:gitlab.svg",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Access Token",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.gitlab/"
+    },
+    {
+      "type": "n8n-nodes-base.gong",
+      "displayName": "Gong",
+      "description": "Interact with Gong API",
+      "icon": "file:gong.svg",
+      "categories": [
+        "Development",
+        "Developer Tools"
+      ],
+      "aliases": [],
+      "resources": [
+        "Access Token",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.gong/"
+    },
+    {
+      "type": "n8n-nodes-base.gotify",
+      "displayName": "Gotify",
+      "description": "Consume Gotify API",
+      "icon": "file:gotify.png",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Message"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.gotify/"
+    },
+    {
+      "type": "n8n-nodes-base.goToWebinar",
+      "displayName": "GoToWebinar",
+      "description": "Consume the GoToWebinar API",
+      "icon": "file:gotowebinar.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Attendee",
+        "Co-Organizer",
+        "Panelist",
+        "Registrant",
+        "Session",
+        "Webinar"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.gotowebinar/"
+    },
+    {
+      "type": "n8n-nodes-base.grafana",
+      "displayName": "Grafana",
+      "description": "Consume the Grafana API",
+      "icon": "file:grafana.svg",
+      "categories": [
+        "Development",
+        "Analytics"
+      ],
+      "aliases": [
+        "Prometheus"
+      ],
+      "resources": [
+        "Dashboard",
+        "Team",
+        "Team Member",
+        "User"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.grafana/"
+    },
+    {
+      "type": "n8n-nodes-base.graphQL",
+      "displayName": "GraphQL",
+      "description": "Makes a GraphQL request and returns the received data",
+      "icon": "file:graphql.png",
+      "categories": [
+        "Data & Storage",
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Basic Auth",
+        "Custom Auth",
+        "Digest Auth",
+        "Header Auth",
+        "None",
+        "OAuth1",
+        "OAuth2",
+        "Query Auth"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.graphql/"
+    },
+    {
+      "type": "n8n-nodes-base.grist",
+      "displayName": "Grist",
+      "description": "Consume the Grist API",
+      "icon": "file:grist.svg",
+      "categories": [
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.grist/"
+    },
+    {
+      "type": "n8n-nodes-base.gumroad",
+      "displayName": "Gumroad Trigger",
+      "description": "Handle Gumroad events via webhooks",
+      "icon": "file:gumroad.png",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "Cancellation",
+        "Dispute",
+        "Dispute Won",
+        "Refund",
+        "Sale"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.hackerNews",
+      "displayName": "Hacker News",
+      "description": "Consume Hacker News API",
+      "icon": "file:hackernews.png",
+      "categories": [
+        "Communication",
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [
+        "All",
+        "Article",
+        "User"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.hackernews/"
+    },
+    {
+      "type": "n8n-nodes-base.haloPSA",
+      "displayName": "HaloPSA",
+      "description": "Consume HaloPSA API",
+      "icon": "file:halopsa.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Client",
+        "Site",
+        "Ticket",
+        "User"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.halopsa/"
+    },
+    {
+      "type": "n8n-nodes-base.harvest",
+      "displayName": "Harvest",
+      "description": "Access data on Harvest",
+      "icon": "file:harvest.png",
+      "categories": [
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [
+        "Access Token",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.harvest/"
+    },
+    {
+      "type": "n8n-nodes-base.helpScout",
+      "displayName": "Help Scout",
+      "description": "Consume Help Scout API",
+      "icon": "file:helpScout.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Conversation",
+        "Customer",
+        "Mailbox",
+        "Thread"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.helpscout/"
+    },
+    {
+      "type": "n8n-nodes-base.highLevel",
+      "displayName": "HighLevel",
+      "description": "Consume HighLevel API",
+      "icon": "file:highLevel.svg",
+      "categories": [
+        "Marketing",
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.highlevel/"
+    },
+    {
+      "type": "n8n-nodes-base.homeAssistant",
+      "displayName": "Home Assistant",
+      "description": "Consume Home Assistant API",
+      "icon": "file:homeAssistant.svg",
+      "categories": [
+        "Miscellaneous"
+      ],
+      "aliases": [],
+      "resources": [
+        "Camera Proxy",
+        "Config",
+        "Event",
+        "History",
+        "Log",
+        "Service",
+        "State",
+        "Template"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.homeassistant/"
+    },
+    {
+      "type": "n8n-nodes-base.htmlExtract",
+      "displayName": "HTML Extract",
+      "description": "Extracts data from HTML",
+      "icon": "fa:cut",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [],
+      "resources": [
+        "Binary",
+        "JSON"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.html/"
+    },
+    {
+      "type": "n8n-nodes-base.httpRequest",
+      "displayName": "HTTP Request",
+      "description": "Makes an HTTP request and returns the response data",
+      "icon": "file:httprequest.svg",
+      "categories": [
+        "Development",
+        "Core Nodes"
+      ],
+      "aliases": [
+        "API",
+        "Request",
+        "URL",
+        "Build",
+        "cURL"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.httprequest/"
+    },
+    {
+      "type": "n8n-nodes-base.hubspot",
+      "displayName": "HubSpot",
+      "description": "Consume HubSpot API",
+      "icon": "file:hubspot.svg",
+      "categories": [
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.hubspot/"
+    },
+    {
+      "type": "n8n-nodes-base.humanticAI",
+      "displayName": "Humantic AI",
+      "description": "Consume Humantic AI API",
+      "icon": "file:humanticai.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "Profile"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.hunter",
+      "displayName": "Hunter",
+      "description": "Consume Hunter API",
+      "icon": "file:hunter.png",
+      "categories": [
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "Domain Search",
+        "Email Finder",
+        "Email Verifier"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.hunter/"
+    },
+    {
+      "type": "n8n-nodes-base.iCalendar",
+      "displayName": "iCalendar",
+      "description": "Create iCalendar file",
+      "icon": "fa:calendar",
+      "categories": [
+        "Core Nodes",
+        "Productivity"
+      ],
+      "aliases": [
+        "ics",
+        ".ics"
+      ],
+      "resources": [
+        "Create Event File"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.converttofile/"
+    },
+    {
+      "type": "n8n-nodes-base.if",
+      "displayName": "If",
+      "description": "Route items to different branches (true/false)",
+      "icon": "fa:map-signs",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Router",
+        "Filter",
+        "Condition",
+        "Logic",
+        "Boolean",
+        "Branch"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.if/"
+    },
+    {
+      "type": "n8n-nodes-base.telegram",
+      "displayName": "Interact with Telegram using our pre-built",
+      "description": "Sends data to Telegram",
+      "icon": "bot",
+      "categories": [
+        "Communication",
+        "HITL"
+      ],
+      "aliases": [
+        "human",
+        "form",
+        "wait",
+        "hitl",
+        "approval"
+      ],
+      "resources": [
+        "Bot",
+        "Chat",
+        "Callback",
+        "File",
+        "Message"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.telegram/"
+    },
+    {
+      "type": "n8n-nodes-base.intercom",
+      "displayName": "Intercom",
+      "description": "Consume Intercom API",
+      "icon": "file:intercom.svg",
+      "categories": [
+        "Communication",
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "Company",
+        "Lead",
+        "User"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.intercom/"
+    },
+    {
+      "type": "n8n-nodes-base.interval",
+      "displayName": "Interval",
+      "description": "Triggers the workflow in a given interval",
+      "icon": "fa:hourglass",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Time",
+        "Scheduler",
+        "Polling"
+      ],
+      "resources": [
+        "Seconds",
+        "Minutes",
+        "Hours"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.interval/"
+    },
+    {
+      "type": "n8n-nodes-base.invoiceNinja",
+      "displayName": "Invoice Ninja",
+      "description": "Consume Invoice Ninja API",
+      "icon": "file:invoiceNinja.svg",
+      "categories": [
+        "Finance & Accounting"
+      ],
+      "aliases": [],
+      "resources": [
+        "Version 4",
+        "Version 5"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.invoiceninja/"
+    },
+    {
+      "type": "n8n-nodes-base.itemLists",
+      "displayName": "Item Lists",
+      "description": "Helper for working with lists of items and transforming arrays",
+      "icon": "file:itemLists.svg",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Aggregate",
+        "Dedupe",
+        "Deduplicate",
+        "Duplicates",
+        "Limit",
+        "Remove",
+        "Slice",
+        "Sort",
+        "Split",
+        "Unique",
+        "JSON",
+        "Transform",
+        "Array",
+        "List",
+        "Object",
+        "Item",
+        "Map",
+        "Format",
+        "Nested",
+        "Iterate",
+        "Summarise",
+        "Summarize",
+        "Group",
+        "Pivot",
+        "Sum",
+        "Count",
+        "Min",
+        "Max"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.itemlists/"
+    },
+    {
+      "type": "n8n-nodes-base.iterable",
+      "displayName": "Iterable",
+      "description": "Consume Iterable API",
+      "icon": "file:iterable.png",
+      "categories": [
+        "Communication",
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [
+        "Event",
+        "User",
+        "User List"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.iterable/"
+    },
+    {
+      "type": "n8n-nodes-base.jenkins",
+      "displayName": "Jenkins",
+      "description": "Consume Jenkins API",
+      "icon": "file:jenkins.svg",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Build",
+        "Instance",
+        "Job"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.jenkins/"
+    },
+    {
+      "type": "n8n-nodes-base.jinaAI",
+      "displayName": "Jina AI",
+      "description": "Interact with Jina AI API",
+      "icon": "file:jinaai.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "Reader",
+        "Research"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.jira",
+      "displayName": "Jira Software",
+      "description": "Consume Jira Software API",
+      "icon": "file:jira.svg",
+      "categories": [
+        "Development",
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [
+        "Cloud",
+        "Server (Self Hosted)",
+        "Server Pat (Self Hosted)"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.jira/"
+    },
+    {
+      "type": "n8n-nodes-base.jotForm",
+      "displayName": "Jotform Trigger",
+      "description": "Handle Jotform events via webhooks",
+      "icon": "file:jotform.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.jwt",
+      "displayName": "JWT",
+      "description": "Be sure to add a valid JWT token to the ",
+      "icon": "file:jwt.svg",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [
+        "Token",
+        "Key",
+        "JSON",
+        "Payload",
+        "Sign",
+        "Verify",
+        "Decode"
+      ],
+      "resources": [
+        "Decode",
+        "Sign",
+        "Verify"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.jwt/"
+    },
+    {
+      "type": "n8n-nodes-base.kafka",
+      "displayName": "Kafka",
+      "description": "Sends messages to a Kafka topic",
+      "icon": "file:kafka.svg",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "headerValues",
+        "key",
+        "value"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.kafka/"
+    },
+    {
+      "type": "n8n-nodes-base.keap",
+      "displayName": "Keap",
+      "description": "Consume Keap API",
+      "icon": "file:keap.png",
+      "categories": [
+        "Sales",
+        "Communication"
+      ],
+      "aliases": [
+        "Infusionsoft"
+      ],
+      "resources": [
+        "Company",
+        "Contact",
+        "Contact Note",
+        "Contact Tag",
+        "Ecommerce Order",
+        "Ecommerce Product",
+        "Email",
+        "File"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.keap/"
+    },
+    {
+      "type": "n8n-nodes-base.kitemaker",
+      "displayName": "Kitemaker",
+      "description": "Consume the Kitemaker GraphQL API",
+      "icon": "file:kitemaker.svg",
+      "categories": [
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [
+        "Organization",
+        "Space",
+        "User",
+        "Work Item"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.kitemaker/"
+    },
+    {
+      "type": "n8n-nodes-base.koBoToolbox",
+      "displayName": "KoBoToolbox",
+      "description": "Work with KoBoToolbox forms and submissions",
+      "icon": "file:koBoToolbox.svg",
+      "categories": [
+        "Communication",
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "File",
+        "Form",
+        "Hook",
+        "Submission"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.kobotoolbox/"
+    },
+    {
+      "type": "n8n-nodes-base.ldap",
+      "displayName": "Ldap",
+      "description": "Interact with LDAP servers",
+      "icon": "file:ldap.svg",
+      "categories": [
+        "Development",
+        "Developer Tools"
+      ],
+      "aliases": [
+        "ad",
+        "active directory"
+      ],
+      "resources": [
+        "Compare",
+        "Create",
+        "Delete",
+        "Rename",
+        "Search",
+        "Update"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.ldap/"
+    },
+    {
+      "type": "n8n-nodes-base.lemlist",
+      "displayName": "Lemlist",
+      "description": "Consume the Lemlist API",
+      "icon": "file:lemlist.svg",
+      "categories": [
+        "Communication",
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.lemlist/"
+    },
+    {
+      "type": "n8n-nodes-base.form",
+      "displayName": "Limit Wait Time",
+      "description": "Whether to limit the time this node should wait for a user response before execution resumes",
+      "icon": "file:form.svg",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "_Form",
+        "form",
+        "table",
+        "submit",
+        "post",
+        "page",
+        "step",
+        "stage",
+        "multi"
+      ],
+      "resources": [
+        "Using Fields Below",
+        "Using JSON"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.form/"
+    },
+    {
+      "type": "n8n-nodes-base.line",
+      "displayName": "Line",
+      "description": "Consume Line API",
+      "icon": "file:line.png",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Notification"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.line/"
+    },
+    {
+      "type": "n8n-nodes-base.linear",
+      "displayName": "Linear",
+      "description": "Consume Linear API",
+      "icon": "file:linear.svg",
+      "categories": [
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [
+        "API Token",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.linear/"
+    },
+    {
+      "type": "n8n-nodes-base.lingvaNex",
+      "displayName": "LingvaNex",
+      "description": "Consume LingvaNex API",
+      "icon": "file:lingvanex.png",
+      "categories": [
+        "Miscellaneous"
+      ],
+      "aliases": [],
+      "resources": [
+        "Translate"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.lingvanex/"
+    },
+    {
+      "type": "n8n-nodes-base.linkedIn",
+      "displayName": "LinkedIn",
+      "description": "Consume LinkedIn API",
+      "icon": "file:linkedin.svg",
+      "categories": [
+        "Marketing",
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Standard",
+        "Community Management"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.linkedin/"
+    },
+    {
+      "type": "n8n-nodes-base.localFileTrigger",
+      "displayName": "Local File Trigger",
+      "description": "Triggers a workflow on file system changes",
+      "icon": "fa:folder-open",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Watch",
+        "Monitor"
+      ],
+      "resources": [
+        "Changes to a Specific File",
+        "Changes Involving a Specific Folder"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.localfiletrigger/"
+    },
+    {
+      "type": "n8n-nodes-base.loneScale",
+      "displayName": "LoneScale",
+      "description": "Create List, add / delete items",
+      "icon": "file:lonescale.svg",
+      "categories": [
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "List",
+        "Item"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.lonescale/"
+    },
+    {
+      "type": "n8n-nodes-base.magento",
+      "displayName": "Magento 2",
+      "description": "Consume Magento API",
+      "icon": "file:magento.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "Customer",
+        "Invoice",
+        "Order",
+        "Product"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.mailcheck",
+      "displayName": "Mailcheck",
+      "description": "Consume Mailcheck API",
+      "icon": "file:mailcheck.svg",
+      "categories": [
+        "Utility",
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [
+        "Email"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mailcheck/"
+    },
+    {
+      "type": "n8n-nodes-base.mailchimp",
+      "displayName": "Mailchimp",
+      "description": "Consume Mailchimp API",
+      "icon": "file:mailchimp.svg",
+      "categories": [
+        "Marketing",
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "API Key",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mailchimp/"
+    },
+    {
+      "type": "n8n-nodes-base.mailerLite",
+      "displayName": "MailerLite",
+      "description": "Consume MailerLite API",
+      "icon": "file:MailerLite.svg",
+      "categories": [
+        "Communication",
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mailerlite/"
+    },
+    {
+      "type": "n8n-nodes-base.mailgun",
+      "displayName": "Mailgun",
+      "description": "Sends an email via Mailgun",
+      "icon": "file:mailgun.svg",
+      "categories": [
+        "Communication",
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mailgun/"
+    },
+    {
+      "type": "n8n-nodes-base.mailjet",
+      "displayName": "Mailjet",
+      "description": "Consume Mailjet API",
+      "icon": "file:mailjet.svg",
+      "categories": [
+        "Communication",
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Email",
+        "SMS"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mailjet/"
+    },
+    {
+      "type": "n8n-nodes-base.mandrill",
+      "displayName": "Mandrill",
+      "description": "Consume Mandrill API",
+      "icon": "file:mandrill.svg",
+      "categories": [
+        "Communication",
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Message"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mandrill/"
+    },
+    {
+      "type": "n8n-nodes-base.manualTrigger",
+      "displayName": "Manual Trigger",
+      "description": "Runs the flow on clicking a button in n8n",
+      "icon": "fa:mouse-pointer",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.manualworkflowtrigger/"
+    },
+    {
+      "type": "n8n-nodes-base.markdown",
+      "displayName": "Markdown",
+      "description": "Convert data between Markdown and HTML",
+      "icon": "file:markdown.svg",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [],
+      "resources": [
+        "Markdown to HTML",
+        "HTML to Markdown"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.markdown/"
+    },
+    {
+      "type": "n8n-nodes-base.marketstack",
+      "displayName": "Marketstack",
+      "description": "Consume Marketstack API",
+      "icon": "file:marketstack.svg",
+      "categories": [
+        "Analytics",
+        "Finance & Accounting"
+      ],
+      "aliases": [],
+      "resources": [
+        "End-of-Day Data",
+        "Exchange",
+        "Ticker"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.marketstack/"
+    },
+    {
+      "type": "n8n-nodes-base.matrix",
+      "displayName": "Matrix",
+      "description": "Consume Matrix API",
+      "icon": "file:matrix.png",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Account",
+        "Event",
+        "Media",
+        "Message",
+        "Room",
+        "Room Member"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.matrix/"
+    },
+    {
+      "type": "n8n-nodes-base.mattermost",
+      "displayName": "Mattermost",
+      "description": "Sends data to Mattermost",
+      "icon": "file:mattermost.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mattermost/"
+    },
+    {
+      "type": "n8n-nodes-base.mautic",
+      "displayName": "Mautic",
+      "description": "Consume Mautic API",
+      "icon": "file:mautic.svg",
+      "categories": [
+        "Marketing",
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Credentials",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mautic/"
+    },
+    {
+      "type": "n8n-nodes-base.medium",
+      "displayName": "Medium",
+      "description": "Consume Medium API",
+      "icon": "file:medium.png",
+      "categories": [
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [
+        "Access Token",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.medium/"
+    },
+    {
+      "type": "n8n-nodes-base.merge",
+      "displayName": "Merge",
+      "description": "Merges data of multiple streams once data from both is available",
+      "icon": "file:merge.svg",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Join",
+        "Concatenate",
+        "Wait"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.merge/"
+    },
+    {
+      "type": "n8n-nodes-base.messageBird",
+      "displayName": "MessageBird",
+      "description": "Sends SMS via MessageBird",
+      "icon": "file:messagebird.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "SMS",
+        "Balance"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.messagebird/"
+    },
+    {
+      "type": "n8n-nodes-base.metabase",
+      "displayName": "Metabase",
+      "description": "Use the Metabase API",
+      "icon": "file:metabase.svg",
+      "categories": [
+        "Development",
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "Alert",
+        "Database",
+        "Metric",
+        "Question"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.metabase/"
+    },
+    {
+      "type": "n8n-nodes-base.mindee",
+      "displayName": "Mindee",
+      "description": "Consume Mindee API",
+      "icon": "file:mindee.svg",
+      "categories": [
+        "Utility"
+      ],
+      "aliases": [],
+      "resources": [
+        "1",
+        "3",
+        "4"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mindee/"
+    },
+    {
+      "type": "n8n-nodes-base.misp",
+      "displayName": "MISP",
+      "description": "Consume the MISP API",
+      "icon": "file:misp.svg",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Attribute",
+        "Event",
+        "Event Tag",
+        "Feed",
+        "Galaxy",
+        "Noticelist",
+        "Object",
+        "Organisation",
+        "Tag",
+        "User"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.misp/"
+    },
+    {
+      "type": "n8n-nodes-base.mistralAI",
+      "displayName": "Mistral AI",
+      "description": "Consume Mistral AI API",
+      "icon": "file:mistralai.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "Document"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.mocean",
+      "displayName": "Mocean",
+      "description": "Send SMS and voice messages via Mocean",
+      "icon": "file:mocean.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "SMS",
+        "Voice"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mocean/"
+    },
+    {
+      "type": "n8n-nodes-base.mondayCom",
+      "displayName": "Monday.com",
+      "description": "Consume Monday.com API",
+      "icon": "file:mondayCom.svg",
+      "categories": [
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [
+        "Access Token",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mondaycom/"
+    },
+    {
+      "type": "n8n-nodes-base.mongoDb",
+      "displayName": "MongoDB",
+      "description": "Find, insert and update documents in MongoDB",
+      "icon": "file:mongodb.svg",
+      "categories": [
+        "Development",
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mongodb/"
+    },
+    {
+      "type": "n8n-nodes-base.monicaCrm",
+      "displayName": "Monica CRM",
+      "description": "Consume the Monica CRM API",
+      "icon": "file:monicaCrm.png",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Activity",
+        "Call",
+        "Contact",
+        "Contact Field",
+        "Contact Tag",
+        "Conversation",
+        "Conversation Message",
+        "Journal Entry",
+        "Note",
+        "Reminder"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.monicacrm/"
+    },
+    {
+      "type": "n8n-nodes-base.mQTT",
+      "displayName": "MQTT",
+      "description": "Push messages to MQTT",
+      "icon": "file:mqtt.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "qos",
+        "Received at Most Once",
+        "Received at Least Once",
+        "Exactly Once"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.msg91",
+      "displayName": "MSG91",
+      "description": "Sends transactional SMS via MSG91",
+      "icon": "file:msg91.svg",
+      "categories": [
+        "Communication",
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "SMS"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.msg91/"
+    },
+    {
+      "type": "n8n-nodes-base.mySql",
+      "displayName": "MySQL",
+      "description": "Get, add and update data in MySQL",
+      "icon": "file:mysql.svg",
+      "categories": [
+        "Development",
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mysql/"
+    },
+    {
+      "type": "n8n-nodes-base.n8n",
+      "displayName": "n8n",
+      "description": "Handle events and perform actions on your n8n instance",
+      "icon": "file:n8n.svg",
+      "categories": [
+        "Development",
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Workflow",
+        "Execution"
+      ],
+      "resources": [
+        "Audit",
+        "Credential",
+        "Execution",
+        "Workflow"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.n8n/"
+    },
+    {
+      "type": "n8n-nodes-base.n8nTrigger",
+      "displayName": "n8n Trigger",
+      "description": "Handle events and perform actions on your n8n instance",
+      "icon": "file:n8nTrigger.svg",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [],
+      "resources": [
+        "Active Workflow Updated",
+        "Instance Started",
+        "Workflow Activated"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.n8ntrigger/"
+    },
+    {
+      "type": "n8n-nodes-base.nasa",
+      "displayName": "NASA",
+      "description": "Retrieve data from the NASA API",
+      "icon": "file:nasa.png",
+      "categories": [
+        "Miscellaneous"
+      ],
+      "aliases": [],
+      "resources": [
+        "Asteroid Neo-Browse",
+        "Asteroid Neo-Feed",
+        "Asteroid Neo-Lookup",
+        "Astronomy Picture of the Day",
+        "DONKI Coronal Mass Ejection",
+        "DONKI High Speed Stream",
+        "DONKI Geomagnetic Storm",
+        "DONKI Interplanetary Shock",
+        "DONKI Magnetopause Crossing",
+        "DONKI Notification"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.nasa/"
+    },
+    {
+      "type": "n8n-nodes-base.netlify",
+      "displayName": "Netlify",
+      "description": "Consume Netlify API",
+      "icon": "file:netlify.svg",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Deploy",
+        "Site"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.netlify/"
+    },
+    {
+      "type": "n8n-nodes-base.nextCloud",
+      "displayName": "Nextcloud",
+      "description": "Access data on Nextcloud",
+      "icon": "file:nextcloud.svg",
+      "categories": [
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "Access Token",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.nextcloud/"
+    },
+    {
+      "type": "n8n-nodes-base.noOp",
+      "displayName": "No Operation, do nothing",
+      "description": "No Operation",
+      "icon": "fa:arrow-right",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "nothing"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.noop/"
+    },
+    {
+      "type": "n8n-nodes-base.nocoDB",
+      "displayName": "NocoDB",
+      "description": "Read, update, write and delete data from NocoDB",
+      "icon": "file:nocodb.svg",
+      "categories": [
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "API Token",
+        "User Token"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.nocodb/"
+    },
+    {
+      "type": "n8n-nodes-base.notion",
+      "displayName": "Notion",
+      "description": "Consume Notion API",
+      "icon": "file:notion.svg",
+      "categories": [
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.notion/"
+    },
+    {
+      "type": "n8n-nodes-base.npm",
+      "displayName": "Npm",
+      "description": "Consume NPM registry API",
+      "icon": "file:npm.svg",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Package",
+        "Distribution Tag"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.npm/"
+    },
+    {
+      "type": "n8n-nodes-base.odoo",
+      "displayName": "Odoo",
+      "description": "Consume Odoo API",
+      "icon": "file:odoo.svg",
+      "categories": [
+        "Data & Storage"
+      ],
+      "aliases": [
+        "ERP"
+      ],
+      "resources": [
+        "Contact",
+        "Custom Resource",
+        "Note",
+        "Opportunity"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.odoo/"
+    },
+    {
+      "type": "n8n-nodes-base.okta",
+      "displayName": "Okta",
+      "description": "Use the Okta API",
+      "icon": "file:okta.svg",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [
+        "authentication",
+        "users",
+        "Security"
+      ],
+      "resources": [
+        "User"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.okta/"
+    },
+    {
+      "type": "n8n-nodes-base.oneSimpleApi",
+      "displayName": "One Simple API",
+      "description": "A toolbox of no-code utilities",
+      "icon": "file:onesimpleapi.svg",
+      "categories": [
+        "Utility"
+      ],
+      "aliases": [],
+      "resources": [
+        "Information",
+        "Social Profile",
+        "Utility",
+        "Website"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.onesimpleapi/"
+    },
+    {
+      "type": "n8n-nodes-base.onfleet",
+      "displayName": "Onfleet",
+      "description": "Consume Onfleet API",
+      "icon": "file:Onfleet.svg",
+      "categories": [
+        "Miscellaneous"
+      ],
+      "aliases": [],
+      "resources": [
+        "Admin",
+        "Container",
+        "Destination",
+        "Hub",
+        "Organization",
+        "Recipient",
+        "Task",
+        "Team",
+        "Webhook",
+        "Worker"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.onfleet/"
+    },
+    {
+      "type": "n8n-nodes-base.openAi",
+      "displayName": "OpenAI",
+      "description": "Consume Open AI",
+      "icon": "file:openai.svg",
+      "categories": [
+        "Utility"
+      ],
+      "aliases": [
+        "ChatGPT",
+        "DallE"
+      ],
+      "resources": [
+        "Chat",
+        "Image",
+        "Text"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-langchain.openai/"
+    },
+    {
+      "type": "n8n-nodes-base.openThesaurus",
+      "displayName": "OpenThesaurus",
+      "description": "Get synonmns for German words using the OpenThesaurus API",
+      "icon": "file:openthesaurus.png",
+      "categories": [
+        "Utility"
+      ],
+      "aliases": [],
+      "resources": [
+        "Get Synonyms"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.openthesaurus/"
+    },
+    {
+      "type": "n8n-nodes-base.openWeatherMap",
+      "displayName": "OpenWeatherMap",
+      "description": "Gets current and future weather information",
+      "icon": "file:openWeatherMap.svg",
+      "categories": [
+        "Miscellaneous",
+        "Utility"
+      ],
+      "aliases": [],
+      "resources": [
+        "Current Weather",
+        "5 Day Forecast"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.openweathermap/"
+    },
+    {
+      "type": "n8n-nodes-base.orbit",
+      "displayName": "Orbit",
+      "description": "Consume Orbit API",
+      "icon": "file:orbit.svg",
+      "categories": [
+        "Analytics"
+      ],
+      "aliases": [],
+      "resources": [
+        "Activity",
+        "Member",
+        "Note",
+        "Post"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.orbit/"
+    },
+    {
+      "type": "n8n-nodes-base.oura",
+      "displayName": "Oura",
+      "description": "Consume Oura API",
+      "icon": "file:oura.svg",
+      "categories": [
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [
+        "Profile",
+        "Summary"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.oura/"
+    },
+    {
+      "type": "n8n-nodes-base.paddle",
+      "displayName": "Paddle",
+      "description": "Consume Paddle API",
+      "icon": "file:paddle.png",
+      "categories": [
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "Coupon",
+        "Payment",
+        "Plan",
+        "Product",
+        "Order",
+        "User"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.paddle/"
+    },
+    {
+      "type": "n8n-nodes-base.pagerDuty",
+      "displayName": "PagerDuty",
+      "description": "Consume PagerDuty API",
+      "icon": "file:pagerDuty.svg",
+      "categories": [
+        "Communication",
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "API Token",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.pagerduty/"
+    },
+    {
+      "type": "n8n-nodes-base.payPal",
+      "displayName": "PayPal",
+      "description": "Consume PayPal API",
+      "icon": "file:paypal.svg",
+      "categories": [
+        "Finance & Accounting",
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "Payout",
+        "Payout Item"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.paypal/"
+    },
+    {
+      "type": "n8n-nodes-base.peekalink",
+      "displayName": "Peekalink",
+      "description": "Consume the Peekalink API",
+      "icon": "file:peekalink.png",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Is Available",
+        "Preview"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.peekalink/"
+    },
+    {
+      "type": "n8n-nodes-base.perplexity",
+      "displayName": "Perplexity",
+      "description": "Interact with the Perplexity API to generate AI responses with citations",
+      "icon": "file:perplexity.svg",
+      "categories": [
+        "Utility"
+      ],
+      "aliases": [],
+      "resources": [
+        "Chat"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-langchain.perplexity/"
+    },
+    {
+      "type": "n8n-nodes-base.phantombuster",
+      "displayName": "Phantombuster",
+      "description": "Consume Phantombuster API",
+      "icon": "file:phantombuster.png",
+      "categories": [
+        "Sales",
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [
+        "Agent"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.phantombuster/"
+    },
+    {
+      "type": "n8n-nodes-base.philipsHue",
+      "displayName": "Philips Hue",
+      "description": "Consume Philips Hue API",
+      "icon": "file:philipshue.png",
+      "categories": [
+        "Miscellaneous"
+      ],
+      "aliases": [],
+      "resources": [
+        "Light"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.philipshue/"
+    },
+    {
+      "type": "n8n-nodes-base.pipedrive",
+      "displayName": "Pipedrive",
+      "description": "Create and edit data in Pipedrive",
+      "icon": "file:pipedrive.svg",
+      "categories": [
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "API Token",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.pipedrive/"
+    },
+    {
+      "type": "n8n-nodes-base.plivo",
+      "displayName": "Plivo",
+      "description": "Send SMS/MMS messages or make phone calls",
+      "icon": "file:plivo.svg",
+      "categories": [
+        "Communication",
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Call",
+        "MMS",
+        "SMS"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.plivo/"
+    },
+    {
+      "type": "n8n-nodes-base.postBin",
+      "displayName": "PostBin",
+      "description": "Consume PostBin API",
+      "icon": "file:postbin.svg",
+      "categories": [
+        "Development",
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "Bin",
+        "Request"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.postbin/"
+    },
+    {
+      "type": "n8n-nodes-base.postgres",
+      "displayName": "Postgres",
+      "description": "Get, add and update data in Postgres",
+      "icon": "file:postgres.svg",
+      "categories": [
+        "Development",
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.postgres/"
+    },
+    {
+      "type": "n8n-nodes-base.postHog",
+      "displayName": "PostHog",
+      "description": "Consume PostHog API",
+      "icon": "file:postHog.svg",
+      "categories": [
+        "Analytics",
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Alias",
+        "Event",
+        "Identity",
+        "Track"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.posthog/"
+    },
+    {
+      "type": "n8n-nodes-base.postmark",
+      "displayName": "Postmark Trigger",
+      "description": "Starts the workflow when Postmark events occur",
+      "icon": "file:postmark.png",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "Bounce",
+        "Click",
+        "Delivery",
+        "Open",
+        "Spam Complaint",
+        "Subscription Change"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.profitWell",
+      "displayName": "ProfitWell",
+      "description": "Consume ProfitWell API",
+      "icon": "file:profitwell.svg",
+      "categories": [
+        "Analytics"
+      ],
+      "aliases": [],
+      "resources": [
+        "Company",
+        "Metric"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.profitwell/"
+    },
+    {
+      "type": "n8n-nodes-base.pushbullet",
+      "displayName": "Pushbullet",
+      "description": "Consume Pushbullet API",
+      "icon": "file:pushbullet.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Push"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.pushbullet/"
+    },
+    {
+      "type": "n8n-nodes-base.pushcut",
+      "displayName": "Pushcut",
+      "description": "Consume Pushcut API",
+      "icon": "file:pushcut.png",
+      "categories": [
+        "Communication",
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [
+        "Notification"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.pushcut/"
+    },
+    {
+      "type": "n8n-nodes-base.pushover",
+      "displayName": "Pushover",
+      "description": "Consume Pushover API",
+      "icon": "file:pushover.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Message"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.pushover/"
+    },
+    {
+      "type": "n8n-nodes-base.questDb",
+      "displayName": "QuestDB",
+      "description": "Get, add and update data in QuestDB",
+      "icon": "file:questdb.png",
+      "categories": [
+        "Data & Storage",
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Execute Query",
+        "Insert"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.questdb/"
+    },
+    {
+      "type": "n8n-nodes-base.quickBase",
+      "displayName": "Quick Base",
+      "description": "Integrate with the Quick Base RESTful API",
+      "icon": "file:quickbase.png",
+      "categories": [
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "Field",
+        "File",
+        "Record",
+        "Report"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.quickbase/"
+    },
+    {
+      "type": "n8n-nodes-base.quickBooks",
+      "displayName": "QuickBooks Online",
+      "description": "Consume the QuickBooks Online API",
+      "icon": "file:quickbooks.svg",
+      "categories": [
+        "Finance & Accounting"
+      ],
+      "aliases": [],
+      "resources": [
+        "Bill",
+        "Customer",
+        "Employee",
+        "Estimate",
+        "Invoice",
+        "Item",
+        "Payment",
+        "Purchase",
+        "Transaction",
+        "Vendor"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.quickbooks/"
+    },
+    {
+      "type": "n8n-nodes-base.quickChart",
+      "displayName": "QuickChart",
+      "description": "Create a chart via QuickChart",
+      "icon": "file:quickChart.svg",
+      "categories": [
+        "Marketing"
+      ],
+      "aliases": [
+        "image",
+        "graph",
+        "report",
+        "chart",
+        "diagram",
+        "data",
+        "visualize"
+      ],
+      "resources": [
+        "Manually",
+        "From Array"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.quickchart/"
+    },
+    {
+      "type": "n8n-nodes-base.rabbitMQ",
+      "displayName": "RabbitMQ",
+      "description": "Sends messages to a RabbitMQ topic",
+      "icon": "file:rabbitmq.svg",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Send a Message to RabbitMQ",
+        "Delete From Queue"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.rabbitmq/"
+    },
+    {
+      "type": "n8n-nodes-base.raindrop",
+      "displayName": "Raindrop",
+      "description": "Consume the Raindrop API",
+      "icon": "file:raindrop.svg",
+      "categories": [
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [
+        "Bookmark",
+        "Collection",
+        "Tag",
+        "User"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.raindrop/"
+    },
+    {
+      "type": "n8n-nodes-base.readBinaryFile",
+      "displayName": "Read Binary File",
+      "description": "Reads a binary file from disk",
+      "icon": "fa:file-import",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Text",
+        "Open",
+        "Import"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.readwritefile/"
+    },
+    {
+      "type": "n8n-nodes-base.readBinaryFiles",
+      "displayName": "Read Binary Files",
+      "description": "Reads binary files from disk",
+      "icon": "fa:file-import",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Text",
+        "Open",
+        "Import"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.readwritefile/"
+    },
+    {
+      "type": "n8n-nodes-base.readPdf",
+      "displayName": "Read PDF",
+      "description": "Reads a PDF and extracts its content",
+      "icon": "fa:file-pdf",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.reddit",
+      "displayName": "Reddit",
+      "description": "Consume the Reddit API",
+      "icon": "file:reddit.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Post",
+        "Post Comment",
+        "Profile",
+        "Subreddit",
+        "User"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.reddit/"
+    },
+    {
+      "type": "n8n-nodes-base.redis",
+      "displayName": "Redis",
+      "description": "Get, send and update data in Redis",
+      "icon": "file:redis.svg",
+      "categories": [
+        "Development",
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "Delete",
+        "Get",
+        "Increment",
+        "Info",
+        "Keys",
+        "List Length",
+        "Pop",
+        "Publish",
+        "Push",
+        "Set"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.redis/"
+    },
+    {
+      "type": "n8n-nodes-base.renameKeys",
+      "displayName": "Rename Keys",
+      "description": "Update item field names",
+      "icon": "fa:edit",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [],
+      "resources": [
+        "key",
+        "currentKey",
+        "newKey"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.renamekeys/"
+    },
+    {
+      "type": "n8n-nodes-base.respondToWebhook",
+      "displayName": "Respond With",
+      "description": "Respond with all input JSON items",
+      "icon": "file:respondtowebhook.svg",
+      "categories": [
+        "Core Nodes",
+        "Utility"
+      ],
+      "aliases": [],
+      "resources": [
+        "All Incoming Items",
+        "Binary File",
+        "First Incoming Item",
+        "JSON",
+        "JWT Token",
+        "No Data",
+        "Redirect",
+        "Text"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.respondtowebhook/"
+    },
+    {
+      "type": "n8n-nodes-base.rocketchat",
+      "displayName": "RocketChat",
+      "description": "Consume RocketChat API",
+      "icon": "file:rocketchat.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Chat"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.rocketchat/"
+    },
+    {
+      "type": "n8n-nodes-base.rssFeedRead",
+      "displayName": "RSS Read",
+      "description": "Reads data from an RSS Feed",
+      "icon": "fa:rss",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [],
+      "resources": [
+        "customFields",
+        "ignoreSSL"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.rssfeedread/"
+    },
+    {
+      "type": "n8n-nodes-base.rundeck",
+      "displayName": "Rundeck",
+      "description": "Manage Rundeck API",
+      "icon": "file:rundeck.png",
+      "categories": [
+        "Communication",
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Job"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.rundeck/"
+    },
+    {
+      "type": "n8n-nodes-base.s3",
+      "displayName": "S3",
+      "description": "Sends data to any S3-compatible service",
+      "icon": "file:s3.png",
+      "categories": [
+        "Development",
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "Bucket",
+        "File",
+        "Folder"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.s3/"
+    },
+    {
+      "type": "n8n-nodes-base.salesforce",
+      "displayName": "Salesforce",
+      "description": "Consume Salesforce API",
+      "icon": "file:salesforce.svg",
+      "categories": [
+        "Sales",
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "OAuth2",
+        "OAuth2 JWT"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.salesforce/"
+    },
+    {
+      "type": "n8n-nodes-base.salesmate",
+      "displayName": "Salesmate",
+      "description": "Consume Salesmate API",
+      "icon": "file:salesmate.png",
+      "categories": [
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "Activity",
+        "Company",
+        "Deal"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.salesmate/"
+    },
+    {
+      "type": "n8n-nodes-base.schedule",
+      "displayName": "Schedule Trigger",
+      "description": "Triggers the workflow on a given schedule",
+      "icon": "fa:clock",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "interval",
+        "field",
+        "Seconds",
+        "Minutes",
+        "Hours",
+        "Days",
+        "Weeks",
+        "Months",
+        "Custom (Cron)"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.seaTable",
+      "displayName": "SeaTable",
+      "description": "Read, update, write and delete data from SeaTable",
+      "icon": "file:seaTable.svg",
+      "categories": [
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.seatable/"
+    },
+    {
+      "type": "n8n-nodes-base.securityScorecard",
+      "displayName": "SecurityScorecard",
+      "description": "Consume SecurityScorecard API",
+      "icon": "file:securityScorecard.svg",
+      "categories": [
+        "Analytics"
+      ],
+      "aliases": [],
+      "resources": [
+        "Company",
+        "Industry",
+        "Invite",
+        "Portfolio",
+        "Portfolio Company",
+        "Report"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.securityscorecard/"
+    },
+    {
+      "type": "n8n-nodes-base.segment",
+      "displayName": "Segment",
+      "description": "Consume Segment API",
+      "icon": "file:segment.svg",
+      "categories": [
+        "Analytics",
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Group",
+        "Identify",
+        "Track"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.segment/"
+    },
+    {
+      "type": "n8n-nodes-base.emailSend",
+      "displayName": "Send Email",
+      "description": "Sends an email using SMTP protocol",
+      "icon": "fa:envelope",
+      "categories": [
+        "Communication",
+        "HITL",
+        "Core Nodes"
+      ],
+      "aliases": [
+        "SMTP",
+        "email",
+        "human",
+        "form",
+        "wait",
+        "hitl",
+        "approval"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.sendemail/"
+    },
+    {
+      "type": "n8n-nodes-base.sendGrid",
+      "displayName": "SendGrid",
+      "description": "Consume SendGrid API",
+      "icon": "file:sendGrid.svg",
+      "categories": [
+        "Marketing",
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Contact",
+        "List",
+        "Mail"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.sendgrid/"
+    },
+    {
+      "type": "n8n-nodes-base.sendy",
+      "displayName": "Sendy",
+      "description": "Consume Sendy API",
+      "icon": "file:sendy.png",
+      "categories": [
+        "Communication",
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [
+        "Campaign",
+        "Subscriber"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.sendy/"
+    },
+    {
+      "type": "n8n-nodes-base.sentryIo",
+      "displayName": "Sentry.io",
+      "description": "Consume Sentry.io API",
+      "icon": "file:sentryio.svg",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Access Token (Cloud)",
+        "OAuth2 (Cloud)",
+        "Access Token (Self Hosted)"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.sentryio/"
+    },
+    {
+      "type": "n8n-nodes-base.serviceNow",
+      "displayName": "ServiceNow",
+      "description": "Consume ServiceNow API",
+      "icon": "file:servicenow.svg",
+      "categories": [
+        "Productivity",
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Basic Auth",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.servicenow/"
+    },
+    {
+      "type": "n8n-nodes-base.set",
+      "displayName": "Set",
+      "description": "Add or edit fields on an input item and optionally remove other fields",
+      "icon": "fa:pen",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Set",
+        "JS",
+        "JSON",
+        "Filter",
+        "Transform",
+        "Map"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.set/"
+    },
+    {
+      "type": "n8n-nodes-base.sms77",
+      "displayName": "seven",
+      "description": "Send SMS and make text-to-speech calls",
+      "icon": "file:seven.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [
+        "SMS",
+        "Sms77"
+      ],
+      "resources": [
+        "SMS",
+        "Voice Call"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.sms77/"
+    },
+    {
+      "type": "n8n-nodes-base.shopify",
+      "displayName": "Shopify",
+      "description": "Consume Shopify API",
+      "icon": "file:shopify.svg",
+      "categories": [
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "Access Token",
+        "OAuth2",
+        "API Key"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.shopify/"
+    },
+    {
+      "type": "n8n-nodes-base.signl4",
+      "displayName": "SIGNL4",
+      "description": "Consume SIGNL4 API",
+      "icon": "file:signl4.png",
+      "categories": [
+        "Communication",
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Alert"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.signl4/"
+    },
+    {
+      "type": "n8n-nodes-base.simulate",
+      "displayName": "Simulate",
+      "description": "Simulate a node",
+      "icon": "fa:arrow-right",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "placeholder",
+        "stub",
+        "dummy"
+      ],
+      "resources": [
+        "Returns all input items",
+        "Specify how many of input items to return",
+        "Specify output as JSON"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.slack",
+      "displayName": "Slack",
+      "description": "Consume Slack API",
+      "icon": "file:slack.svg",
+      "categories": [
+        "Communication",
+        "HITL"
+      ],
+      "aliases": [
+        "human",
+        "form",
+        "wait",
+        "hitl",
+        "approval"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.slack/"
+    },
+    {
+      "type": "n8n-nodes-base.snowflake",
+      "displayName": "Snowflake",
+      "description": "Get, add and update data in Snowflake",
+      "icon": "file:snowflake.svg",
+      "categories": [
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "Execute Query",
+        "Insert",
+        "Update"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.snowflake/"
+    },
+    {
+      "type": "n8n-nodes-base.splitInBatches",
+      "displayName": "Split In Batches",
+      "description": "Split data into batches and iterate over each batch",
+      "icon": "fa:th-large",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Loop",
+        "Concatenate",
+        "Batch",
+        "Split",
+        "Split In Batches"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.splitinbatches/"
+    },
+    {
+      "type": "n8n-nodes-base.splunk",
+      "displayName": "Splunk",
+      "description": "Consume the Splunk Enterprise API",
+      "icon": "file:splunk.svg",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.splunk/"
+    },
+    {
+      "type": "n8n-nodes-base.spontit",
+      "displayName": "Spontit",
+      "description": "Consume Spontit API",
+      "icon": "file:spontit.png",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Push"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.spontit/"
+    },
+    {
+      "type": "n8n-nodes-base.spotify",
+      "displayName": "Spotify",
+      "description": "Access public song data via the Spotify API",
+      "icon": "file:spotify.svg",
+      "categories": [
+        "Miscellaneous"
+      ],
+      "aliases": [
+        "Music",
+        "Song"
+      ],
+      "resources": [
+        "Album",
+        "Artist",
+        "Library",
+        "My Data",
+        "Player",
+        "Playlist",
+        "Track"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.spotify/"
+    },
+    {
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "displayName": "Spreadsheet File",
+      "description": "Reads and writes data from a spreadsheet file like CSV, XLS, ODS, etc",
+      "icon": "fa:table",
+      "categories": [
+        "Data & Storage",
+        "Core Nodes"
+      ],
+      "aliases": [
+        "_Excel",
+        "Excel",
+        "CSV",
+        "Sheet",
+        "Spreadsheet",
+        "xls",
+        "xlsx",
+        "ods"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.converttofile/"
+    },
+    {
+      "type": "n8n-nodes-base.sseTrigger",
+      "displayName": "SSE Trigger",
+      "description": "Triggers the workflow when Server-Sent Events occur",
+      "icon": "fa:cloud-download-alt",
+      "categories": [
+        "Development",
+        "Core Nodes"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.ssetrigger/"
+    },
+    {
+      "type": "n8n-nodes-base.ssh",
+      "displayName": "SSH",
+      "description": "Execute commands via SSH",
+      "icon": "fa:terminal",
+      "categories": [
+        "Core Nodes",
+        "Development"
+      ],
+      "aliases": [
+        "remote"
+      ],
+      "resources": [
+        "Password",
+        "Private Key"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.ssh/"
+    },
+    {
+      "type": "n8n-nodes-base.stackby",
+      "displayName": "Stackby",
+      "description": "Read, write, and delete data in Stackby",
+      "icon": "file:stackby.png",
+      "categories": [
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "Append",
+        "Delete",
+        "List",
+        "Read"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.stackby/"
+    },
+    {
+      "type": "n8n-nodes-base.start",
+      "displayName": "Start",
+      "description": "Starts the workflow execution from this node",
+      "icon": "fa:play",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.start/"
+    },
+    {
+      "type": "n8n-nodes-base.stickyNote",
+      "displayName": "Sticky Note",
+      "description": "Make your workflow easier to understand",
+      "icon": "fa:sticky-note",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Comments",
+        "Notes",
+        "Sticky"
+      ],
+      "resources": [],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.stopAndError",
+      "displayName": "Stop and Error",
+      "description": "Throw an error in the workflow",
+      "icon": "fa:exclamation-triangle",
+      "categories": [
+        "Core Nodes",
+        "Utility"
+      ],
+      "aliases": [
+        "Throw error",
+        "Error",
+        "Exception"
+      ],
+      "resources": [
+        "Error Message",
+        "Error Object"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.stopanderror/"
+    },
+    {
+      "type": "n8n-nodes-base.storyblok",
+      "displayName": "Storyblok",
+      "description": "Consume Storyblok API",
+      "icon": "file:storyblok.svg",
+      "categories": [
+        "Data & Storage",
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [
+        "Content API",
+        "Management API"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.storyblok/"
+    },
+    {
+      "type": "n8n-nodes-base.strapi",
+      "displayName": "Strapi",
+      "description": "Consume Strapi API",
+      "icon": "file:strapi.svg",
+      "categories": [
+        "Data & Storage",
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [
+        "Username & Password",
+        "API Token"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.strapi/"
+    },
+    {
+      "type": "n8n-nodes-base.strava",
+      "displayName": "Strava",
+      "description": "Consume Strava API",
+      "icon": "file:strava.svg",
+      "categories": [
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [
+        "Activity"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.strava/"
+    },
+    {
+      "type": "n8n-nodes-base.stripe",
+      "displayName": "Stripe",
+      "description": "Consume the Stripe API",
+      "icon": "file:stripe.svg",
+      "categories": [
+        "Finance & Accounting",
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "Balance",
+        "Charge",
+        "Coupon",
+        "Customer",
+        "Customer Card",
+        "Source",
+        "Token"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.stripe/"
+    },
+    {
+      "type": "n8n-nodes-base.supabase",
+      "displayName": "Supabase",
+      "description": "Add, get, delete and update data in a table",
+      "icon": "file:supabase.svg",
+      "categories": [
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "Row"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.supabase/"
+    },
+    {
+      "type": "n8n-nodes-base.surveyMonkey",
+      "displayName": "SurveyMonkey Trigger",
+      "description": "Starts the workflow when Survey Monkey events occur",
+      "icon": "file:surveyMonkey.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "Access Token",
+        "OAuth2"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.switch",
+      "displayName": "Switch",
+      "description": "Route items depending on defined expression or rules",
+      "icon": "fa:map-signs",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Router",
+        "If",
+        "Path",
+        "Filter",
+        "Condition",
+        "Logic",
+        "Branch",
+        "Case"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.switch/"
+    },
+    {
+      "type": "n8n-nodes-base.syncroMSP",
+      "displayName": "SyncroMSP",
+      "description": "Manage contacts, tickets and more from Syncro MSP",
+      "icon": "file:syncromsp.png",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.taiga",
+      "displayName": "Taiga",
+      "description": "Consume Taiga API",
+      "icon": "file:taiga.svg",
+      "categories": [
+        "Development",
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [
+        "Epic",
+        "Issue",
+        "Task",
+        "User Story"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.taiga/"
+    },
+    {
+      "type": "n8n-nodes-base.tapfiliate",
+      "displayName": "Tapfiliate",
+      "description": "Consume Tapfiliate API",
+      "icon": "file:tapfiliate.svg",
+      "categories": [
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "Affiliate",
+        "Affiliate Metadata",
+        "Program Affiliate"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.tapfiliate/"
+    },
+    {
+      "type": "n8n-nodes-base.theHive",
+      "displayName": "TheHive",
+      "description": "Consume TheHive API",
+      "icon": "file:thehive.svg",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Alert",
+        "Case",
+        "Log",
+        "Observable",
+        "Task"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.thehive/"
+    },
+    {
+      "type": "n8n-nodes-base.theHiveProject",
+      "displayName": "TheHiveProject",
+      "description": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.thehive5/",
+      "icon": "file:thehiveproject.svg",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [
+        "Security",
+        "Monitoring",
+        "Incident",
+        "Response",
+        "Alert"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.thehive5/"
+    },
+    {
+      "type": "n8n-nodes-base.timescaleDb",
+      "displayName": "TimescaleDB",
+      "description": "Add and update data in TimescaleDB",
+      "icon": "file:timescaledb.svg",
+      "categories": [
+        "Data & Storage",
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Execute Query",
+        "Insert",
+        "Update"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.timescaledb/"
+    },
+    {
+      "type": "n8n-nodes-base.todoist",
+      "displayName": "Todoist",
+      "description": "Consume Todoist API",
+      "icon": "file:todoist.svg",
+      "categories": [
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.todoist/"
+    },
+    {
+      "type": "n8n-nodes-base.toggl",
+      "displayName": "Toggl Trigger",
+      "description": "Starts the workflow when Toggl events occur",
+      "icon": "file:toggl.png",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "New Time Entry"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.totp",
+      "displayName": "TOTP",
+      "description": "Generate a time-based one-time password",
+      "icon": "fa:fingerprint",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "2FA",
+        "MFA",
+        "authentication",
+        "Security",
+        "OTP",
+        "password",
+        "multi",
+        "factor"
+      ],
+      "resources": [
+        "Generate Secret"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.totp/"
+    },
+    {
+      "type": "n8n-nodes-base.travisCi",
+      "displayName": "TravisCI",
+      "description": "Consume TravisCI API",
+      "icon": "file:travisci.png",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Build"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.travisci/"
+    },
+    {
+      "type": "n8n-nodes-base.trello",
+      "displayName": "Trello",
+      "description": "Create, change and delete boards and cards",
+      "icon": "file:trello.svg",
+      "categories": [
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [
+        "Attachment",
+        "Board",
+        "Board Member",
+        "Card",
+        "Card Comment",
+        "Checklist",
+        "Label",
+        "List"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.trello/"
+    },
+    {
+      "type": "n8n-nodes-base.twake",
+      "displayName": "Twake",
+      "description": "Consume Twake API",
+      "icon": "file:twake.png",
+      "categories": [
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [
+        "Cloud",
+        "Server (Self Hosted)"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.twake/"
+    },
+    {
+      "type": "n8n-nodes-base.twilio",
+      "displayName": "Twilio",
+      "description": "Send SMS and WhatsApp messages or make phone calls",
+      "icon": "file:twilio.svg",
+      "categories": [
+        "Communication",
+        "Development"
+      ],
+      "aliases": [
+        "SMS",
+        "Phone",
+        "Voice"
+      ],
+      "resources": [
+        "Call",
+        "SMS"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.twilio/"
+    },
+    {
+      "type": "n8n-nodes-base.twist",
+      "displayName": "Twist",
+      "description": "Consume Twist API",
+      "icon": "file:twist.png",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Channel",
+        "Comment",
+        "Message Conversation",
+        "Thread"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.twist/"
+    },
+    {
+      "type": "n8n-nodes-base.typeform",
+      "displayName": "Typeform Trigger",
+      "description": "Starts the workflow on a Typeform form submission",
+      "icon": "file:typeform.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "Access Token",
+        "OAuth2"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.unleashedSoftware",
+      "displayName": "Unleashed Software",
+      "description": "Consume Unleashed Software API",
+      "icon": "file:unleashedSoftware.png",
+      "categories": [
+        "Sales",
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "Sales Order",
+        "Stock On Hand"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.unleashedsoftware/"
+    },
+    {
+      "type": "n8n-nodes-base.uplead",
+      "displayName": "Uplead",
+      "description": "Consume Uplead API",
+      "icon": "file:uplead.png",
+      "categories": [
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "Company",
+        "Person"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.uplead/"
+    },
+    {
+      "type": "n8n-nodes-base.uProc",
+      "displayName": "uProc",
+      "description": "Consume uProc API",
+      "icon": "file:uproc.png",
+      "categories": [
+        "Data & Storage"
+      ],
+      "aliases": [],
+      "resources": [
+        "dataWebhook"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.uproc/"
+    },
+    {
+      "type": "n8n-nodes-base.uptimeRobot",
+      "displayName": "UptimeRobot",
+      "description": "Consume UptimeRobot API",
+      "icon": "file:uptimerobot.svg",
+      "categories": [
+        "Development"
+      ],
+      "aliases": [],
+      "resources": [
+        "Account",
+        "Alert Contact",
+        "Maintenance Window",
+        "Monitor",
+        "Public Status Page"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.uptimerobot/"
+    },
+    {
+      "type": "n8n-nodes-base.urlScanIo",
+      "displayName": "urlscan.io",
+      "description": "Provides various utilities for monitoring websites like health checks or screenshots",
+      "icon": "file:urlScanIo.svg",
+      "categories": [
+        "Development",
+        "Utility"
+      ],
+      "aliases": [
+        "Scrape"
+      ],
+      "resources": [
+        "Scan"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.urlscanio/"
+    },
+    {
+      "type": "n8n-nodes-base.vero",
+      "displayName": "Vero",
+      "description": "Consume Vero API",
+      "icon": "file:vero.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "User",
+        "Event"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.vero/"
+    },
+    {
+      "type": "n8n-nodes-base.vonage",
+      "displayName": "Vonage",
+      "description": "Consume Vonage API",
+      "icon": "file:vonage.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [
+        "SMS"
+      ],
+      "resources": [
+        "SMS"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.vonage/"
+    },
+    {
+      "type": "n8n-nodes-base.wait",
+      "displayName": "Wait Amount",
+      "description": "The time to wait",
+      "icon": "fa:pause-circle",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "pause",
+        "sleep",
+        "delay",
+        "timeout"
+      ],
+      "resources": [
+        "Seconds",
+        "Minutes",
+        "Hours",
+        "Days"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.wait/"
+    },
+    {
+      "type": "n8n-nodes-base.webflow",
+      "displayName": "Webflow",
+      "description": "Consume the Webflow API",
+      "icon": "file:webflow.svg",
+      "categories": [
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.webflow/"
+    },
+    {
+      "type": "n8n-nodes-base.webhook",
+      "displayName": "Webhook",
+      "description": "Starts the workflow when a webhook is called",
+      "icon": "file:webhook.svg",
+      "categories": [
+        "Development",
+        "Core Nodes"
+      ],
+      "aliases": [
+        "HTTP",
+        "API",
+        "Build",
+        "WH"
+      ],
+      "resources": [
+        "DELETE",
+        "GET",
+        "HEAD",
+        "PATCH",
+        "POST",
+        "PUT"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/"
+    },
+    {
+      "type": "n8n-nodes-base.wekan",
+      "displayName": "Wekan",
+      "description": "Consume Wekan API",
+      "icon": "file:wekan.svg",
+      "categories": [
+        "Productivity"
+      ],
+      "aliases": [],
+      "resources": [
+        "Board",
+        "Card",
+        "Card Comment",
+        "Checklist",
+        "Checklist Item",
+        "List"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.wekan/"
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "displayName": "WhatsApp Business Cloud",
+      "description": "Access WhatsApp API",
+      "icon": "file:whatsapp.svg",
+      "categories": [
+        "Communication",
+        "HITL"
+      ],
+      "aliases": [],
+      "resources": [
+        "Message",
+        "Media"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.whatsapp/"
+    },
+    {
+      "type": "n8n-nodes-base.wise",
+      "displayName": "Wise",
+      "description": "Consume the Wise API",
+      "icon": "file:wise.svg",
+      "categories": [
+        "Finance & Accounting"
+      ],
+      "aliases": [
+        "Currency"
+      ],
+      "resources": [
+        "Account",
+        "Exchange Rate",
+        "Profile",
+        "Quote",
+        "Recipient",
+        "Transfer"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.wise/"
+    },
+    {
+      "type": "n8n-nodes-base.wooCommerce",
+      "displayName": "WooCommerce",
+      "description": "Consume WooCommerce API",
+      "icon": "file:wooCommerce.svg",
+      "categories": [
+        "Sales"
+      ],
+      "aliases": [],
+      "resources": [
+        "Customer",
+        "Order",
+        "Product"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.woocommerce/"
+    },
+    {
+      "type": "n8n-nodes-base.wordpress",
+      "displayName": "Wordpress",
+      "description": "Consume Wordpress API",
+      "icon": "file:wordpress.svg",
+      "categories": [
+        "Marketing"
+      ],
+      "aliases": [],
+      "resources": [
+        "Post",
+        "Page",
+        "User"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.wordpress/"
+    },
+    {
+      "type": "n8n-nodes-base.workable",
+      "displayName": "Workable Trigger",
+      "description": "Starts the workflow when Workable events occur",
+      "icon": "file:workable.png",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "Candidate Created",
+        "Candidate Moved"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.workflowTrigger",
+      "displayName": "Workflow Trigger",
+      "description": "Triggers based on various lifecycle events, like when a workflow is activated",
+      "icon": "fa:network-wired",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [],
+      "resources": [
+        "Active Workflow Updated",
+        "Workflow Activated"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.workflowtrigger/"
+    },
+    {
+      "type": "n8n-nodes-base.writeBinaryFile",
+      "displayName": "Write Binary File",
+      "description": "Writes a binary file to disk",
+      "icon": "fa:file-export",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Text",
+        "Save",
+        "Export"
+      ],
+      "resources": [
+        "append"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.readwritefile/"
+    },
+    {
+      "type": "n8n-nodes-base.wufoo",
+      "displayName": "Wufoo Trigger",
+      "description": "Handle Wufoo events via webhooks",
+      "icon": "file:wufoo.png",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.twitter",
+      "displayName": "X (Formerly Twitter)",
+      "description": "Consume the X API",
+      "icon": "file:twitter.svg",
+      "categories": [
+        "Marketing"
+      ],
+      "aliases": [
+        "Tweet",
+        "Twitter",
+        "X",
+        "X API"
+      ],
+      "resources": [],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.twitter/"
+    },
+    {
+      "type": "n8n-nodes-base.xero",
+      "displayName": "Xero",
+      "description": "Consume Xero API",
+      "icon": "file:xero.svg",
+      "categories": [
+        "Finance & Accounting"
+      ],
+      "aliases": [],
+      "resources": [
+        "Contact",
+        "Invoice"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.xero/"
+    },
+    {
+      "type": "n8n-nodes-base.xml",
+      "displayName": "XML",
+      "description": "Convert data from and to XML",
+      "icon": "fa:file-code",
+      "categories": [
+        "Core Nodes"
+      ],
+      "aliases": [
+        "Parse"
+      ],
+      "resources": [
+        "JSON to XML",
+        "XML to JSON"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.xml/"
+    },
+    {
+      "type": "n8n-nodes-base.yourls",
+      "displayName": "Yourls",
+      "description": "Consume Yourls API",
+      "icon": "file:yourls.png",
+      "categories": [
+        "Utility"
+      ],
+      "aliases": [],
+      "resources": [
+        "URL"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.yourls/"
+    },
+    {
+      "type": "n8n-nodes-base.zammad",
+      "displayName": "Zammad",
+      "description": "Consume the Zammad API",
+      "icon": "file:zammad.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Basic Auth",
+        "Token Auth"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.zammad/"
+    },
+    {
+      "type": "n8n-nodes-base.zendesk",
+      "displayName": "Zendesk",
+      "description": "Consume Zendesk API",
+      "icon": "file:zendesk.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "API Token",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.zendesk/"
+    },
+    {
+      "type": "n8n-nodes-base.zoho",
+      "displayName": "Zoho CRM",
+      "description": "Consume Zoho CRM API",
+      "icon": "file:zoho.svg",
+      "categories": [
+        "Other"
+      ],
+      "aliases": [],
+      "resources": [
+        "Account",
+        "Contact",
+        "Deal",
+        "Invoice",
+        "Lead",
+        "Product",
+        "Purchase Order",
+        "Quote",
+        "Sales Order",
+        "Vendor"
+      ],
+      "documentationUrl": null
+    },
+    {
+      "type": "n8n-nodes-base.zoom",
+      "displayName": "Zoom",
+      "description": "Consume Zoom API",
+      "icon": "file:zoom.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Access Token",
+        "OAuth2"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.zoom/"
+    },
+    {
+      "type": "n8n-nodes-base.zulip",
+      "displayName": "Zulip",
+      "description": "Consume Zulip API",
+      "icon": "file:zulip.svg",
+      "categories": [
+        "Communication"
+      ],
+      "aliases": [],
+      "resources": [
+        "Message",
+        "Stream",
+        "User"
+      ],
+      "documentationUrl": "https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.zulip/"
+    }
+  ]
+}

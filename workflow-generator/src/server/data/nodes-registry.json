@@ -1,0 +1,4646 @@
+{
+  "version": "2.3.4",
+  "generatedAt": "2026-01-14T11:36:01.444Z",
+  "totalNodes": 349,
+  "categories": [
+    {
+      "name": "Trigger",
+      "color": "#ff6d5a",
+      "count": 7
+    },
+    {
+      "name": "Flow",
+      "color": "#ff9922",
+      "count": 6
+    },
+    {
+      "name": "Core",
+      "color": "#36a2eb",
+      "count": 0
+    },
+    {
+      "name": "Data Transformation",
+      "color": "#00b8d9",
+      "count": 8
+    },
+    {
+      "name": "Network",
+      "color": "#7e57c2",
+      "count": 6
+    },
+    {
+      "name": "Communication",
+      "color": "#00c853",
+      "count": 8
+    },
+    {
+      "name": "Data",
+      "color": "#448aff",
+      "count": 3
+    },
+    {
+      "name": "Database",
+      "color": "#795548",
+      "count": 3
+    },
+    {
+      "name": "Files",
+      "color": "#9c27b0",
+      "count": 4
+    },
+    {
+      "name": "AI",
+      "color": "#e91e63",
+      "count": 2
+    },
+    {
+      "name": "Development",
+      "color": "#607d8b",
+      "count": 4
+    },
+    {
+      "name": "Productivity",
+      "color": "#009688",
+      "count": 7
+    },
+    {
+      "name": "CRM",
+      "color": "#f44336",
+      "count": 7
+    },
+    {
+      "name": "Commerce",
+      "color": "#ffca28",
+      "count": 3
+    },
+    {
+      "name": "Finance",
+      "color": "#4caf50",
+      "count": 0
+    },
+    {
+      "name": "Marketing",
+      "color": "#ff5722",
+      "count": 3
+    },
+    {
+      "name": "Analytics",
+      "color": "#3f51b5",
+      "count": 0
+    },
+    {
+      "name": "Social",
+      "color": "#03a9f4",
+      "count": 5
+    },
+    {
+      "name": "Utility",
+      "color": "#9e9e9e",
+      "count": 0
+    },
+    {
+      "name": "Other",
+      "color": "#666666",
+      "count": 273
+    }
+  ],
+  "nodes": [
+    {
+      "type": "n8n-nodes-base.aDC",
+      "displayName": "A D C",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:adc.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.actionNetwork",
+      "displayName": "Action Network",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:actionnetwork.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.activeCampaign",
+      "displayName": "Active Campaign",
+      "category": "Marketing",
+      "color": "#ff5722",
+      "icon": "file:activecampaign.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.acuityScheduling",
+      "displayName": "Acuity Scheduling",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:acuityscheduling.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.adalo",
+      "displayName": "Adalo",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:adalo.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.ads",
+      "displayName": "Ads",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:ads.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.affinity",
+      "displayName": "Affinity",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:affinity.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.aggregate",
+      "displayName": "Aggregate",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:aggregate.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.agileCrm",
+      "displayName": "Agile Crm",
+      "category": "CRM",
+      "color": "#f44336",
+      "icon": "file:agilecrm.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.aiTransform",
+      "displayName": "Ai Transform",
+      "category": "AI",
+      "color": "#e91e63",
+      "icon": "file:aitransform.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.airtable",
+      "displayName": "Airtable",
+      "category": "Data",
+      "color": "#448aff",
+      "icon": "file:airtable.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.airtop",
+      "displayName": "Airtop",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:airtop.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.amqp",
+      "displayName": "Amqp",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:amqp.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.analytics",
+      "displayName": "Analytics",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:analytics.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.apiTemplateIo",
+      "displayName": "Api Template Io",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:apitemplateio.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.asana",
+      "displayName": "Asana",
+      "category": "Productivity",
+      "color": "#009688",
+      "icon": "file:asana.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.automizy",
+      "displayName": "Automizy",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:automizy.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.autopilot",
+      "displayName": "Autopilot",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:autopilot.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.aws",
+      "displayName": "Aws",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:aws.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.azureCosmosDb",
+      "displayName": "Azure Cosmos Db",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:azurecosmosdb.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.bambooHr",
+      "displayName": "Bamboo Hr",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:bamboohr.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.bannerbear",
+      "displayName": "Bannerbear",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:bannerbear.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.baserow",
+      "displayName": "Baserow",
+      "category": "Data",
+      "color": "#448aff",
+      "icon": "file:baserow.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.beeminder",
+      "displayName": "Beeminder",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:beeminder.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.bigQuery",
+      "displayName": "Big Query",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:bigquery.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.bitbucket",
+      "displayName": "Bitbucket",
+      "category": "Development",
+      "color": "#607d8b",
+      "icon": "file:bitbucket.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.bitly",
+      "displayName": "Bitly",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:bitly.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.bitwarden",
+      "displayName": "Bitwarden",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:bitwarden.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.books",
+      "displayName": "Books",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:books.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.box",
+      "displayName": "Box",
+      "category": "Files",
+      "color": "#9c27b0",
+      "icon": "file:box.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.brandfetch",
+      "displayName": "Brandfetch",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:brandfetch.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.brevo",
+      "displayName": "Brevo",
+      "category": "Marketing",
+      "color": "#ff5722",
+      "icon": "file:brevo.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.bubble",
+      "displayName": "Bubble",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:bubble.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.businessProfile",
+      "displayName": "Business Profile",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:businessprofile.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.cal",
+      "displayName": "Cal",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:cal.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.calendar",
+      "displayName": "Calendar",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:calendar.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.calendly",
+      "displayName": "Calendly",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:calendly.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.chargebee",
+      "displayName": "Chargebee",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:chargebee.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.chat",
+      "displayName": "Chat",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:chat.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.circleCi",
+      "displayName": "Circle Ci",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:circleci.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.clearbit",
+      "displayName": "Clearbit",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:clearbit.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.clickUp",
+      "displayName": "Click Up",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:clickup.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.clockify",
+      "displayName": "Clockify",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:clockify.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.cloudFirestore",
+      "displayName": "Cloud Firestore",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:cloudfirestore.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.cloudNaturalLanguage",
+      "displayName": "Cloud Natural Language",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:cloudnaturallanguage.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.cloudStorage",
+      "displayName": "Cloud Storage",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:cloudstorage.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.cloudflare",
+      "displayName": "Cloudflare",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:cloudflare.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.cockpit",
+      "displayName": "Cockpit",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:cockpit.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.coda",
+      "displayName": "Coda",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:coda.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.code",
+      "displayName": "Code",
+      "category": "Data Transformation",
+      "color": "#00b8d9",
+      "icon": "file:code.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.coinGecko",
+      "displayName": "Coin Gecko",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:coingecko.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.compareDatasets",
+      "displayName": "Compare Datasets",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:comparedatasets.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.compression",
+      "displayName": "Compression",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:compression.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.contacts",
+      "displayName": "Contacts",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:contacts.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.contentful",
+      "displayName": "Contentful",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:contentful.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.convertKit",
+      "displayName": "Convert Kit",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:convertkit.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.convertToFile",
+      "displayName": "Convert To File",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:converttofile.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.copper",
+      "displayName": "Copper",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:copper.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.cortex",
+      "displayName": "Cortex",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:cortex.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.crateDb",
+      "displayName": "Crate Db",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:cratedb.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.cron",
+      "displayName": "Cron",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:cron.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.crowdDev",
+      "displayName": "Crowd Dev",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:crowddev.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.crypto",
+      "displayName": "Crypto",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:crypto.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.customerIo",
+      "displayName": "Customer Io",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:customerio.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.dataTable",
+      "displayName": "Data Table",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:datatable.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.datacenter",
+      "displayName": "Datacenter",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:datacenter.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.dateTime",
+      "displayName": "Date Time",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:datetime.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.debugHelper",
+      "displayName": "Debug Helper",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:debughelper.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.deepL",
+      "displayName": "Deep L",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:deepl.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.demio",
+      "displayName": "Demio",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:demio.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.dhl",
+      "displayName": "Dhl",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:dhl.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.discord",
+      "displayName": "Discord",
+      "category": "Communication",
+      "color": "#00c853",
+      "icon": "file:discord.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.discourse",
+      "displayName": "Discourse",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:discourse.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.disqus",
+      "displayName": "Disqus",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:disqus.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.docs",
+      "displayName": "Docs",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:docs.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.drift",
+      "displayName": "Drift",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:drift.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.drive",
+      "displayName": "Drive",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:drive.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.dropbox",
+      "displayName": "Dropbox",
+      "category": "Files",
+      "color": "#9c27b0",
+      "icon": "file:dropbox.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.dropcontact",
+      "displayName": "Dropcontact",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:dropcontact.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.dynamics",
+      "displayName": "Dynamics",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:dynamics.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.eRPNext",
+      "displayName": "E R P Next",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:erpnext.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.e2eTest",
+      "displayName": "E2e Test",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:e2etest.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.editImage",
+      "displayName": "Edit Image",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:editimage.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.egoi",
+      "displayName": "Egoi",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:egoi.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.elasticSecurity",
+      "displayName": "Elastic Security",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:elasticsecurity.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.elasticsearch",
+      "displayName": "Elasticsearch",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:elasticsearch.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.emailReadImap",
+      "displayName": "Email Read Imap",
+      "category": "Communication",
+      "color": "#00c853",
+      "icon": "file:emailreadimap.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.emailSend",
+      "displayName": "Email Send",
+      "category": "Communication",
+      "color": "#00c853",
+      "icon": "file:emailsend.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.emelia",
+      "displayName": "Emelia",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:emelia.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.entra",
+      "displayName": "Entra",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:entra.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.errorTrigger",
+      "displayName": "Error Trigger",
+      "category": "Trigger",
+      "color": "#ff6d5a",
+      "icon": "file:errortrigger.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.evaluation",
+      "displayName": "Evaluation",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:evaluation.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.eventbrite",
+      "displayName": "Eventbrite",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:eventbrite.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.excel",
+      "displayName": "Excel",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:excel.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.executeCommand",
+      "displayName": "Execute Command",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:executecommand.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.executeWorkflow",
+      "displayName": "Execute Workflow",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:executeworkflow.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "displayName": "Execute Workflow Trigger",
+      "category": "Trigger",
+      "color": "#ff6d5a",
+      "icon": "file:executeworkflowtrigger.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.executionData",
+      "displayName": "Execution Data",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:executiondata.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.extractFromFile",
+      "displayName": "Extract From File",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:extractfromfile.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.facebook",
+      "displayName": "Facebook",
+      "category": "Social",
+      "color": "#03a9f4",
+      "icon": "file:facebook.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.facebookLeadAds",
+      "displayName": "Facebook Lead Ads",
+      "category": "Social",
+      "color": "#03a9f4",
+      "icon": "file:facebookleadads.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.figma",
+      "displayName": "Figma",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:figma.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.fileMaker",
+      "displayName": "File Maker",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:filemaker.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.filter",
+      "displayName": "Filter",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:filter.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.flow",
+      "displayName": "Flow",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:flow.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.form",
+      "displayName": "Form",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:form.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.formIo",
+      "displayName": "Form Io",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:formio.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.formstack",
+      "displayName": "Formstack",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:formstack.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.freshdesk",
+      "displayName": "Freshdesk",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:freshdesk.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.freshservice",
+      "displayName": "Freshservice",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:freshservice.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.freshworksCrm",
+      "displayName": "Freshworks Crm",
+      "category": "CRM",
+      "color": "#f44336",
+      "icon": "file:freshworkscrm.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.ftp",
+      "displayName": "Ftp",
+      "category": "Network",
+      "color": "#7e57c2",
+      "icon": "file:ftp.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.function",
+      "displayName": "Function",
+      "category": "Data Transformation",
+      "color": "#00b8d9",
+      "icon": "file:function.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.functionItem",
+      "displayName": "Function Item",
+      "category": "Data Transformation",
+      "color": "#00b8d9",
+      "icon": "file:functionitem.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.gSuiteAdmin",
+      "displayName": "G Suite Admin",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:gsuiteadmin.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.getResponse",
+      "displayName": "Get Response",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:getresponse.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.ghost",
+      "displayName": "Ghost",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:ghost.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.git",
+      "displayName": "Git",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:git.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.github",
+      "displayName": "Github",
+      "category": "Development",
+      "color": "#607d8b",
+      "icon": "file:github.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.gitlab",
+      "displayName": "Gitlab",
+      "category": "Development",
+      "color": "#607d8b",
+      "icon": "file:gitlab.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.gmail",
+      "displayName": "Gmail",
+      "category": "Communication",
+      "color": "#00c853",
+      "icon": "file:gmail.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.goToWebinar",
+      "displayName": "Go To Webinar",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:gotowebinar.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.gong",
+      "displayName": "Gong",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:gong.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.gotify",
+      "displayName": "Gotify",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:gotify.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.grafana",
+      "displayName": "Grafana",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:grafana.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.graphQL",
+      "displayName": "Graph Q L",
+      "category": "Network",
+      "color": "#7e57c2",
+      "icon": "file:graphql.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.graphSecurity",
+      "displayName": "Graph Security",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:graphsecurity.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.grist",
+      "displayName": "Grist",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:grist.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.gumroad",
+      "displayName": "Gumroad",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:gumroad.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.hackerNews",
+      "displayName": "Hacker News",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:hackernews.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.haloPSA",
+      "displayName": "Halo P S A",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:halopsa.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.harvest",
+      "displayName": "Harvest",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:harvest.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.helpScout",
+      "displayName": "Help Scout",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:helpscout.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.highLevel",
+      "displayName": "High Level",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:highlevel.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.homeAssistant",
+      "displayName": "Home Assistant",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:homeassistant.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.html",
+      "displayName": "Html",
+      "category": "Data Transformation",
+      "color": "#00b8d9",
+      "icon": "file:html.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.htmlExtract",
+      "displayName": "Html Extract",
+      "category": "Data Transformation",
+      "color": "#00b8d9",
+      "icon": "file:htmlextract.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.httpRequest",
+      "displayName": "Http Request",
+      "category": "Network",
+      "color": "#7e57c2",
+      "icon": "file:httprequest.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.hubspot",
+      "displayName": "Hubspot",
+      "category": "CRM",
+      "color": "#f44336",
+      "icon": "file:hubspot.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.humanticAI",
+      "displayName": "Humantic A I",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:humanticai.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.hunter",
+      "displayName": "Hunter",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:hunter.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.iCalendar",
+      "displayName": "I Calendar",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:icalendar.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.if",
+      "displayName": "If",
+      "category": "Flow",
+      "color": "#ff9922",
+      "icon": "file:if.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.intercom",
+      "displayName": "Intercom",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:intercom.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.interval",
+      "displayName": "Interval",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:interval.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.invoiceNinja",
+      "displayName": "Invoice Ninja",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:invoiceninja.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.itemLists",
+      "displayName": "Item Lists",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:itemlists.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.iterable",
+      "displayName": "Iterable",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:iterable.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.jenkins",
+      "displayName": "Jenkins",
+      "category": "Development",
+      "color": "#607d8b",
+      "icon": "file:jenkins.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.jinaAI",
+      "displayName": "Jina A I",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:jinaai.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.jira",
+      "displayName": "Jira",
+      "category": "Productivity",
+      "color": "#009688",
+      "icon": "file:jira.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.jotForm",
+      "displayName": "Jot Form",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:jotform.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.jwt",
+      "displayName": "Jwt",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:jwt.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.kafka",
+      "displayName": "Kafka",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:kafka.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.keap",
+      "displayName": "Keap",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:keap.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.kitemaker",
+      "displayName": "Kitemaker",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:kitemaker.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.koBoToolbox",
+      "displayName": "Ko Bo Toolbox",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:kobotoolbox.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.ldap",
+      "displayName": "Ldap",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:ldap.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.lemlist",
+      "displayName": "Lemlist",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:lemlist.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.limit",
+      "displayName": "Limit",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:limit.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.line",
+      "displayName": "Line",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:line.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.linear",
+      "displayName": "Linear",
+      "category": "Productivity",
+      "color": "#009688",
+      "icon": "file:linear.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.lingvaNex",
+      "displayName": "Lingva Nex",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:lingvanex.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.linkedIn",
+      "displayName": "Linked In",
+      "category": "Social",
+      "color": "#03a9f4",
+      "icon": "file:linkedin.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.localFileTrigger",
+      "displayName": "Local File Trigger",
+      "category": "Trigger",
+      "color": "#ff6d5a",
+      "icon": "file:localfiletrigger.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.loneScale",
+      "displayName": "Lone Scale",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:lonescale.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.mQTT",
+      "displayName": "M Q T T",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:mqtt.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.magento",
+      "displayName": "Magento",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:magento.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.mailcheck",
+      "displayName": "Mailcheck",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:mailcheck.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.mailchimp",
+      "displayName": "Mailchimp",
+      "category": "Marketing",
+      "color": "#ff5722",
+      "icon": "file:mailchimp.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.mailerLite",
+      "displayName": "Mailer Lite",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:mailerlite.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.mailgun",
+      "displayName": "Mailgun",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:mailgun.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.mailjet",
+      "displayName": "Mailjet",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:mailjet.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.mandrill",
+      "displayName": "Mandrill",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:mandrill.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.manualTrigger",
+      "displayName": "Manual Trigger",
+      "category": "Trigger",
+      "color": "#ff6d5a",
+      "icon": "file:manualtrigger.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.markdown",
+      "displayName": "Markdown",
+      "category": "Data Transformation",
+      "color": "#00b8d9",
+      "icon": "file:markdown.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.marketstack",
+      "displayName": "Marketstack",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:marketstack.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.matrix",
+      "displayName": "Matrix",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:matrix.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.mattermost",
+      "displayName": "Mattermost",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:mattermost.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.mautic",
+      "displayName": "Mautic",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:mautic.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.medium",
+      "displayName": "Medium",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:medium.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.merge",
+      "displayName": "Merge",
+      "category": "Flow",
+      "color": "#ff9922",
+      "icon": "file:merge.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.messageBird",
+      "displayName": "Message Bird",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:messagebird.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.metabase",
+      "displayName": "Metabase",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:metabase.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.mindee",
+      "displayName": "Mindee",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:mindee.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.misp",
+      "displayName": "Misp",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:misp.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.mistralAI",
+      "displayName": "Mistral A I",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:mistralai.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.mocean",
+      "displayName": "Mocean",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:mocean.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.mondayCom",
+      "displayName": "Monday Com",
+      "category": "Productivity",
+      "color": "#009688",
+      "icon": "file:mondaycom.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.mongoDb",
+      "displayName": "Mongo Db",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:mongodb.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.monicaCrm",
+      "displayName": "Monica Crm",
+      "category": "CRM",
+      "color": "#f44336",
+      "icon": "file:monicacrm.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.moveBinaryData",
+      "displayName": "Move Binary Data",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:movebinarydata.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.msg91",
+      "displayName": "Msg91",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:msg91.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.mySql",
+      "displayName": "My Sql",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:mysql.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.n8n",
+      "displayName": "N8n",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:n8n.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.n8nTrainingCustomerDatastore",
+      "displayName": "N8n Training Customer Datastore",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:n8ntrainingcustomerdatastore.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.n8nTrainingCustomerMessenger",
+      "displayName": "N8n Training Customer Messenger",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:n8ntrainingcustomermessenger.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.n8nTrigger",
+      "displayName": "N8n Trigger",
+      "category": "Trigger",
+      "color": "#ff6d5a",
+      "icon": "file:n8ntrigger.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.nasa",
+      "displayName": "Nasa",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:nasa.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.netlify",
+      "displayName": "Netlify",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:netlify.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.nextCloud",
+      "displayName": "Next Cloud",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:nextcloud.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.noOp",
+      "displayName": "No Op",
+      "category": "Flow",
+      "color": "#ff9922",
+      "icon": "file:noop.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.nocoDB",
+      "displayName": "Noco D B",
+      "category": "Data",
+      "color": "#448aff",
+      "icon": "file:nocodb.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.notion",
+      "displayName": "Notion",
+      "category": "Productivity",
+      "color": "#009688",
+      "icon": "file:notion.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.npm",
+      "displayName": "Npm",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:npm.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.odoo",
+      "displayName": "Odoo",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:odoo.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.okta",
+      "displayName": "Okta",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:okta.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.oneDrive",
+      "displayName": "One Drive",
+      "category": "Files",
+      "color": "#9c27b0",
+      "icon": "file:onedrive.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.oneSimpleApi",
+      "displayName": "One Simple Api",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:onesimpleapi.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.onfleet",
+      "displayName": "Onfleet",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:onfleet.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.openAi",
+      "displayName": "Open Ai",
+      "category": "AI",
+      "color": "#e91e63",
+      "icon": "file:openai.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.openThesaurus",
+      "displayName": "Open Thesaurus",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:openthesaurus.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.openWeatherMap",
+      "displayName": "Open Weather Map",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:openweathermap.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.orbit",
+      "displayName": "Orbit",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:orbit.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.oura",
+      "displayName": "Oura",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:oura.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.outlook",
+      "displayName": "Outlook",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:outlook.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.paddle",
+      "displayName": "Paddle",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:paddle.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.pagerDuty",
+      "displayName": "Pager Duty",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:pagerduty.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.payPal",
+      "displayName": "Pay Pal",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:paypal.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.peekalink",
+      "displayName": "Peekalink",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:peekalink.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.perplexity",
+      "displayName": "Perplexity",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:perplexity.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.perspective",
+      "displayName": "Perspective",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:perspective.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.phantombuster",
+      "displayName": "Phantombuster",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:phantombuster.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.philipsHue",
+      "displayName": "Philips Hue",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:philipshue.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.pipedrive",
+      "displayName": "Pipedrive",
+      "category": "CRM",
+      "color": "#f44336",
+      "icon": "file:pipedrive.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.plivo",
+      "displayName": "Plivo",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:plivo.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.postBin",
+      "displayName": "Post Bin",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:postbin.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.postHog",
+      "displayName": "Post Hog",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:posthog.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.postgres",
+      "displayName": "Postgres",
+      "category": "Database",
+      "color": "#795548",
+      "icon": "file:postgres.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.postmark",
+      "displayName": "Postmark",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:postmark.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.profitWell",
+      "displayName": "Profit Well",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:profitwell.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.protectCloud",
+      "displayName": "Protect Cloud",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:protectcloud.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.pushbullet",
+      "displayName": "Pushbullet",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:pushbullet.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.pushcut",
+      "displayName": "Pushcut",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:pushcut.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.pushover",
+      "displayName": "Pushover",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:pushover.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.questDb",
+      "displayName": "Quest Db",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:questdb.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.quickBase",
+      "displayName": "Quick Base",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:quickbase.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.quickBooks",
+      "displayName": "Quick Books",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:quickbooks.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.quickChart",
+      "displayName": "Quick Chart",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:quickchart.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.rabbitMQ",
+      "displayName": "Rabbit M Q",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:rabbitmq.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.raindrop",
+      "displayName": "Raindrop",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:raindrop.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.readBinaryFile",
+      "displayName": "Read Binary File",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:readbinaryfile.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.readBinaryFiles",
+      "displayName": "Read Binary Files",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:readbinaryfiles.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.readPdf",
+      "displayName": "Read Pdf",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:readpdf.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.readWriteFile",
+      "displayName": "Read Write File",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:readwritefile.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.realtimeDatabase",
+      "displayName": "Realtime Database",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:realtimedatabase.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.reddit",
+      "displayName": "Reddit",
+      "category": "Social",
+      "color": "#03a9f4",
+      "icon": "file:reddit.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.redis",
+      "displayName": "Redis",
+      "category": "Database",
+      "color": "#795548",
+      "icon": "file:redis.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.removeDuplicates",
+      "displayName": "Remove Duplicates",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:removeduplicates.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.renameKeys",
+      "displayName": "Rename Keys",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:renamekeys.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.respondToWebhook",
+      "displayName": "Respond To Webhook",
+      "category": "Network",
+      "color": "#7e57c2",
+      "icon": "file:respondtowebhook.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.rocketchat",
+      "displayName": "Rocketchat",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:rocketchat.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.rssFeedRead",
+      "displayName": "Rss Feed Read",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:rssfeedread.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.rundeck",
+      "displayName": "Rundeck",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:rundeck.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.s3",
+      "displayName": "S3",
+      "category": "Files",
+      "color": "#9c27b0",
+      "icon": "file:s3.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.salesforce",
+      "displayName": "Salesforce",
+      "category": "CRM",
+      "color": "#f44336",
+      "icon": "file:salesforce.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.salesmate",
+      "displayName": "Salesmate",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:salesmate.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.schedule",
+      "displayName": "Schedule",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:schedule.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.seaTable",
+      "displayName": "Sea Table",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:seatable.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.securityScorecard",
+      "displayName": "Security Scorecard",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:securityscorecard.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.segment",
+      "displayName": "Segment",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:segment.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.sendGrid",
+      "displayName": "Send Grid",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:sendgrid.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.sendy",
+      "displayName": "Sendy",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:sendy.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.sentryIo",
+      "displayName": "Sentry Io",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:sentryio.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.serviceNow",
+      "displayName": "Service Now",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:servicenow.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.set",
+      "displayName": "Set",
+      "category": "Data Transformation",
+      "color": "#00b8d9",
+      "icon": "file:set.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.sharePoint",
+      "displayName": "Share Point",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:sharepoint.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.sheet",
+      "displayName": "Sheet",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:sheet.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.shopify",
+      "displayName": "Shopify",
+      "category": "Commerce",
+      "color": "#ffca28",
+      "icon": "file:shopify.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.signl4",
+      "displayName": "Signl4",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:signl4.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.simulate",
+      "displayName": "Simulate",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:simulate.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.slack",
+      "displayName": "Slack",
+      "category": "Communication",
+      "color": "#00c853",
+      "icon": "file:slack.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.slides",
+      "displayName": "Slides",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:slides.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.sms77",
+      "displayName": "Sms77",
+      "category": "Communication",
+      "color": "#00c853",
+      "icon": "file:sms77.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.snowflake",
+      "displayName": "Snowflake",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:snowflake.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.sort",
+      "displayName": "Sort",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:sort.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.splitInBatches",
+      "displayName": "Split In Batches",
+      "category": "Flow",
+      "color": "#ff9922",
+      "icon": "file:splitinbatches.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.splitOut",
+      "displayName": "Split Out",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:splitout.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.splunk",
+      "displayName": "Splunk",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:splunk.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.spontit",
+      "displayName": "Spontit",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:spontit.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.spotify",
+      "displayName": "Spotify",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:spotify.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "displayName": "Spreadsheet File",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:spreadsheetfile.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.sql",
+      "displayName": "Sql",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:sql.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.sql",
+      "displayName": "Sql",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:sql.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.sseTrigger",
+      "displayName": "Sse Trigger",
+      "category": "Trigger",
+      "color": "#ff6d5a",
+      "icon": "file:ssetrigger.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.ssh",
+      "displayName": "Ssh",
+      "category": "Network",
+      "color": "#7e57c2",
+      "icon": "file:ssh.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.stackby",
+      "displayName": "Stackby",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:stackby.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.start",
+      "displayName": "Start",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:start.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.stickyNote",
+      "displayName": "Sticky Note",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:stickynote.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.stopAndError",
+      "displayName": "Stop And Error",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:stopanderror.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.storage",
+      "displayName": "Storage",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:storage.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.storyblok",
+      "displayName": "Storyblok",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:storyblok.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.strapi",
+      "displayName": "Strapi",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:strapi.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.strava",
+      "displayName": "Strava",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:strava.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.stripe",
+      "displayName": "Stripe",
+      "category": "Commerce",
+      "color": "#ffca28",
+      "icon": "file:stripe.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.summarize",
+      "displayName": "Summarize",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:summarize.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.supabase",
+      "displayName": "Supabase",
+      "category": "Database",
+      "color": "#795548",
+      "icon": "file:supabase.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.surveyMonkey",
+      "displayName": "Survey Monkey",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:surveymonkey.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.switch",
+      "displayName": "Switch",
+      "category": "Flow",
+      "color": "#ff9922",
+      "icon": "file:switch.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.syncroMSP",
+      "displayName": "Syncro M S P",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:syncromsp.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.taiga",
+      "displayName": "Taiga",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:taiga.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.tapfiliate",
+      "displayName": "Tapfiliate",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:tapfiliate.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.task",
+      "displayName": "Task",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:task.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.teams",
+      "displayName": "Teams",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:teams.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.telegram",
+      "displayName": "Telegram",
+      "category": "Communication",
+      "color": "#00c853",
+      "icon": "file:telegram.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.theHive",
+      "displayName": "The Hive",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:thehive.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.theHiveProject",
+      "displayName": "The Hive Project",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:thehiveproject.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.timescaleDb",
+      "displayName": "Timescale Db",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:timescaledb.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.toDo",
+      "displayName": "To Do",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:todo.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.todoist",
+      "displayName": "Todoist",
+      "category": "Productivity",
+      "color": "#009688",
+      "icon": "file:todoist.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.toggl",
+      "displayName": "Toggl",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:toggl.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.totp",
+      "displayName": "Totp",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:totp.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.translate",
+      "displayName": "Translate",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:translate.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.travisCi",
+      "displayName": "Travis Ci",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:travisci.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.trello",
+      "displayName": "Trello",
+      "category": "Productivity",
+      "color": "#009688",
+      "icon": "file:trello.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.twake",
+      "displayName": "Twake",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:twake.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.twilio",
+      "displayName": "Twilio",
+      "category": "Communication",
+      "color": "#00c853",
+      "icon": "file:twilio.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.twist",
+      "displayName": "Twist",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:twist.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.twitter",
+      "displayName": "Twitter",
+      "category": "Social",
+      "color": "#03a9f4",
+      "icon": "file:twitter.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.typeform",
+      "displayName": "Typeform",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:typeform.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.uProc",
+      "displayName": "U Proc",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:uproc.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.unleashedSoftware",
+      "displayName": "Unleashed Software",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:unleashedsoftware.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.uplead",
+      "displayName": "Uplead",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:uplead.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.uptimeRobot",
+      "displayName": "Uptime Robot",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:uptimerobot.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.urlScanIo",
+      "displayName": "Url Scan Io",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:urlscanio.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.vero",
+      "displayName": "Vero",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:vero.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.vonage",
+      "displayName": "Vonage",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:vonage.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.wait",
+      "displayName": "Wait",
+      "category": "Flow",
+      "color": "#ff9922",
+      "icon": "file:wait.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.webex",
+      "displayName": "Webex",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:webex.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.webflow",
+      "displayName": "Webflow",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:webflow.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.webhook",
+      "displayName": "Webhook",
+      "category": "Network",
+      "color": "#7e57c2",
+      "icon": "file:webhook.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.wekan",
+      "displayName": "Wekan",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:wekan.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.whatsApp",
+      "displayName": "Whats App",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:whatsapp.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.wise",
+      "displayName": "Wise",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:wise.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.wooCommerce",
+      "displayName": "Woo Commerce",
+      "category": "Commerce",
+      "color": "#ffca28",
+      "icon": "file:woocommerce.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.wordpress",
+      "displayName": "Wordpress",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:wordpress.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.workable",
+      "displayName": "Workable",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:workable.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.workflowTrigger",
+      "displayName": "Workflow Trigger",
+      "category": "Trigger",
+      "color": "#ff6d5a",
+      "icon": "file:workflowtrigger.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.writeBinaryFile",
+      "displayName": "Write Binary File",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:writebinaryfile.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.wufoo",
+      "displayName": "Wufoo",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:wufoo.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.xero",
+      "displayName": "Xero",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:xero.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.xml",
+      "displayName": "Xml",
+      "category": "Data Transformation",
+      "color": "#00b8d9",
+      "icon": "file:xml.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.youTube",
+      "displayName": "You Tube",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:youtube.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.yourls",
+      "displayName": "Yourls",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:yourls.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.zammad",
+      "displayName": "Zammad",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:zammad.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.zendesk",
+      "displayName": "Zendesk",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:zendesk.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.zoho",
+      "displayName": "Zoho",
+      "category": "CRM",
+      "color": "#f44336",
+      "icon": "file:zoho.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.zoom",
+      "displayName": "Zoom",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:zoom.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    },
+    {
+      "type": "n8n-nodes-base.zulip",
+      "displayName": "Zulip",
+      "category": "Other",
+      "color": "#666666",
+      "icon": "file:zulip.svg",
+      "inputs": [
+        "main"
+      ],
+      "outputs": [
+        "main"
+      ]
+    }
+  ]
+}
