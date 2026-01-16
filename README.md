@@ -6,26 +6,27 @@
 
 ![Custom Model](https://img.shields.io/badge/Custom%20Model-Training%20In%20Progress-orange?style=for-the-badge)
 ![RAG](https://img.shields.io/badge/RAG%20Vectors-36,166-FF4F64?style=for-the-badge)
+![CRAG](https://img.shields.io/badge/CRAG%20Pipeline-Active-brightgreen?style=for-the-badge)
 
 ### 🔧 Core Tech Stack
-![Next.js](https://img.shields.io/badge/Next.js%2015-000000?style=flat-square&logo=nextdotjs&logoColor=white)
-![React](https://img.shields.io/badge/React%2019-61DAFB?style=flat-square&logo=react&logoColor=black)
+![Vue.js](https://img.shields.io/badge/Vue%203-4FC08D?style=flat-square&logo=vuedotjs&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite%206-646CFF?style=flat-square&logo=vite&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript%205.x-3178C6?style=flat-square&logo=typescript&logoColor=white)
 ![n8n](https://img.shields.io/badge/n8n%201.x-EA4B71?style=flat-square&logo=n8n&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js%2022-339933?style=flat-square&logo=nodedotjs&logoColor=white)
 
 ### 🗄️ Database & Storage  
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL%2016-4169E1?style=flat-square&logo=postgresql&logoColor=white)
-![Prisma](https://img.shields.io/badge/Prisma%205-2D3748?style=flat-square&logo=prisma&logoColor=white)
 ![Qdrant](https://img.shields.io/badge/Qdrant%20Cloud-FF4F64?style=flat-square&logo=qdrant&logoColor=white)
 
-### 🧠 AI & LLM
-![Gemini](https://img.shields.io/badge/Gemini%203-Pro%20Preview-4285F4?style=flat-square&logo=google&logoColor=white)
+### 🧠 AI & LLM Pipeline
+![Gemini](https://img.shields.io/badge/Gemini-Generation-4285F4?style=flat-square&logo=google&logoColor=white)
+![Jina](https://img.shields.io/badge/Jina-Reranker-orange?style=flat-square)
+![Together](https://img.shields.io/badge/Mistral--Nemo-Judge-purple?style=flat-square)
 ![Qwen](https://img.shields.io/badge/Qwen%203-Coder%2014B-7C3AED?style=flat-square)
-![Unsloth](https://img.shields.io/badge/Unsloth-Fine--Tuning-orange?style=flat-square)
 
-> 🚀 **Enterprise AI-powered n8n workflow builder** with RAG-enhanced generation.  
-> 🔥 **Custom Qwen 3 Coder 14B** model training in progress for specialized workflow generation.
+> 🚀 **Enterprise AI-powered n8n workflow builder** with CRAG-enhanced generation.  
+> 🔥 **CRAG Pipeline**: Jina Reranker + Mistral-Nemo Judge for superior retrieval.
 
 ---
 

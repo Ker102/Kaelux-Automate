@@ -13,32 +13,46 @@
 
 | Feature | Status | Details |
 |---------|--------|---------|
-| **AI Builder Panel** | ✅ Working | n8n frontend integration |
-| **Diff-Based Updates** | ✅ Implemented | Add/update/remove/reconnect actions |
-| **Qdrant Integration** | ✅ Connected | RAG with 36,166 workflow vectors |
-| **Docker Stack** | ✅ Configured | Next.js + n8n + Postgres + Qdrant |
+| **Lightweight Workflow Generator** | ✅ Working | Vue 3 + Vite + Express standalone app |
+| **CRAG Pipeline** | ✅ Implemented | Jina Reranker + Mistral-Nemo Judge |
+| **Qdrant Integration** | ✅ Connected | RAG with 36,166 workflow + 296 node vectors |
+| **n8n-Style Canvas** | ✅ Complete | Vue Flow with real n8n icons, node editing |
+| **Multi-Model Support** | ✅ Working | Gemini (generation) + Together (judge) + Jina (rerank) |
 
 ### 🔄 In Progress
 
 | Feature | Status | Details |
 |---------|--------|---------|
-| **Custom Fine-Tuned Model** | ⏳ Pending | Qwen2.5-Coder for workflow generation |
+| **Custom Fine-Tuned Model** | ⏳ Pending GPU quota | Qwen2.5-Coder for workflow generation |
 
 ---
 
 ## 🏗️ Architecture
 
+### CRAG Pipeline (Corrective RAG)
+
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Next.js App   │───▶│   Qdrant RAG    │    │  Fine-Tuned LLM │
-│   (Port 3000)   │    │ (36,166 vectors)│    │ (Qwen2.5-Coder) │
-└────────┬────────┘    └─────────────────┘    └─────────────────┘
-         │
-         ▼
-┌─────────────────┐    ┌─────────────────┐
-│   n8n Canvas    │───▶│   PostgreSQL    │
-│   (Port 5678)   │    │   (Port 5433)   │
-└─────────────────┘    └─────────────────┘
+User Query
+    ↓
+┌─────────────────┐
+│  Qdrant Cloud   │  ← Retrieve 30+ candidates
+│  (36k workflows)│
+└────────┬────────┘
+         ↓
+┌─────────────────┐
+│  Jina Reranker  │  ← Rerank by semantic relevance
+│  (top 10)       │
+└────────┬────────┘
+         ↓
+┌─────────────────┐
+│  Mistral-Nemo   │  ← Judge relevance, rewrite query if needed
+│  (Together AI)  │
+└────────┬────────┘
+         ↓
+┌─────────────────┐
+│  Gemini Pro     │  ← Generate workflow JSON
+│  (Main LLM)     │
+└─────────────────┘
 ```
 
 ---
@@ -47,18 +61,17 @@
 
 ```
 Project05/
-├── app/                    # Next.js app router
-│   └── api/ai/            # AI endpoints
-│       ├── workflow/      # Workflow generation
-│       └── prompts/       # Prompt templates
-├── n8n/                   # Forked n8n with AI Builder
-│   └── packages/frontend/ # Modified Vue components
-├── scripts/
-│   └── seed-qdrant.ts    # Qdrant seeding script
-├── data/workflows/        # High-quality workflow examples
-│   └── episodes/          # 33 curated workflows
-├── docker-compose.dev.yml # Development stack
-└── prisma/               # Database schema
+├── workflow-generator/        # Lightweight standalone app
+│   ├── src/client/           # Vue 3 + Vue Flow canvas
+│   │   ├── components/       # WorkflowNode, NodeEditor, etc.
+│   │   └── styles/           # n8n-like dark theme
+│   ├── src/server/           # Express API
+│   │   ├── services/         # RAG, CRAG, ReAct agent
+│   │   └── routes/           # /api/generate endpoint
+│   ├── public/icons/         # 254 n8n SVG icons
+│   └── scripts/              # Node extraction, Qdrant ingestion
+├── n8n/                      # Forked n8n (optional)
+└── data/workflows/           # 33 curated high-quality workflows
 ```
 
 ---
@@ -67,60 +80,63 @@ Project05/
 
 | Component | Technology |
 |-----------|------------|
-| **Frontend** | Next.js 14, React, TypeScript |
-| **n8n Integration** | Forked n8n with custom AI Builder panel |
-| **Database** | PostgreSQL + Prisma ORM |
-| **Vector Store** | Qdrant Cloud (Gemini embeddings) |
-| **LLM** | Gemini 2.0 Flash (configurable) |
+| **Frontend** | Vue 3, Vue Flow, Vite, TypeScript |
+| **Backend** | Express.js, Node.js |
+| **Vector Store** | Qdrant Cloud |
 | **Embeddings** | Gemini text-embedding-004 (768-dim) |
+| **Reranker** | Jina AI (jina-reranker-v2-base-multilingual) |
+| **Judge LLM** | Mistral-Nemo-12B via Together AI |
+| **Generator LLM** | Gemini (gemini-3-flash-preview / gemini-2.5-pro) |
 
 ---
 
 ## 🔑 Environment Variables
 
 ```bash
-# .env.local
+# workflow-generator/.env
 GEMINI_API_KEY=<your-key>
-GEMINI_MODEL=gemini-2.0-flash
-GEMINI_EMBED_MODEL=text-embedding-004
-
-# Qdrant (uses project06's Qdrant Cloud instance)
-QDRANT_URL=https://04c89d54-9692-49b8-8d51-f86645400865.europe-west3-0.gcp.cloud.qdrant.io
+QDRANT_URL=https://04c89d54-...cloud.qdrant.io
 QDRANT_API_KEY=<your-key>
 QDRANT_COLLECTION=n8n_workflows
 
-# Database
-DATABASE_URL=postgresql://postgres:postgres@localhost:5433/kaelux
+# CRAG Pipeline
+JINA_API_KEY=<your-key>           # Reranker
+TOGETHER_API_KEY=<your-key>       # Mistral-Nemo judge
 ```
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start (Workflow Generator)
 
 ```bash
-# 1. Build n8n with AI Builder
-cd n8n && pnpm build:n8n && pnpm build:docker && cd ..
-
-# 2. Start services
-docker compose -f docker-compose.dev.yml up -d
-
-# 3. Seed Qdrant (optional - uses shared collection)
-docker compose exec app npm run seed:qdrant
+cd workflow-generator
+pnpm install
+pnpm dev
 ```
 
-**Access Points:**
-- Next.js: http://localhost:3000
-- n8n Canvas: http://localhost:5678
-- Qdrant: http://localhost:6333
+**Access:** http://localhost:5173
 
 ---
 
 ## 🎓 AI Assistant Guidelines
 
-1. **n8n Fork**: This uses a custom n8n fork in `n8n/` directory with AI Builder modifications.
-2. **Shared RAG**: Uses the same Qdrant Cloud collection (`n8n_workflows`) as project06.
-3. **Embeddings**: Uses Gemini `text-embedding-004` (768-dim, matches project06).
-4. **Workflow Format**: AI generates diff actions (add/update/remove), not full replacements.
+1. **CRAG Pipeline**: All RAG queries go through Jina reranker + Mistral-Nemo judge
+2. **Canvas State**: User edits on canvas are synced and sent to model on next generate
+3. **Workflow Format**: Generated as n8n JSON with nodes + connections
+4. **Expressions**: Use `={{$json.field}}` syntax for data references
+5. **Document Progress**: Update GEMINI.md before each commit
+
+---
+
+## 📊 Progress Log
+
+| Date | Update |
+|------|--------|
+| 2026-01-16 | ✅ CRAG pipeline complete (Jina + Mistral-Nemo) |
+| 2026-01-15 | ✅ UI improvements: node editing, manual connecting, canvas sync |
+| 2026-01-15 | ✅ Added 254 n8n SVG icons, improved system prompt for skeleton workflows |
+| 2026-01-14 | ✅ Fixed connections bug, added detailed terminal logging |
+| 2026-01-13 | ✅ RAG integration with Qdrant (workflows + nodes), ReAct agent |
 
 ---
 

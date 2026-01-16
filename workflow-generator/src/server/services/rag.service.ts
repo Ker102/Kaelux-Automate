@@ -1,6 +1,7 @@
 import { QdrantClient } from '@qdrant/js-client-rest';
 import { GoogleGenerativeAIEmbeddings } from '@langchain/google-genai';
 import type { Workflow } from '@shared/types.js';
+import { getCRAGService, type CRAGService } from './crag.service.js';
 
 interface NodeInfo {
     type: string;
@@ -14,10 +15,12 @@ interface NodeInfo {
 
 /**
  * RAG Service for retrieving similar workflows AND relevant nodes from Qdrant Cloud
+ * Now with CRAG (Corrective RAG) pipeline using Jina Reranker
  */
 export class RAGService {
     private client: QdrantClient | null = null;
     private embeddings: GoogleGenerativeAIEmbeddings | null = null;
+    private crag: CRAGService;
     private workflowCollection: string;
     private nodesCollection = 'n8n_nodes';
 
@@ -28,11 +31,10 @@ export class RAGService {
 
         if (!url || !apiKey) {
             console.warn('⚠️ Qdrant credentials not configured, RAG disabled');
-            return;
+        } else {
+            this.client = new QdrantClient({ url, apiKey });
+            this.workflowCollection = process.env.QDRANT_COLLECTION || 'n8n_workflows';
         }
-
-        this.client = new QdrantClient({ url, apiKey });
-        this.workflowCollection = process.env.QDRANT_COLLECTION || 'n8n_workflows';
 
         if (geminiKey) {
             this.embeddings = new GoogleGenerativeAIEmbeddings({
@@ -40,6 +42,9 @@ export class RAGService {
                 model: 'text-embedding-004',
             });
         }
+
+        // Initialize CRAG service for reranking
+        this.crag = getCRAGService();
     }
 
     isAvailable(): boolean {
@@ -47,22 +52,60 @@ export class RAGService {
     }
 
     /**
-     * Search for relevant nodes based on prompt
+     * Search for relevant nodes based on prompt (with optional CRAG reranking)
      */
-    async searchRelevantNodes(prompt: string, limit: number = 10): Promise<NodeInfo[]> {
+    async searchRelevantNodes(prompt: string, limit: number = 10, useReranking: boolean = true): Promise<NodeInfo[]> {
         if (!this.isAvailable()) return [];
 
         try {
             const vector = await this.embeddings!.embedQuery(prompt);
+
+            // Fetch more results if reranking
+            const fetchLimit = useReranking && this.crag.isAvailable() ? limit * 3 : limit;
+
             const results = await this.client!.search(this.nodesCollection, {
                 vector,
-                limit,
+                limit: fetchLimit,
                 with_payload: true,
             });
 
-            console.log(`🧩 Found ${results.length} relevant nodes for prompt`);
+            console.log(`🧩 Retrieved ${results.length} nodes from Qdrant`);
 
-            return results.map(r => ({
+            // Convert to documents for reranking
+            const documents = results.map(r => ({
+                text: `${r.payload?.displayName}: ${r.payload?.description}`,
+                metadata: {
+                    type: r.payload?.type,
+                    displayName: r.payload?.displayName,
+                    description: r.payload?.description,
+                    categories: r.payload?.categories,
+                    aliases: r.payload?.aliases,
+                    resources: r.payload?.resources,
+                    documentationUrl: r.payload?.documentationUrl,
+                    score: r.score,
+                } as Record<string, unknown>,
+            }));
+
+            // Apply CRAG reranking if available
+            if (useReranking && this.crag.isAvailable()) {
+                const { documents: reranked } = await this.crag.process(prompt, documents, {
+                    topK: limit,
+                    scoreThreshold: 0.2,
+                });
+
+                return reranked.map(doc => ({
+                    type: doc.metadata.type as string || '',
+                    displayName: doc.metadata.displayName as string || '',
+                    description: doc.metadata.description as string || '',
+                    categories: (doc.metadata.categories as string[]) || [],
+                    aliases: (doc.metadata.aliases as string[]) || [],
+                    resources: (doc.metadata.resources as string[]) || [],
+                    documentationUrl: doc.metadata.documentationUrl as string,
+                }));
+            }
+
+            // No reranking - return original order
+            return results.slice(0, limit).map(r => ({
                 type: r.payload?.type as string || '',
                 displayName: r.payload?.displayName as string || '',
                 description: r.payload?.description as string || '',
@@ -78,9 +121,9 @@ export class RAGService {
     }
 
     /**
-     * Search for similar workflows
+     * Search for similar workflows (with optional CRAG reranking)
      */
-    async searchSimilarWorkflows(prompt: string, limit: number = 3): Promise<Array<{
+    async searchSimilarWorkflows(prompt: string, limit: number = 3, useReranking: boolean = true): Promise<Array<{
         workflow: Workflow;
         score: number;
         name: string;
@@ -89,15 +132,48 @@ export class RAGService {
 
         try {
             const vector = await this.embeddings!.embedQuery(prompt);
+
+            // Fetch more results if reranking
+            const fetchLimit = useReranking && this.crag.isAvailable() ? limit * 4 : limit;
+
             const results = await this.client!.search(this.workflowCollection, {
                 vector,
-                limit,
+                limit: fetchLimit,
                 with_payload: true,
             });
 
-            console.log(`📋 Found ${results.length} similar workflows`);
+            console.log(`📋 Retrieved ${results.length} workflows from Qdrant`);
 
-            return results.map(result => ({
+            // Convert to documents for reranking
+            const documents = results.map(r => {
+                const workflow = r.payload?.workflow as Workflow;
+                const nodeTypes = workflow?.nodes?.map(n => n.type.replace('n8n-nodes-base.', '')).join(', ') || '';
+                return {
+                    text: `${r.payload?.name}: ${r.payload?.description || ''} Nodes: ${nodeTypes}`,
+                    metadata: {
+                        workflow,
+                        name: r.payload?.name,
+                        score: r.score,
+                    } as Record<string, unknown>,
+                };
+            });
+
+            // Apply CRAG reranking if available
+            if (useReranking && this.crag.isAvailable()) {
+                const { documents: reranked } = await this.crag.process(prompt, documents, {
+                    topK: limit,
+                    scoreThreshold: 0.3,
+                });
+
+                return reranked.map(doc => ({
+                    workflow: doc.metadata.workflow as Workflow || { nodes: [], connections: {} },
+                    score: doc.score,
+                    name: (doc.metadata.name as string) || 'Unknown Workflow',
+                }));
+            }
+
+            // No reranking - return original order
+            return results.slice(0, limit).map(result => ({
                 workflow: result.payload?.workflow as Workflow || { nodes: [], connections: {} },
                 score: result.score,
                 name: (result.payload?.name as string) || 'Unknown Workflow',
@@ -110,22 +186,23 @@ export class RAGService {
 
     /**
      * Get combined context: relevant nodes + similar workflows
+     * Uses CRAG pipeline for better relevance
      */
     async getContextForPrompt(prompt: string, maxNodes: number = 10, maxWorkflows: number = 2): Promise<string> {
-        // Get relevant nodes
-        const nodes = await this.searchRelevantNodes(prompt, maxNodes);
+        // Get relevant nodes (with reranking)
+        const nodes = await this.searchRelevantNodes(prompt, maxNodes, true);
         const nodeContext = nodes.length > 0
-            ? `RELEVANT NODES FOR THIS TASK:\n${nodes.map(n =>
+            ? `RELEVANT NODES FOR THIS TASK (reranked):\n${nodes.map(n =>
                 `• ${n.displayName} (${n.type}): ${n.description}${n.resources.length > 0 ? ` | Operations: ${n.resources.join(', ')}` : ''}`
             ).join('\n')}`
             : '';
 
-        // Get similar workflow examples
-        const workflows = await this.searchSimilarWorkflows(prompt, maxWorkflows);
+        // Get similar workflow examples (with reranking)
+        const workflows = await this.searchSimilarWorkflows(prompt, maxWorkflows, true);
         const workflowContext = workflows.length > 0
-            ? `\nSIMILAR WORKFLOW EXAMPLES:\n${workflows.map((w, i) => {
+            ? `\nSIMILAR WORKFLOW EXAMPLES (reranked):\n${workflows.map((w, i) => {
                 const nodeTypes = w.workflow.nodes?.map(n => n.type.replace('n8n-nodes-base.', '')).join(' → ') || 'unknown';
-                return `${i + 1}. "${w.name}" (score: ${w.score.toFixed(2)}): ${nodeTypes}`;
+                return `${i + 1}. "${w.name}" (relevance: ${w.score.toFixed(2)}): ${nodeTypes}`;
             }).join('\n')}`
             : '';
 
@@ -147,3 +224,4 @@ export function getRAGService(): RAGService {
     }
     return ragServiceInstance;
 }
+
